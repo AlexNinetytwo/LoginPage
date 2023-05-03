@@ -1,28 +1,105 @@
-{% extends "base.html" %} {% block title %}Login{% endblock %} {% block content
-    %}
-    <form method="POST">
-      <h3 align="center">Login</h3>
-      <div class="form-group">
-        <label for="username">Benutzername</label>
-        <input
-          type="text"
-          class="form-control"
-          id="username"
-          name="username"
-          placeholder="Enter username"
-        />
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input
-          type="password"
-          class="form-control"
-          id="password"
-          name="password"
-          placeholder="Enter password"
-        />
-      </div>
-      <br />
-      <button type="submit" class="btn btn-primary">Login</button>
-    </form>
-    {% endblock %}
+{% extends "base.html" %} {% block title %}Login{% endblock %} {% block content%}
+<style>
+
+  .header {
+    font-size: 50px;
+  }
+
+  .numpad {
+    width: 100%;
+    height: 100%;
+  }
+
+  .padrow {
+    width: 100%;
+    height: 25%;
+  }
+
+  .numButton, .enterButton {
+    font-size: 110px;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    border-width: 1px;
+  }
+
+  .enterButton {
+    background-color: rgb(0, 64, 255);
+    font-size: 110px;
+    padding: 0;
+    color: white;
+  }
+
+  .padcolumn {
+    width: 33%;
+    height: 100%;
+  }
+
+
+</style>
+
+<script>
+  function insertNum(num) {
+    try{
+      filled = document.getElementById("inputField").value;
+      filled += String(num);
+    } catch {
+      filled = String(num);
+    } finally {
+      document.getElementById("inputField").value=filled;
+    }
+  }
+
+  function deleteNum() {
+    try {
+      filled = document.getElementById("inputField").value;
+      filled = filled.slice(0, -1);
+      document.getElementById("inputField").value=filled;
+    }
+    catch {}
+    }
+  
+</script>
+    
+<h3 class="header">PIN</h3>
+
+  <div>
+    <table class="numpad">
+      <tr class="padrow">
+        <td class="padcolumn"><button value="1" class="numButton" onclick="insertNum(value)">1</button></td>
+        <td class="padcolumn"><button value="2" class="numButton" onclick="insertNum(value)">2</button></td>
+        <td class="padcolumn"><button value="3" class="numButton" onclick="insertNum(value)">3</button></td>
+      </tr>
+      <tr class="padrow">
+        <td class="padcolumn"><button value="4" class="numButton" onclick="insertNum(value)">4</button></td>
+        <td class="padcolumn"><button value="5" class="numButton" onclick="insertNum(value)">5</button></td>
+        <td class="padcolumn"><button value="6" class="numButton" onclick="insertNum(value)">6</button></td>
+      </tr>
+      <tr class="padrow">
+        <td class="padcolumn"><button value="7" class="numButton" onclick="insertNum(value)">7</button></td>
+        <td class="padcolumn"><button value="8" class="numButton" onclick="insertNum(value)">8</button></td>
+        <td class="padcolumn"><button value="9" class="numButton" onclick="insertNum(value)">9</button></td>
+      </tr>
+      <tr class="padrow">
+        <td><button class="numButton" onclick="deleteNum()">&#8678</button></td>
+        <td><button value="0" class="numButton" onclick="insertNum(value)">0</button></td>
+        <form method="POST">
+        <td><button class="enterButton">OK</button></td>
+      </tr>
+  
+
+    </table>
+    
+  </div>
+  <input id="inputField"
+    type="password"
+    class="form-control"
+    id="password"
+    name="password"
+    placeholder="PIN eingeben"
+    disabled
+  />
+
+<br />
+</form>
+{% endblock %}
