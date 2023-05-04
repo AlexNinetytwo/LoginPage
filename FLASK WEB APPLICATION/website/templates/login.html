@@ -1,40 +1,78 @@
 {% extends "base.html" %} {% block title %}Login{% endblock %} {% block content%}
+
+
 <style>
 
+ 
   .header {
-    font-size: 50px;
+    font-size: 5vw;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    background-color: darkgray;
   }
-
+  
   .numpad {
     width: 100%;
-    height: 100%;
-  }
-
-  .padrow {
-    width: 100%;
-    height: 25%;
+    height: 75vh;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
   }
 
   .numButton, .enterButton {
-    font-size: 110px;
-    padding: 0;
-    width: 100%;
-    height: 100%;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 8vw;
+    width: 30vw;
+    height: 8.5vw;
     border-width: 1px;
+    border-style: solid;
+    background-color: white;
+    color: black;
   }
 
   .enterButton {
     background-color: rgb(0, 64, 255);
-    font-size: 110px;
-    padding: 0;
     color: white;
+    text-overflow: hidden;
   }
 
-  .padcolumn {
-    width: 33%;
-    height: 100%;
+  .inputField {
+    width: 100%;
+    font-size: 5vw;
+    padding: 0vw;
+    margin: 0;
+    text-align: center;
   }
 
+  @media screen and (max-device-width: 480px) {
+
+    .numpad {
+      height: 85vh;
+    }
+
+    .numButton, .enterButton {
+      height: 30vw;
+      font-size: 12vw;
+    }
+
+    .enterButton {
+      font-size: 10vw;
+    }
+
+    .inputField {
+    font-size: 10vw;
+   }
+
+   .header {
+    font-size: 8vw;
+   }
+
+  }
+
+
+</style>
 
 </style>
 
@@ -63,43 +101,42 @@
     
 <h3 class="header">PIN</h3>
 
-  <div>
-    <table class="numpad">
-      <tr class="padrow">
-        <td class="padcolumn"><button value="1" class="numButton" onclick="insertNum(value)">1</button></td>
-        <td class="padcolumn"><button value="2" class="numButton" onclick="insertNum(value)">2</button></td>
-        <td class="padcolumn"><button value="3" class="numButton" onclick="insertNum(value)">3</button></td>
-      </tr>
-      <tr class="padrow">
-        <td class="padcolumn"><button value="4" class="numButton" onclick="insertNum(value)">4</button></td>
-        <td class="padcolumn"><button value="5" class="numButton" onclick="insertNum(value)">5</button></td>
-        <td class="padcolumn"><button value="6" class="numButton" onclick="insertNum(value)">6</button></td>
-      </tr>
-      <tr class="padrow">
-        <td class="padcolumn"><button value="7" class="numButton" onclick="insertNum(value)">7</button></td>
-        <td class="padcolumn"><button value="8" class="numButton" onclick="insertNum(value)">8</button></td>
-        <td class="padcolumn"><button value="9" class="numButton" onclick="insertNum(value)">9</button></td>
-      </tr>
-      <tr class="padrow">
-        <td><button class="numButton" onclick="deleteNum()">&#8678</button></td>
-        <td><button value="0" class="numButton" onclick="insertNum(value)">0</button></td>
-        <form method="POST">
-        <td><button class="enterButton">OK</button></td>
-      </tr>
+<div style="width: 100%;">
+  <table class="numpad">
+    <tr class="padrow">
+      <td class="padcolumn"><button value="1" class="numButton" onclick="insertNum(value)">1</button></td>
+      <td class="padcolumn"><button value="2" class="numButton" onclick="insertNum(value)">2</button></td>
+      <td class="padcolumn"><button value="3" class="numButton" onclick="insertNum(value)">3</button></td>
+    </tr>
+    <tr class="padrow">
+      <td class="padcolumn"><button value="4" class="numButton" onclick="insertNum(value)">4</button></td>
+      <td class="padcolumn"><button value="5" class="numButton" onclick="insertNum(value)">5</button></td>
+      <td class="padcolumn"><button value="6" class="numButton" onclick="insertNum(value)">6</button></td>
+    </tr>
+    <tr class="padrow">
+      <td class="padcolumn"><button value="7" class="numButton" onclick="insertNum(value)">7</button></td>
+      <td class="padcolumn"><button value="8" class="numButton" onclick="insertNum(value)">8</button></td>
+      <td class="padcolumn"><button value="9" class="numButton" onclick="insertNum(value)">9</button></td>
+    </tr>
+    <tr class="padrow">
+      <td><button class="numButton" onclick="deleteNum()">&#8678</button></td>
+      <td><button value="0" class="numButton" onclick="insertNum(value)">0</button></td>
+      <form method="POST">
+        <td><button class="enterButton">Enter</button></td>
+    </tr>
   
 
-    </table>
-    
-  </div>
+  </table>
+
   <input id="inputField"
     type="password"
-    class="form-control"
+    class="inputField"
     id="password"
     name="password"
     placeholder="PIN eingeben"
-    disabled
   />
 
-<br />
+</div>
+  
 </form>
 {% endblock %}
