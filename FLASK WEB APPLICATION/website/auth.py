@@ -3,7 +3,8 @@ from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db   ##means from __init__.py import db
 from flask_login import login_user, login_required, logout_user, current_user
-from .config import testCreateBlind
+from .config import testCreateBlind, chreateAutoAction
+from datetime import time
 
 
 auth = Blueprint('auth', __name__)
@@ -12,7 +13,10 @@ auth = Blueprint('auth', __name__)
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
 
-    testCreateBlind("Kinderzimmer", 1)
+    # testCreateBlind("Kinderzimmer", 2)
+    # testCreateBlind("Wohnzimmer", 5)
+    
+    # chreateAutoAction(2,time(15,0),100)
 
     if User.query.count() < 1:
 

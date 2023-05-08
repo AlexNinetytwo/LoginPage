@@ -1,8 +1,9 @@
 from . import db
+from flask_login import UserMixin
 
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     pin = db.Column(db.String(6))
 
@@ -33,7 +34,7 @@ class BlindsAutoActions(db.Model):
 
     blind_id = db.Column(db.Integer, db.ForeignKey('blind.id'), primary_key=True) # Beziehung
     time_value = db.Column(db.Time, primary_key=True)
-    closedInPercentInPercent = db.Column(db.Integer)
+    closedInPercent = db.Column(db.Integer)
 
     def __init__(self, blind_id, time_value, closedInPercentInPercent):
         self.blind_id = blind_id

@@ -1,5 +1,6 @@
 from . import db
 from .models import Blind, BlindsAutoActions
+from sqlalchemy.exc import SQLAlchemyError
 
 
 def testCreateBlind(room, port): 
@@ -8,6 +9,15 @@ def testCreateBlind(room, port):
     db.session.commit()
 
 def chreateAutoAction(blind_id, time_value, closedInPercent):
-    newAction = BlindsAutoActions(blind_id, time_value, closedInPercent)
-    db.session.add(newAction)
-    db.session.commit()
+    try:
+        newAction = BlindsAutoActions(blind_id, time_value, closedInPercent)
+        db.session.add(newAction)
+        db.session.commit()
+    except SQLAlchemyError as e:
+        print("Eintrag bereits vorhanden")
+        db.session.rollback()
+    
+
+
+    
+
