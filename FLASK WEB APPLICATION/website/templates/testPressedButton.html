@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Button Beispiel</title>
+	<script>
+    let ButtonPressed = false;
+		function setButtonPressed() {
+      if (!ButtonPressed) {
+        ButtonPressed = true;
+			  console.log(ButtonPressed);
+      }
+      
+		}
+    function setButtonReleased() {
+      if (ButtonPressed) {
+        ButtonPressed = false;
+        console.log(ButtonPressed);
+      }
+      
+    }
+    
+	</script>
+</head>
+<body>
+	<button onmousedown="setButtonPressed()" onmouseleave="setButtonReleased()" onmouseup="setButtonReleased()">Just a button</button>
+</body>
+</html>

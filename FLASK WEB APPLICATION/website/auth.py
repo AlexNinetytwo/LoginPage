@@ -3,6 +3,7 @@ from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db   ##means from __init__.py import db
 from flask_login import login_user, login_required, logout_user, current_user
+from .config import testCreateBlind
 
 
 auth = Blueprint('auth', __name__)
@@ -10,22 +11,30 @@ auth = Blueprint('auth', __name__)
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
 
-        user = User.query.filter_by(username=username).first()
-        if user:
-            if check_password_hash(user.password, password):
+    testCreateBlind("Kinderzimmer", 1)
+
+    if User.query.count() < 1:
+
+        newUser = User(pin=generate_password_hash("478026", method='sha256'))
+        flash(User.query.count())
+        db.session.add(newUser)
+        db.session.commit()
+
+    if request.method == 'POST':
+        pin = request.form.get('pinField')
+        users = User.query.all()
+        for user in users:
+            if check_password_hash(user.pin, pin):
                 flash('Logged in successfully!', category='success')
                 login_user(user, remember=True)
                 return redirect(url_for('views.home'))
             else:
-                flash('Incorrect password, try again.', category='error')
-        else:
-            flash('username does not exist.', category='error')
-
+                flash(type(pin))
+       
     return render_template("login.html", user=current_user)
+
+
 
 
 @auth.route('/logout')

@@ -3,105 +3,145 @@
 
 <style>
 
- 
+  html {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+  }
+
+  body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+  }
+
   .header {
     font-size: 5vw;
     padding: 0;
     margin: 0;
     text-align: center;
-    background-color: darkgray;
+    /* margin-top: -2vh; */
   }
   
   .numpad {
     width: 100%;
     height: 75vh;
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
   }
 
   .numButton, .enterButton {
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    font-size: 8vw;
-    width: 30vw;
-    height: 8.5vw;
-    border-width: 1px;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: lighter;
+    font-size: 9vw;
+    width: 28vw;
+    height: 17vh;
+    border-width: 0.1vw;
     border-style: solid;
-    background-color: white;
-    color: black;
+    border-radius: 1.5vw;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    margin: -1px 0px;
+  }
+
+  .numButton:hover {
+    color: rgb(194, 194, 194);
+    /* font-weight: bold; */
   }
 
   .enterButton {
-    background-color: rgb(0, 64, 255);
+    background-color: rgb(0, 131, 2);
     color: white;
     text-overflow: hidden;
+    font-size: 6vw;
   }
 
-  .inputField {
-    width: 100%;
-    font-size: 5vw;
+  .pinField {
+    width: 90%;
+    font-size: 8vw;
     padding: 0vw;
     margin: 0;
     text-align: center;
   }
 
-  @media screen and (max-device-width: 480px) {
+  tbody {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+
+  @media screen and (max-width: 480px) and (min-height: 480px) {
+
+    body {
+      /* background-color: blue; */
+    }
 
     .numpad {
       height: 85vh;
     }
 
     .numButton, .enterButton {
-      height: 30vw;
-      font-size: 12vw;
+      /* height: 30vw;
+      font-size: 12vw; */
+      padding: 8vh 0vw;
     }
 
     .enterButton {
       font-size: 10vw;
     }
 
-    .inputField {
+    .pinField {
     font-size: 10vw;
    }
 
    .header {
     font-size: 8vw;
+    margin-top: 0vh;
    }
 
   }
 
 
 </style>
+
+
 
 </style>
 
 <script>
   function insertNum(num) {
     try{
-      filled = document.getElementById("inputField").value;
+      filled = document.getElementById("pinField").value;
       filled += String(num);
     } catch {
       filled = String(num);
     } finally {
-      document.getElementById("inputField").value=filled;
+      document.getElementById("pinField").value=filled;
     }
   }
 
   function deleteNum() {
     try {
-      filled = document.getElementById("inputField").value;
+      filled = document.getElementById("pinField").value;
       filled = filled.slice(0, -1);
-      document.getElementById("inputField").value=filled;
+      document.getElementById("pinField").value=filled;
     }
     catch {}
     }
   
 </script>
     
-<h3 class="header">PIN</h3>
+<h1 class="header">PIN</h1>
 
-<div style="width: 100%;">
+<div style="display:flex; justify-content: center; align-items: center; flex-wrap: wrap;">
   <table class="numpad">
     <tr class="padrow">
       <td class="padcolumn"><button value="1" class="numButton" onclick="insertNum(value)">1</button></td>
@@ -122,21 +162,20 @@
       <td><button class="numButton" onclick="deleteNum()">&#8678</button></td>
       <td><button value="0" class="numButton" onclick="insertNum(value)">0</button></td>
       <form method="POST">
-        <td><button class="enterButton">Enter</button></td>
+        <td><button type="submit" class="enterButton">Enter</button></td>
     </tr>
   
 
   </table>
 
-  <input id="inputField"
+  <input id="pinField"
     type="password"
-    class="inputField"
-    id="password"
-    name="password"
+    class="pinField"
+    name="pinField"
     placeholder="PIN eingeben"
   />
-
+  </form>
 </div>
   
-</form>
+
 {% endblock %}
