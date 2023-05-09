@@ -1,22 +1,24 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import current_app, Blueprint, render_template, request, flash, redirect, url_for
 from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db   ##means from __init__.py import db
 from flask_login import login_user, login_required, logout_user, current_user
-from .config import testCreateBlind, chreateAutoAction
-from datetime import time
-
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 auth = Blueprint('auth', __name__)
 
+# limiter = Limiter(current_app, key_func=get_remote_address)
+limiter = Limiter(get_remote_address, app=current_app, default_limits=["200 per day", "50 per hour"])
+tries = 4
 
 @auth.route('/login', methods=['GET', 'POST'])
+@limiter.limit("3 per minute")
 def login():
+    global tries
+    requester_ip = request.remote_addr
+    # showMe = current_app.config['home'].rooms[2].blinds[0].room
 
-    # testCreateBlind("Kinderzimmer", 2)
-    # testCreateBlind("Wohnzimmer", 5)
-    
-    # chreateAutoAction(2,time(15,0),100)
 
     if User.query.count() < 1:
 
@@ -30,13 +32,11 @@ def login():
         users = User.query.all()
         for user in users:
             if check_password_hash(user.pin, pin):
-                flash('Logged in successfully!', category='success')
-                login_user(user, remember=True)
+                login_user(user, remember=False)
                 return redirect(url_for('views.home'))
-            else:
-                flash(type(pin))
+
        
-    return render_template("login.html", user=current_user)
+    return render_template("login.html", user=current_user, tries=tries)
 
 
 

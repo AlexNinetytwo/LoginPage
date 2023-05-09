@@ -1,19 +1,12 @@
-{% extends "base.html" %} {% block title %}Login{% endblock %} {% block content%}
+{% extends "base.html" %}
+{% block content%}
 
 
 <style>
 
-  html {
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-  }
-
   body {
-    height: 100%;
-    width: 100%;
     overflow: hidden;
-    display: flex;
+  
   }
 
   .header {
@@ -21,7 +14,6 @@
     padding: 0;
     margin: 0;
     text-align: center;
-    /* margin-top: -2vh; */
   }
   
   .numpad {
@@ -140,6 +132,10 @@
 </script>
     
 <h1 class="header">PIN</h1>
+
+{% if tries < 3 %}
+<h2>Du hast noch {{tries}} Versuche</h2>
+{% endif %}
 
 <div style="display:flex; justify-content: center; align-items: center; flex-wrap: wrap;">
   <table class="numpad">

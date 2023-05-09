@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
 from flask_sslify import SSLify
+from datetime import timedelta
 
 db = SQLAlchemy()
 DB_NAME = "database.db"
@@ -14,6 +15,8 @@ def create_app():
     sslify = SSLify(app)
     app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+    app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=30)
+
     db.init_app(app)
 
     from .views import views
@@ -26,6 +29,7 @@ def create_app():
     
     with app.app_context():
         db.create_all()
+        
 
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
@@ -34,6 +38,7 @@ def create_app():
     @login_manager.user_loader
     def load_user(id):
         return User.query.get(int(id))
+          
 
     return app
 
