@@ -1,27 +1,28 @@
-html {
-  /* height: 100vh; */
-  /* width: 100vw; */
-  /* display: flex; */
-  /* background-color: blue; */
-}
+
 
 body {
   background: -webkit-linear-gradient(rgb(79, 73, 112), rgb(5, 2, 39));
   background-position: top, bottom;
   background-size: 1px 100vh, 1px 1px;
-  /* background-repeat: repeat-x, repeat; */
   background-attachment: fixed;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-
-  /* width: 110%; */
-  /* overflow: hidden; */
-  /* display: flex; */
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  
 }
 
 .header {
   color: white;
-  font-size: 5vw;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-size: 3vw;
+  /* font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; */
+  text-align: center;
+  background-color: rgb(8, 6, 39);
+  width: 100%;
+  margin: 0;
+  position: fixed;
+  justify-content: space-between;
+  display: flex;
 }
 
 .bigButtonContainer {
@@ -33,12 +34,12 @@ body {
   flex-wrap: wrap;
 }
 
-.roomButton, .allRooms, .livingRoom, .bedRoom, .nursery{
+.roomButton {
 
   width: 100%;
   height: 33vh;
   border-radius: 1.5vw;
-  margin: 2vh 1vw;
+  margin: 1vh 1vw;
   padding: 5vh 0vw;
   font-size: 10vw;
   /* background-image: linear-gradient(rgb(201, 192, 255), rgb(0, 0, 0)); */
@@ -46,7 +47,17 @@ body {
   background-position: center;
   background-size: 100%;
   background-repeat: no-repeat;
-  color: white;
+  color: rgb(255, 255, 255);
+  border: 0;
+}
+
+.roomButton:hover {
+  background-blend-mode: lighten, darken;
+}
+
+.roomButton:active {
+  background-blend-mode: lighten, darken;
+  box-shadow: 0 0 2vw;
 }
 
 .allRooms {
@@ -55,19 +66,26 @@ body {
 
 .livingRoom {
   background-image: linear-gradient(rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.8)), url(../images/livingroom.jpg);
-
 }
 
 .bedRoom {
   background-image: linear-gradient(rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.8)), url(../images/bedroom.jpg);
-  
 }
 
 .nursery {
   background-image: linear-gradient(rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.8)), url(../images/nursery.jpg);
-  
 }
 
-.roomButton:active {
-  background: linear-gradient(to bottom, rgb(72, 39, 255), rgb(201, 192, 255));
+.headerSpace {
+
+  width: 100%;
+  height: 22vh;
+}
+
+@media screen and (max-width: 480px) and (min-height: 480px) {
+
+  .headerSpace {
+    height: 9vh;
+  }
+
 }

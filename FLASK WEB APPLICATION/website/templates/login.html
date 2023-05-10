@@ -3,19 +3,16 @@
 
 
 <style>
-
   body {
     overflow: hidden;
-  
+
   }
 
   .header {
-    font-size: 5vw;
-    padding: 0;
-    margin: 0;
-    text-align: center;
+    position: static;
   }
-  
+
+
   .numpad {
     width: 100%;
     height: 75vh;
@@ -24,7 +21,8 @@
     align-items: center;
   }
 
-  .numButton, .enterButton {
+  .numButton,
+  .enterButton {
     display: flex;
     text-align: center;
     justify-content: center;
@@ -34,32 +32,47 @@
     font-size: 9vw;
     width: 28vw;
     height: 17vh;
-    border-width: 0.1vw;
     border-style: solid;
     border-radius: 1.5vw;
-    background-color: rgb(255, 255, 255);
-    color: rgb(0, 0, 0);
-    margin: -1px 0px;
+    background-color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
+    margin: -2px -1px;
+    border-width: 1px;
+    border-color: rgb(67, 67, 67);
   }
 
-  .numButton:hover {
-    color: rgb(194, 194, 194);
-    /* font-weight: bold; */
+  .numButton:active {
+    background-color: rgb(35, 35, 35);
+    box-shadow: 0 0 6px;
+  }
+
+  .numButton:hover, .enterButton:hover {
+    text-shadow: 0 0 4px;
+    border-color: rgb(123, 123, 123);
   }
 
   .enterButton {
-    background-color: rgb(0, 131, 2);
+    background-color: rgb(39, 56, 39);
     color: white;
     text-overflow: hidden;
     font-size: 6vw;
   }
 
+  .enterButton:active {
+    background-color: rgb(59, 84, 59);
+    box-shadow: 0 0 6px;
+  }
+
   .pinField {
     width: 90%;
-    font-size: 8vw;
-    padding: 0vw;
+    font-size: 6vw;
+    padding: 0;
     margin: 0;
     text-align: center;
+    background-color: rgb(38, 38, 38);
+    border: 0;
+    color: white;
+    /* height: 5vh; */
   }
 
   tbody {
@@ -72,17 +85,12 @@
 
   @media screen and (max-width: 480px) and (min-height: 480px) {
 
-    body {
-      /* background-color: blue; */
-    }
-
     .numpad {
       height: 85vh;
     }
 
-    .numButton, .enterButton {
-      /* height: 30vw;
-      font-size: 12vw; */
+    .numButton,
+    .enterButton {
       padding: 8vh 0vw;
     }
 
@@ -91,17 +99,10 @@
     }
 
     .pinField {
-    font-size: 10vw;
-   }
-
-   .header {
-    font-size: 8vw;
-    margin-top: 0vh;
-   }
+      font-size: 10vw;
+    }
 
   }
-
-
 </style>
 
 
@@ -110,13 +111,13 @@
 
 <script>
   function insertNum(num) {
-    try{
+    try {
       filled = document.getElementById("pinField").value;
       filled += String(num);
     } catch {
       filled = String(num);
     } finally {
-      document.getElementById("pinField").value=filled;
+      document.getElementById("pinField").value = filled;
     }
   }
 
@@ -124,54 +125,47 @@
     try {
       filled = document.getElementById("pinField").value;
       filled = filled.slice(0, -1);
-      document.getElementById("pinField").value=filled;
+      document.getElementById("pinField").value = filled;
     }
-    catch {}
-    }
-  
+    catch { }
+  }
+
 </script>
-    
-<h1 class="header">PIN</h1>
 
-{% if tries < 3 %}
-<h2>Du hast noch {{tries}} Versuche</h2>
-{% endif %}
 
-<div style="display:flex; justify-content: center; align-items: center; flex-wrap: wrap;">
-  <table class="numpad">
-    <tr class="padrow">
-      <td class="padcolumn"><button value="1" class="numButton" onclick="insertNum(value)">1</button></td>
-      <td class="padcolumn"><button value="2" class="numButton" onclick="insertNum(value)">2</button></td>
-      <td class="padcolumn"><button value="3" class="numButton" onclick="insertNum(value)">3</button></td>
-    </tr>
-    <tr class="padrow">
-      <td class="padcolumn"><button value="4" class="numButton" onclick="insertNum(value)">4</button></td>
-      <td class="padcolumn"><button value="5" class="numButton" onclick="insertNum(value)">5</button></td>
-      <td class="padcolumn"><button value="6" class="numButton" onclick="insertNum(value)">6</button></td>
-    </tr>
-    <tr class="padrow">
-      <td class="padcolumn"><button value="7" class="numButton" onclick="insertNum(value)">7</button></td>
-      <td class="padcolumn"><button value="8" class="numButton" onclick="insertNum(value)">8</button></td>
-      <td class="padcolumn"><button value="9" class="numButton" onclick="insertNum(value)">9</button></td>
-    </tr>
-    <tr class="padrow">
-      <td><button class="numButton" onclick="deleteNum()">&#8678</button></td>
-      <td><button value="0" class="numButton" onclick="insertNum(value)">0</button></td>
-      <form method="POST">
-        <td><button type="submit" class="enterButton">Enter</button></td>
-    </tr>
-  
+{% if tries < 3 %} <h2>Du hast noch {{tries}} Versuche</h2>
+  {% endif %}
 
-  </table>
+  <div style="display:flex; justify-content: center; align-items: center; flex-wrap: wrap;">
+    <table class="numpad">
+      <tr class="padrow">
+        <td class="padcolumn"><button value="1" class="numButton" onclick="insertNum(value)">1</button></td>
+        <td class="padcolumn"><button value="2" class="numButton" onclick="insertNum(value)">2</button></td>
+        <td class="padcolumn"><button value="3" class="numButton" onclick="insertNum(value)">3</button></td>
+      </tr>
+      <tr class="padrow">
+        <td class="padcolumn"><button value="4" class="numButton" onclick="insertNum(value)">4</button></td>
+        <td class="padcolumn"><button value="5" class="numButton" onclick="insertNum(value)">5</button></td>
+        <td class="padcolumn"><button value="6" class="numButton" onclick="insertNum(value)">6</button></td>
+      </tr>
+      <tr class="padrow">
+        <td class="padcolumn"><button value="7" class="numButton" onclick="insertNum(value)">7</button></td>
+        <td class="padcolumn"><button value="8" class="numButton" onclick="insertNum(value)">8</button></td>
+        <td class="padcolumn"><button value="9" class="numButton" onclick="insertNum(value)">9</button></td>
+      </tr>
+      <tr class="padrow">
+        <td><button class="numButton" onclick="deleteNum()">&#8678</button></td>
+        <td><button value="0" class="numButton" onclick="insertNum(value)">0</button></td>
+        <form method="POST">
+          <td><button type="submit" class="enterButton">Enter</button></td>
+      </tr>
 
-  <input id="pinField"
-    type="password"
-    class="pinField"
-    name="pinField"
-    placeholder="PIN eingeben"
-  />
-  </form>
-</div>
-  
 
-{% endblock %}
+    </table>
+
+    <input id="pinField" type="password" class="pinField" name="pinField" placeholder="PIN eingeben"/>
+    </form>
+  </div>
+
+
+  {% endblock %}

@@ -17,6 +17,7 @@ tries = 4
 def login():
     global tries
     requester_ip = request.remote_addr
+    header = "PIN"
     # showMe = current_app.config['home'].rooms[2].blinds[0].room
 
 
@@ -36,7 +37,7 @@ def login():
                 return redirect(url_for('views.home'))
 
        
-    return render_template("login.html", user=current_user, tries=tries)
+    return render_template("login.html", user=current_user, tries=tries, header=header)
 
 
 
