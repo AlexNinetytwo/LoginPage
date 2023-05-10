@@ -2,19 +2,26 @@ html {
   /* height: 100vh; */
   /* width: 100vw; */
   /* display: flex; */
+  /* background-color: blue; */
 }
 
 body {
-  background: -webkit-linear-gradient(rgb(209, 227, 213), rgb(51, 111, 64));
-  background-position: bottom, top;
-  background-size: 1px 50%, 1px 1px;
-  background-repeat: repeat-x, repeat;
-  background-attachment: scroll;
+  background: -webkit-linear-gradient(rgb(79, 73, 112), rgb(5, 2, 39));
+  background-position: top, bottom;
+  background-size: 1px 100vh, 1px 1px;
+  /* background-repeat: repeat-x, repeat; */
+  background-attachment: fixed;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 
-  /* width: 100%; */
+  /* width: 110%; */
   /* overflow: hidden; */
   /* display: flex; */
+}
+
+.header {
+  color: white;
+  font-size: 5vw;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 .bigButtonContainer {
@@ -26,7 +33,7 @@ body {
   flex-wrap: wrap;
 }
 
-.roomButton {
+.roomButton, .allRooms, .livingRoom, .bedRoom, .nursery{
 
   width: 100%;
   height: 33vh;
@@ -34,8 +41,31 @@ body {
   margin: 2vh 1vw;
   padding: 5vh 0vw;
   font-size: 10vw;
-  background: linear-gradient(to bottom, rgb(201, 192, 255), rgb(72, 39, 255));
+  /* background-image: linear-gradient(rgb(201, 192, 255), rgb(0, 0, 0)); */
+  background-blend-mode: normal;
+  background-position: center;
+  background-size: 100%;
+  background-repeat: no-repeat;
   color: white;
+}
+
+.allRooms {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.8)), url(../images/house.jpg);
+}
+
+.livingRoom {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.8)), url(../images/livingroom.jpg);
+
+}
+
+.bedRoom {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.8)), url(../images/bedroom.jpg);
+  
+}
+
+.nursery {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.8)), url(../images/nursery.jpg);
+  
 }
 
 .roomButton:active {

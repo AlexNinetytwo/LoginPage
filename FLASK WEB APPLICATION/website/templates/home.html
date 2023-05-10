@@ -2,11 +2,39 @@
 {% block content%}
 
 
-<h1 align="center">Smart Home System</h1>
+<h1 align="center" class="header">Home System</h1>
 <div class="bigButtonContainer">
-  <button class="roomButton">Alle</button>
+  <button class="allRooms">Alle</button>
+  <script>
+    let roomName;
+    let buttonID;
+  </script>
   {% for room in house.rooms %}
-    <button class="roomButton">{{room.name}}</button>
+    <button id="{{room.name}}" class="roomButton">{{room.name}}</button>
+    <script>
+      roomName = "{{room.name}}";
+      buttonID = document.getElementById("{{room.name}}")
+      switch (roomName) {
+        case "Wohnzimmer":
+          buttonID.classList.remove("roomButton")
+          buttonID.classList.add("livingRoom")
+          break;
+        case "Kinderzimmer":
+          buttonID.classList.remove("roomButton")
+          buttonID.classList.add("nursery")
+          break;
+        case "Schlafzimmer":
+          buttonID.classList.remove("roomButton")
+          buttonID.classList.add("bedRoom")
+          break;
+
+      }
+      // if (roomName == "Wohnzimmer") {
+      //   {{room.name}}.classList.add("livingRoom")
+      // }
+      
+
+    </script>
   {% endfor %}
 </div>
 
