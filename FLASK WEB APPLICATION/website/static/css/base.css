@@ -1,4 +1,30 @@
+.screenSaver {
+  background-color: black;
+  font-size: 8vh;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  display: none;
+  flex-wrap: wrap;
+  color: white;
+  align-items: center;
 
+}
+
+.screenSaverBox {
+  width: 50vw;
+  position: absolute;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.screenSaverFont {
+  padding: 0;
+  margin: 0;
+  
+}
 
 body {
   background: -webkit-linear-gradient(rgb(79, 73, 112), rgb(5, 2, 39));
@@ -9,7 +35,6 @@ body {
   display: flex;
   flex-wrap: wrap;
   margin: 0;
-  
 }
 
 .header {
@@ -42,47 +67,52 @@ body {
   margin: 1vh 1vw;
   padding: 5vh 0vw;
   font-size: 10vw;
-  background-blend-mode: normal;
+  background-blend-mode: normal, luminosity;
   background-position: center;
   background-size: 110% auto;
   background-repeat: no-repeat;
   color: rgb(255, 255, 255);
   border: 0;
-  background-image: linear-gradient(rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.8)), url(../images/all.jpg);
-}
-
-.roomButton:hover {
-  background-blend-mode: lighten, darken;
+  background-image: linear-gradient(rgba(78, 77, 150, 0.5), rgba(0, 0, 0, 0.8)), url(../images/all.jpg);
 }
 
 .roomButton:active {
-  background-blend-mode: lighten, darken;
-  box-shadow: 0 0 2vw;
+
+  box-shadow: 0 0 3vw;
 }
 
 .allRooms {
-  background-image: linear-gradient(rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.8)), url(../images/all.jpg);
+  background-image: linear-gradient(rgba(78, 77, 150, 0.5), rgba(0, 0, 0, 0.8)), url(../images/all.jpg);
 }
 
 .groundFloor {
-  background-image: linear-gradient(rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.8)), url(../images/ground.jpg);
+  background-image: linear-gradient(rgba(78, 77, 150, 0.5), rgba(0, 0, 0, 0.8)), url(../images/ground.jpg);
 }
 
 .firstFloor {
-  background-image: linear-gradient(rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.8)), url(../images/first.jpg);
+  background-image: linear-gradient(rgba(78, 77, 150, 0.5), rgba(0, 0, 0, 0.8)), url(../images/first.jpg);
 }
 
 .livingRoom {
-  background-image: linear-gradient(rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.8)), url(../images/livingroom.jpg);
+  background-image: linear-gradient(rgba(78, 77, 150, 0.5), rgba(0, 0, 0, 0.8)), url(../images/livingroom.jpg);
 }
 
-.bedRoom {
-  background-image: linear-gradient(rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.8)), url(../images/bedroom.jpg);
+.diningRoom {
+  background-image: linear-gradient(rgba(78, 77, 150, 0.5), rgba(0, 0, 0, 0.8)), url(../images/diningRoom.jpg);
 }
 
-.nursery {
-  background-image: linear-gradient(rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.8)), url(../images/nursery.jpg);
+.kitchen {
+  background-image: linear-gradient(rgba(78, 77, 150, 0.5), rgba(0, 0, 0, 0.8)), url(../images/kitchen.jpg);
 }
+
+.office {
+  background-image: linear-gradient(rgba(78, 77, 150, 0.5), rgba(0, 0, 0, 0.8)), url(../images/office.jpg);
+}
+
+.business {
+  background-image: linear-gradient(rgba(78, 77, 150, 0.5), rgba(0, 0, 0, 0.8)), url(../images/business.jpeg);
+}
+
 
 
 

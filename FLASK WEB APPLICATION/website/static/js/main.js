@@ -18,11 +18,20 @@ function changeClass(object, caseVar) {
       case "Wohnzimmer":
         object.classList.add("livingRoom");
         break;
-      case "Kinderzimmer":
-        object.classList.add("nursery");
+      case "Esszimmer":
+        object.classList.add("diningRoom");
         break;
-      case "Schlafzimmer":
-        object.classList.add("bedRoom");
+      case "Küche":
+        object.classList.add("kitchen");
+        break;
+      case "Büro1":
+        object.classList.add("office");
+        break;
+      case "Büro2":
+        object.classList.add("office");
+        break;
+      case "Herrenzimmer":
+        object.classList.add("business");
         break;
     }
   }

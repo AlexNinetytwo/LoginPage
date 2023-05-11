@@ -8,11 +8,14 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    
+    <style>
+
+    </style>
 
     <title>Smart Home System</title>
   </head>
   <body>
+    
     <div onclick="redirectToPage('{{previousPage}}')" class="header">
       <h1>&nbsp;&#8678</h1>
       <h1>
@@ -51,7 +54,37 @@
 
     <div class="container">{% block content %} {% endblock %}</div>
     
+    
+    <div onclick="resetTimer()" class="screenSaver" id="screenSaver">
+      <div class="screenSaverBox">
+        <h1 class="screenSaverFont">14:31</h1>
+        <h1 class="screenSaverFont">{{celsius}}</h1>
+      </div>
+    </div>
+  
+    
 
+    <script>
+
+      let seconds = 0;
+      var timer = setInterval(updateTimer, 250);
+      let screenSaver = document.getElementById("screenSaver");
+
+      function updateTimer() {
+        seconds++;
+      }
+    
+      function resetTimer() {
+        clearInterval(timer);
+        screenSaver.style.display = "none";
+        timer = setInterval(updateTimer, 250);
+      }
+
+      setTimeout(function() {
+      clearInterval(timer); // Timer wird gestoppt
+      screenSaver.style.display = "flex";
+      }, 10000);
+    </script>
 
   </body>
 </html>
