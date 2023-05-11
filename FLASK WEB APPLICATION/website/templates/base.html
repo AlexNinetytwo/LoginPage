@@ -15,8 +15,15 @@
   <body>
     <div onclick="redirectToPage('{{previousPage}}')" class="header">
       <h1>&nbsp;&#8678</h1>
-      <h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{header}}</h1>
-      <h1>21°C&nbsp;</h1>
+      <h1>
+        {% for i in range(4) %}
+        &nbsp;
+        {% endfor %}
+        {{header}}
+      </h1>
+      <div style="width:17vw; text-align: right;">
+        <h1>{{celsius}}&nbsp;</h1>
+      </div>
     </div>
       
 

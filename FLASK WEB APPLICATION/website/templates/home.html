@@ -2,26 +2,30 @@
 {% block content%}
 
 
-
 <div class="bigButtonContainer">
   <div class="headerSpace"></div>
-  <button onclick="redirectToPage('Alle')" id="Alle" class="roomButton">Alle</button>
+  <button onclick="redirectToPage('/Home/Alle')" id="Alle" class="roomButton">Alle</button>
 
+
+  {% set envs = house.floors %}
+  {% if isFloor %}
+  {% set envs = floor.rooms %}
   <script>
     buttonID = document.getElementById("Alle");
-    buttonID.classList.add("allRooms")
+    changeClass(buttonID, "{{floor.name}}");
   </script>
-
-  {% for room in house.rooms %}
-    <button onclick="redirectToPage('{{room.name}}')" id="{{room.name}}" class="roomButton">{{room.name}}</button>
+  {% endif %}
+  {% for env in envs %}
+    <button onclick="redirectToPage('/Home/{{env.name}}')" id="{{env.name}}" class="roomButton">{{env.name}}</button>
 
     <script>
-      roomName = "{{room.name}}";
-      buttonID = document.getElementById("{{room.name}}")
-      changeClass(buttonID, roomName);
+      envName = "{{env.name}}";
+      buttonID = document.getElementById("{{env.name}}")
+      changeClass(buttonID, envName);
     </script>
   {% endfor %}
-
+  
+  
 </div>
 
 

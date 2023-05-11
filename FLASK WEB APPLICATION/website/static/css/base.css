@@ -42,13 +42,13 @@ body {
   margin: 1vh 1vw;
   padding: 5vh 0vw;
   font-size: 10vw;
-  /* background-image: linear-gradient(rgb(201, 192, 255), rgb(0, 0, 0)); */
   background-blend-mode: normal;
   background-position: center;
-  background-size: 100%;
+  background-size: 110% auto;
   background-repeat: no-repeat;
   color: rgb(255, 255, 255);
   border: 0;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.8)), url(../images/all.jpg);
 }
 
 .roomButton:hover {
@@ -61,7 +61,15 @@ body {
 }
 
 .allRooms {
-  background-image: linear-gradient(rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.8)), url(../images/house.jpg);
+  background-image: linear-gradient(rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.8)), url(../images/all.jpg);
+}
+
+.groundFloor {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.8)), url(../images/ground.jpg);
+}
+
+.firstFloor {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.8)), url(../images/first.jpg);
 }
 
 .livingRoom {
@@ -75,6 +83,8 @@ body {
 .nursery {
   background-image: linear-gradient(rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.8)), url(../images/nursery.jpg);
 }
+
+
 
 .headerSpace {
 

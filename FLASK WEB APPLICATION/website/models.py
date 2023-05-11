@@ -8,9 +8,42 @@ class User(db.Model, UserMixin):
     pin = db.Column(db.String(6))
 
 # Haus
-class Home():
+class House:
     def __init__(self, roomNames:list):
+        self.floors = [Floor(roomNames)]
+
+    def addRooms(self, roomNames:list, floorName:str, floorIndex:int=None):
+
+        if type(floorIndex) == None:
+            if len(self.floors) == 1:
+                self.floors[-1].addRooms(roomNames)
+            else:
+                self.floors.append(Floor(roomNames, floorName))
+
+        else:
+            if floorIndex in list(range(len(self.floors))):
+                self.floors[floorIndex].addRooms(roomNames)
+            else:
+                self.floors.insert(floorIndex, Floor(roomNames, floorName))
+
+    def raiseAllBlinds(self):
+        for room in self.rooms:
+            room.raiseAllBlinds()
+
+    def lowerAllBlinds(self):
+        for room in self.rooms:
+            room.raiseAllBlinds()
+
+# Etage
+class Floor:
+    def __init__(self, roomNames:list, floorName="Erdgeschoss"):
+
+        self.name = floorName
         self.rooms = []
+        for roomName in roomNames:
+            self.rooms.append(Room(roomName))
+
+    def addRooms(self, roomNames):
         for roomName in roomNames:
             self.rooms.append(Room(roomName))
 
@@ -23,7 +56,7 @@ class Home():
             room.raiseAllBlinds()
 
 # Raum
-class Room():
+class Room:
     def __init__(self, name):
         self.name = name
         self.blinds = Blind.query.filter_by(room=self.name)

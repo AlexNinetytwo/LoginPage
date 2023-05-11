@@ -1,14 +1,19 @@
 from . import db
-from .models import Blind, BlindsActionTimes, Home
+from .models import Blind, BlindsActionTimes, House
 from sqlalchemy.exc import SQLAlchemyError
 from datetime import time
 
 openBlinds = time(8,0)
 closeBlinds = time(21,0)
-rooms = [
+groundFloor = [
     "Wohnzimmer",
-    "Schlafzimmer",
-    "Kinderzimmer"
+    "Esszimmer",
+    "Küche"
+]
+firstFloor = [
+    "Büro1",
+    "Büro2",
+    "Herrenzimmer"
 ]
 
 
@@ -16,11 +21,11 @@ def mainConfig():
 
     def firstStart():
         # create Blinds
-        testCreateBlind(rooms[0],1)
-        testCreateBlind(rooms[0],2)
-        testCreateBlind(rooms[0],3)
-        testCreateBlind(rooms[1],4)
-        testCreateBlind(rooms[2],5)
+        testCreateBlind(groundFloor[0],1)
+        testCreateBlind(groundFloor[0],2)
+        testCreateBlind(groundFloor[0],3)
+        testCreateBlind(groundFloor[1],4)
+        testCreateBlind(groundFloor[2],5)
 
         # Wohnzimmer
             #open
@@ -45,8 +50,6 @@ def mainConfig():
         createAutoAction(5,closeBlinds,100)
 
     # firstStart()
-
-
 
 
 def testCreateBlind(room, port): 

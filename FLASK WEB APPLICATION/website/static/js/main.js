@@ -9,6 +9,12 @@ function redirectToPage(pageUrl) {
 
 function changeClass(object, caseVar) {
     switch (caseVar) {
+      case "Erdgeschoss":
+        object.classList.add("groundFloor");
+        break;
+      case "1.OG":
+        object.classList.add("firstFloor");
+        break;
       case "Wohnzimmer":
         object.classList.add("livingRoom");
         break;
