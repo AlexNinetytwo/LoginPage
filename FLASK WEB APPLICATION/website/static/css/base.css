@@ -1,3 +1,9 @@
+::-webkit-scrollbar {
+  display: none;
+}
+
+
+
 .screenSaver {
   background-color: black;
   font-size: 8vh;
@@ -35,6 +41,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   margin: 0;
+  /* overflow: hidden; */
 }
 
 .header {
@@ -48,6 +55,10 @@ body {
   position: fixed;
   justify-content: space-between;
   display: flex;
+}
+
+.header:hover {
+  cursor: default;
 }
 
 .bigButtonContainer {

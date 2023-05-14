@@ -27,12 +27,20 @@ class House:
                 self.floors.insert(floorIndex, Floor(roomNames, floorName))
 
     def raiseAllBlinds(self):
-        for room in self.rooms:
-            room.raiseAllBlinds()
+        for floor in self.floors:
+            floor.raiseAllBlinds()
 
     def lowerAllBlinds(self):
-        for room in self.rooms:
-            room.raiseAllBlinds()
+        for floor in self.floors:
+            floor.lowerAllBlinds()
+
+    def lightsOn(self):
+        for floor in self.floors:
+            floor.lightsOn()
+
+    def lightsOff(self):
+        for floor in self.floors:
+            floor.lightsOff()
 
 # Etage
 class Floor:
@@ -55,11 +63,20 @@ class Floor:
         for room in self.rooms:
             room.raiseAllBlinds()
 
+    def lightsOn(self):
+        for room in self.rooms:
+            room.lightsOn()
+
+    def lightsOff(self):
+        for room in self.rooms:
+            room.lightsOff()
+
 # Raum
 class Room:
     def __init__(self, name):
         self.name = name
         self.blinds = Blind.query.filter_by(room=self.name)
+        self.lights = Light.query.filter_by(room=self.name)
 
     def raiseAllBlinds(self):
         for blind in self.blinds:
@@ -69,13 +86,42 @@ class Room:
         for blind in self.blinds:
             blind.lowerTheBlind()
 
+    def lightsOn(self):
+        for light in self.lights:
+            light.turnOn()
+
+    def lightsOff(self):
+        for light in self.lights:
+            light.turnOff()
+
+# Licht
+class Light(db.Model):
+
+    port = db.Column(db.Integer, primary_key=True)
+    threshold = db.Column(db.Integer)
+    room = db.Column(db.String(15))
+
+    def __init__(self, room, port, threshold):
+        self.port = port
+        self.room = room
+        self.threshold = threshold
+
+    def setThreshold(self, value:int):
+        self.threshold = value
+        db.session.commt()
+
+    def turnOn(self):
+        pass
+
+    def turnOff(self):
+        pass
+
 # Rollo
 class Blind(db.Model):
 
     port = db.Column(db.Integer, primary_key=True)
     room = db.Column(db.String(15))
     
-
     actionTimes = db.relationship('BlindsActionTimes', backref='blind', lazy=True) # Beziehung zu Action
 
     def __init__(self, room, port):
@@ -86,10 +132,12 @@ class Blind(db.Model):
     def raiseTheBlind(self):
         percent = 0
         self.closedInPercent = percent
+        db.session.commit()
 
     def lowerTheBlind(self):
         percent = 100
         self.closedInPercent = percent
+        db.session.commit()
 
 # Automatikzeiten
 class BlindsActionTimes(db.Model):
@@ -102,4 +150,6 @@ class BlindsActionTimes(db.Model):
         self.port = port
         self.time_value = time_value
         self.closedInPercent = closedInPercent
+
+
         

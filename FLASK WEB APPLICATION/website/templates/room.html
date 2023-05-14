@@ -1,26 +1,27 @@
 {% extends "base.html" %}
 {% block content%}
 
+<style>
+  body {
+    display: inline;
+  }
+</style>
+
 
 <div class="bigButtonContainer">
   <div class="headerSpace"></div>
-  <button id="Alle" class="roomButton">Alle</button>
+  {% for light in lights %}
+  <button onclick="" id="" class="roomButton">Licht</button>
 
-  <script>
-    buttonID = document.getElementById("Alle");
-    buttonID.classList.add("allRooms")
-  </script>
 
-  {% for room in house.rooms %}
-    <button onclick="redirectToPage('{{room.name}}')" id="{{room.name}}" class="roomButton">{{room.name}}</button>
-
-    <script>
-      roomName = "{{room.name}}";
-      buttonID = document.getElementById("{{room.name}}")
-      changeClass(buttonID, roomName);
-    </script>
+  <!-- <script>
+    envName = "";
+    buttonID = document.getElementById("")
+    changeClass(buttonID, envName);
+  </script> -->
   {% endfor %}
-
+  0
+  
 </div>
 
 

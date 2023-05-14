@@ -4,7 +4,13 @@
 
 <div class="bigButtonContainer">
   <div class="headerSpace"></div>
+  {% if header == "HOME" %}
   <button onclick="redirectToPage('/Home/Alle')" id="Alle" class="roomButton">Alle</button>
+  {% elif header == "ERDGESCHOSS" %}
+  <button onclick="redirectToPage('/Home/Erdgeschoss/Alle')" id="Alle" class="roomButton">Alle</button>
+  {% elif header == "1.OG" %}
+  <button onclick="redirectToPage('/Home/1.OG/Alle')" id="Alle" class="roomButton">Alle</button>
+  {% endif %}
 
 
   {% set envs = house.floors %}
@@ -16,13 +22,19 @@
   </script>
   {% endif %}
   {% for env in envs %}
-    <button onclick="redirectToPage('/Home/{{env.name}}')" id="{{env.name}}" class="roomButton">{{env.name}}</button>
+  {% if header == "HOME" %}
+  <button onclick="redirectToPage('/Home/{{env.name}}')" id="{{env.name}}" class="roomButton">{{env.name}}</button>
+  {% elif header == "ERDGESCHOSS" %}
+  <button onclick="redirectToPage('/Home/Erdgeschoss/{{env.name}}')" id="{{env.name}}" class="roomButton">{{env.name}}</button>
+  {% elif header == "1.OG" %}
+  <button onclick="redirectToPage('/Home/1.OG/{{env.name}}')" id="{{env.name}}" class="roomButton">{{env.name}}</button>
+  {% endif %}
 
-    <script>
-      envName = "{{env.name}}";
-      buttonID = document.getElementById("{{env.name}}")
-      changeClass(buttonID, envName);
-    </script>
+  <script>
+    envName = "{{env.name}}";
+    buttonID = document.getElementById("{{env.name}}")
+    changeClass(buttonID, envName);
+  </script>
   {% endfor %}
   
   

@@ -1,98 +1,59 @@
 from flask import flash, current_app, Blueprint, render_template, redirect, url_for
 from flask_login import login_required, current_user
+from .models import Light
 
 views = Blueprint('views', __name__)
 
 def getTemp():
     return "21°C"
 
+def getLights(roomName):
+    return Light.query.filter_by(room=roomName)
+
 @views.route('/', methods=['GET', 'POST'])
 def sentToHome():
     return redirect(url_for('views.home'))
 
+route_data = [
+    {'path': '/', 'previousPage': '', 'header': 'HOME', 'template': 'menu.html', 'is_floor': False, 'floor': None},
+    {'path': '/Erdgeschoss', 'previousPage': '/Home', 'header': 'ERDGESCHOSS', 'template': 'menu.html', 'is_floor': True, 'floor': 0},
+    {'path': '/1.OG', 'previousPage': '/Home', 'header': '1.OG', 'template': 'menu.html', 'is_floor': True, 'floor': 1},
+    {'path': '/Erdgeschoss/Flur', 'previousPage': '/Home/Erdgeschoss', 'header': 'FLUR', 'template': 'room.html'},
+    {'path': '/Erdgeschoss/Wohnzimmer', 'previousPage': '/Home/Erdgeschoss', 'header': 'WOHNZIMMER', 'template': 'room.html'},
+    {'path': '/Erdgeschoss/Esszimmer', 'previousPage': '/Home/Erdgeschoss', 'header': 'ESSZIMMER', 'template': 'room.html'},
+    {'path': '/Erdgeschoss/Küche', 'previousPage': '/Home/Erdgeschoss', 'header': 'KÜCHE', 'template': 'room.html'},
+    {'path': '/1.OG/Büro1', 'previousPage': '/Home/1.OG', 'header': 'BÜRO1', 'template': 'room.html'},
+    {'path': '/1.OG/Büro2', 'previousPage': '/Home/1.OG', 'header': 'BÜRO2', 'template': 'room.html'},
+    {'path': '/1.OG/Herrenzimmer', 'previousPage': '/Home/1.OG', 'header': 'HERRENZIMMER', 'template': 'room.html'},
+    {'path': '/Alle', 'previousPage': '/Home', 'header': 'ALLE MODULE', 'template': 'room.html'},
+    {'path': '/Erdgeschoss/Alle', 'previousPage': '/Home/Erdgeschoss', 'header': 'ERDGESCHOSS-ALLE', 'template': 'room.html'},
+    {'path': '/1.OG/Alle', 'previousPage': '/Home/1.OG', 'header': '1.OG-ALLE', 'template': 'room.html'},
+]
+
 @views.route('/Home', methods=['GET', 'POST'])
 @login_required
 def home():
-    header = "HOME"
-    house = current_app.config['home'] 
-    return render_template("menu.html",
-                           house=house,
-                           header=header,
-                           celsius = getTemp(),
-                           floor=False)
-
-@views.route('/Home/Erdgeschoss', methods=['GET', 'POST'])
-@login_required
-def groundFloor():
-    header = "ERDGESCHOSS"
     house = current_app.config['home']
-    previousPage = "/Home"
-    return render_template("menu.html",
-                           house=house,
-                           header=header,
-                           celsius=getTemp(),
-                           previousPage=previousPage,
-                           isFloor=True,
-                           floor=house.floors[0])
+    return render_template('menu.html', house=house, celsius=getTemp(), header='HOME')
 
-@views.route('/Home/1.OG', methods=['GET', 'POST'])
+@views.route('/Home/<path:subpath>', methods=['GET', 'POST'])
 @login_required
-def firstFloor():
-    header = "1.OG"
+def dynamic_route(subpath):
     house = current_app.config['home']
-    previousPage = "/Home"
-    return render_template("menu.html",
-                           house=house,
-                           header=header,
-                           celsius=getTemp(),
-                           previousPage=previousPage,
-                           isFloor=True,
-                           floor=house.floors[1])
+    for data in route_data:
+        if data['path'].lstrip('/') == subpath:
+            header = data['header']
+            template = data['template']
+            previousPage = data['previousPage']
+            is_floor = data.get('is_floor', False)
+            floor = house.floors[data.get('floor', 0)] if is_floor else None
+            return render_template(template,
+                                   house=house,
+                                   celsius=getTemp(),
+                                   header=header,
+                                   isFloor=is_floor,
+                                   floor=floor,
+                                   previousPage=previousPage,
+                                   lights=getLights("Flur"))
+    return redirect(url_for('views.home'))
 
-@views.route('/Home/Wohnzimmer', methods=['GET', 'POST'])
-@login_required
-def livingRoom():
-    header = "WOHNZIMMER"
-    house = current_app.config['home']
-    previousPage = "/Home"
-    return render_template("room.html",
-                           house=house,
-                           header=header,
-                           celsius = getTemp(),
-                           previousPage=previousPage)
-
-@views.route('/Home/Esszimmer', methods=['GET', 'POST'])
-@login_required
-def bedRoom():
-    header = "ESSZIMMER"
-    house = current_app.config['home']
-    previousPage = "/Home"
-    return render_template("room.html",
-                           house=house,
-                           header=header,
-                           celsius=getTemp(),
-                           previousPage=previousPage)
-
-@views.route('/Home/Kinderzimmer', methods=['GET', 'POST'])
-@login_required
-def nurery():
-    header = "KINDERZIMMER"
-    house = current_app.config['home']
-    previousPage = "/Home"
-    return render_template("room.html",
-                            house=house,
-                            header=header,
-                            celsius=getTemp(),
-                            previousPage=previousPage)
-
-@views.route('/Home/Alle', methods=['GET', 'POST'])
-@login_required
-def all():
-    header = "ALLE"
-    house = current_app.config['home']
-    previousPage = "/Home"
-    return render_template("room.html",
-                            house=house,
-                            header=header,
-                            celsius=getTemp(),
-                            previousPage=previousPage)

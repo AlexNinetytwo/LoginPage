@@ -1,20 +1,17 @@
 <!DOCTYPE html>
 <html>
 
-  <link rel="stylesheet" type="text/css" href="../static/css/base.css">
-  <script src="../static/js/main.js"></script>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/base.css') }}">
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-
-    </style>
 
     <title>Smart Home System</title>
   </head>
-  <body>
+  <body id="body">
     
     <div onclick="redirectToPage('{{previousPage}}')" class="header">
       <h1>&nbsp;&#8678</h1>
@@ -56,7 +53,7 @@
     
     
     <div onclick="resetTimer()" class="screenSaver" id="screenSaver">
-      <div class="screenSaverBox">
+      <div class="screenSaverBox" id="screenSaverBox">
         <h1 class="screenSaverFont">14:31</h1>
         <h1 class="screenSaverFont">{{celsius}}</h1>
       </div>
@@ -67,23 +64,56 @@
     <script>
 
       let seconds = 0;
-      var timer = setInterval(updateTimer, 250);
+      let timer = setInterval(updateTimer, 1000);
       let screenSaver = document.getElementById("screenSaver");
+      let screenSaverBox = document.getElementById("screenSaverBox");
 
       function updateTimer() {
         seconds++;
+        if (seconds > 60) {
+          showScreenSaver()
+          seconds = 0;
+        }
       }
     
       function resetTimer() {
         clearInterval(timer);
         screenSaver.style.display = "none";
-        timer = setInterval(updateTimer, 250);
+        timer = setInterval(updateTimer, 1000);
       }
 
-      setTimeout(function() {
-      clearInterval(timer); // Timer wird gestoppt
-      screenSaver.style.display = "flex";
-      }, 10000);
+      function showScreenSaver() {
+        clearInterval(timer);
+        screenSaver.style.display = "flex";
+        timer = setInterval(moveScreenSaver, 2000);
+      }
+
+      let directionX = 10
+      let directionY = 10
+      let bodyWidth = document.getElementById("body").getBoundingClientRect().width;
+      let bodyHeight = document.getElementById("body").getBoundingClientRect().height;
+      
+
+      function moveScreenSaver() {
+        let xPos = screenSaverBox.offsetLeft;
+        let yPos = screenSaverBox.offsetTop;
+        let screenSaverWidth = screenSaverBox.getBoundingClientRect().width;
+        let screenSaverHeight = screenSaverBox.getBoundingClientRect().height;
+        screenSaverBox.style.left = String(xPos + directionX) + "px";
+        screenSaverBox.style.top = String(yPos + directionY) + "px";
+        if (xPos < 0)  {
+          directionX = 10
+        } else if (xPos+screenSaverWidth > bodyWidth) {
+          directionX = -10
+        }
+        if (yPos < 0)  {
+          directionY = 10
+        } else if (yPos+screenSaverHeight > bodyHeight-screenSaverHeight) {
+          directionY = -10
+        }
+        
+      }
+
     </script>
 
   </body>
