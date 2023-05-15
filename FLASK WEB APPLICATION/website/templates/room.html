@@ -8,10 +8,52 @@
 </style>
 
 
+<style>
+  .configContainer {
+    width: 90%;
+    background-color: rgb(8, 6, 39);
+    border-color: rgb(60, 56, 117);
+    border-width: 1px;
+  }
+
+  .flex {
+    display: flex;
+    width: 100%;
+  }
+
+  .controlButton {
+    display: block;
+    width: 100%;
+  }
+
+  .control {
+    width: 50%;
+    height: 50vh;
+  }
+
+</style>
+
+
 <div class="bigButtonContainer">
   <div class="headerSpace"></div>
-  {% for light in lights %}
-  <button onclick="" id="" class="roomButton">Licht</button>
+  <!-- {% for light in lights %} -->
+  <!-- <button onclick="" id="" class="roomButton">Licht</button> -->
+  <div class="configContainer">
+    <div class="flex">
+      <div class="control">
+        <button class="controlButton">Up</button>
+        <button class="controlButton">Down</button>
+      </div>
+      <div class="control">
+        <div>
+          <input type="checkbox">Automatik
+        </div>
+        <div>
+          <button>Zeitplan</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
   <!-- <script>
@@ -20,7 +62,6 @@
     changeClass(buttonID, envName);
   </script> -->
   {% endfor %}
-  0
   
 </div>
 
