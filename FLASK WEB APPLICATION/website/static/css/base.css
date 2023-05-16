@@ -110,11 +110,15 @@ body {
   background-image: linear-gradient(rgba(78, 77, 150, 0.5), rgba(0, 0, 0, 0.8)), url(../images/first.jpg);
 }
 
-.livingRoom {
+.hallway {
+  background-image: linear-gradient(rgba(78, 77, 150, 0.5), rgba(0, 0, 0, 0.8)), url(../images/ground.jpg);
+}
+
+.livingroom {
   background-image: linear-gradient(rgba(78, 77, 150, 0.5), rgba(0, 0, 0, 0.8)), url(../images/livingroom.jpg);
 }
 
-.diningRoom {
+.diningroom {
   background-image: linear-gradient(rgba(78, 77, 150, 0.5), rgba(0, 0, 0, 0.8)), url(../images/diningRoom.jpg);
 }
 
@@ -126,7 +130,7 @@ body {
   background-image: linear-gradient(rgba(78, 77, 150, 0.5), rgba(0, 0, 0, 0.8)), url(../images/office.jpg);
 }
 
-.business {
+.mensroom {
   background-image: linear-gradient(rgba(78, 77, 150, 0.5), rgba(0, 0, 0, 0.8)), url(../images/business.jpeg);
 }
 

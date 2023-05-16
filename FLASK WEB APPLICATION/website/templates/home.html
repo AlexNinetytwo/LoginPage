@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content%}
+
+
+<div class="bigButtonContainer">
+  <div class="headerSpace"></div>
+  
+  <button onclick="redirectToPage({{pathToAll}})" id="Alle" class="roomButton">Alle</button>
+  
+  {% for env in envs %}
+  <button onclick="redirectToPage('/Home/{{env.name}}')" id="{{env.name}}" class="roomButton">{{env.name}}</button>
+  
+  <script>
+    envName = "{{env.name}}";
+    buttonID = document.getElementById(envName)
+    changeClass(buttonID, envName);
+  </script>
+  {% endfor %}
+  
+  
+</div>
+
+
+{% endblock %}

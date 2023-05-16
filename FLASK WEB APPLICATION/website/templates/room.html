@@ -13,29 +13,24 @@
 
 <div class="bigButtonContainer">
   <div class="headerSpace"></div>
-  {% set lights = house.floors %}
-  {% for light in lights %}
+  {% for module in modules %}
   <div id="blindControl">
     <div class="configContainer">
       <div class="flex">
 
         <div class="controlLeft">
-          <button onclick="lockButton(id)"  class="controlButton" id="driveUp{{light.port}}">
+          <button onclick="lockButton(id)"  class="controlButton" id="driveUp{{module.port}}">
             <div class="buttonFont">&#x003C;</div>
           </button>
-          <button onclick="lockButton(id)" class="controlButton" id="driveDown{{light.port}}">
+          <button onclick="lockButton(id)" class="controlButton" id="driveDown{{module.port}}">
             <div class="buttonFont">&#x003E;</div>
           </button>
         </div>
-        <script>
-          let button{{light.port}}UpisLocked
-          let button{{light.port}}DownUpisLocked
-        </script>
 
         <div class="controlRight">
 
           <div class="controlHeader">
-            <div>&nbsp;ROLLO {{light.port}}</div>
+            <div>&nbsp;ROLLO {{module.port}}</div>
             <div>0%&nbsp;</div>
           </div>
 
