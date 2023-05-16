@@ -8,26 +8,30 @@ def getTemp():
     return "21°C"
 
 def getLights(roomName):
-    return Light.query.filter_by(room=roomName)
+    house = current_app.config['home']
+
+    lights = house.floors['Erdgeschoss'].rooms['Flur'].lights
+    
+    lights = Light.query.get_by(name=roomName)
 
 @views.route('/', methods=['GET', 'POST'])
 def sentToHome():
     return redirect(url_for('views.home'))
 
 route_data = [
-    {'path': '/', 'previousPage': '', 'header': 'HOME', 'template': 'menu.html', 'is_floor': False, 'floor': None},
-    {'path': '/Erdgeschoss', 'previousPage': '/Home', 'header': 'ERDGESCHOSS', 'template': 'menu.html', 'is_floor': True, 'floor': 0},
+    {'path': '/', 'previousPage': '', 'header': 'Home', 'template': 'menu.html', 'is_floor': False, 'floor': None},
+    {'path': '/Erdgeschoss', 'previousPage': '/Home', 'header': 'Erdgeschoss', 'template': 'menu.html', 'is_floor': True, 'floor': 0},
     {'path': '/1.OG', 'previousPage': '/Home', 'header': '1.OG', 'template': 'menu.html', 'is_floor': True, 'floor': 1},
-    {'path': '/Erdgeschoss/Flur', 'previousPage': '/Home/Erdgeschoss', 'header': 'FLUR', 'template': 'room.html'},
-    {'path': '/Erdgeschoss/Wohnzimmer', 'previousPage': '/Home/Erdgeschoss', 'header': 'WOHNZIMMER', 'template': 'room.html'},
-    {'path': '/Erdgeschoss/Esszimmer', 'previousPage': '/Home/Erdgeschoss', 'header': 'ESSZIMMER', 'template': 'room.html'},
-    {'path': '/Erdgeschoss/Küche', 'previousPage': '/Home/Erdgeschoss', 'header': 'KÜCHE', 'template': 'room.html'},
-    {'path': '/1.OG/Büro1', 'previousPage': '/Home/1.OG', 'header': 'BÜRO1', 'template': 'room.html'},
-    {'path': '/1.OG/Büro2', 'previousPage': '/Home/1.OG', 'header': 'BÜRO2', 'template': 'room.html'},
-    {'path': '/1.OG/Herrenzimmer', 'previousPage': '/Home/1.OG', 'header': 'HERRENZIMMER', 'template': 'room.html'},
-    {'path': '/Alle', 'previousPage': '/Home', 'header': 'ALLE MODULE', 'template': 'room.html'},
-    {'path': '/Erdgeschoss/Alle', 'previousPage': '/Home/Erdgeschoss', 'header': 'ERDGESCHOSS-ALLE', 'template': 'room.html'},
-    {'path': '/1.OG/Alle', 'previousPage': '/Home/1.OG', 'header': '1.OG-ALLE', 'template': 'room.html'},
+    {'path': '/Erdgeschoss/Flur', 'previousPage': '/Home/Erdgeschoss', 'header': 'Flur', 'template': 'room.html'},
+    {'path': '/Erdgeschoss/Wohnzimmer', 'previousPage': '/Home/Erdgeschoss', 'header': 'Wohnzimmer', 'template': 'room.html'},
+    {'path': '/Erdgeschoss/Esszimmer', 'previousPage': '/Home/Erdgeschoss', 'header': 'Esszimmer', 'template': 'room.html'},
+    {'path': '/Erdgeschoss/Küche', 'previousPage': '/Home/Erdgeschoss', 'header': 'Küche', 'template': 'room.html'},
+    {'path': '/1.OG/Büro1', 'previousPage': '/Home/1.OG', 'header': 'Büro2', 'template': 'room.html'},
+    {'path': '/1.OG/Büro2', 'previousPage': '/Home/1.OG', 'header': 'Büro1', 'template': 'room.html'},
+    {'path': '/1.OG/Herrenzimmer', 'previousPage': '/Home/1.OG', 'header': 'Herrenzimmer', 'template': 'room.html'},
+    {'path': '/Alle', 'previousPage': '/Home', 'header': 'Alle Module', 'template': 'room.html'},
+    {'path': '/Erdgeschoss/Alle', 'previousPage': '/Home/Erdgeschoss', 'header': 'Erdgeschoss-Alle', 'template': 'room.html'},
+    {'path': '/1.OG/Alle', 'previousPage': '/Home/1.OG', 'header': '1.OG-Alle', 'template': 'room.html'},
 ]
 
 @views.route('/Home', methods=['GET', 'POST'])
@@ -42,7 +46,7 @@ def dynamic_route(subpath):
     house = current_app.config['home']
     for data in route_data:
         if data['path'].lstrip('/') == subpath:
-            header = data['header']
+            header = data['header'].upper()
             template = data['template']
             previousPage = data['previousPage']
             is_floor = data.get('is_floor', False)
@@ -54,6 +58,6 @@ def dynamic_route(subpath):
                                    isFloor=is_floor,
                                    floor=floor,
                                    previousPage=previousPage,
-                                   lights=getLights("Flur"))
+                                   lights=getLights(data['header']))
     return redirect(url_for('views.home'))
 

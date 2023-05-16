@@ -8,23 +8,19 @@ class User(db.Model, UserMixin):
     pin = db.Column(db.String(6))
 
 # Haus
-class House:
-    def __init__(self, roomNames:list):
-        self.floors = [Floor(roomNames)]
+class House(db.Model):
 
-    def addRooms(self, roomNames:list, floorName:str, floorIndex:int=None):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(15), unique=True)
 
-        if type(floorIndex) == None:
-            if len(self.floors) == 1:
-                self.floors[-1].addRooms(roomNames)
-            else:
-                self.floors.append(Floor(roomNames, floorName))
+    floors = db.relationship('Floor', backref='house', lazy=True)
 
-        else:
-            if floorIndex in list(range(len(self.floors))):
-                self.floors[floorIndex].addRooms(roomNames)
-            else:
-                self.floors.insert(floorIndex, Floor(roomNames, floorName))
+    def __init__(self, name):
+        self.floors = Floor.query.filter_by(house_id=id)
+
+    def getFloors(self):
+        self.floors = Floor.query.filter_by(house_id=id)
+        return self.floors
 
     def raiseAllBlinds(self):
         for floor in self.floors:
@@ -44,16 +40,21 @@ class House:
 
 # Etage
 class Floor:
-    def __init__(self, roomNames:list, floorName="Erdgeschoss"):
 
-        self.name = floorName
-        self.rooms = []
-        for roomName in roomNames:
-            self.rooms.append(Room(roomName))
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(15))
+    house_id = db.Column(db.Integer, db.ForeignKey('house.id'))
 
-    def addRooms(self, roomNames):
-        for roomName in roomNames:
-            self.rooms.append(Room(roomName))
+    rooms = db.relationship('Room', backref='floor', lazy=True)
+
+    def __init__(self, name, house_id):
+        self.name = name
+        self.house_id = house_id
+        self.rooms = Room.query.filter_by(floor_id=id)
+
+    def getRooms(self):
+        self.rooms = Room.query.filter_by(floor_id=id)
+        return self.rooms
 
     def raiseAllBlinds(self):
         for room in self.rooms:
@@ -72,11 +73,28 @@ class Floor:
             room.lightsOff()
 
 # Raum
-class Room:
-    def __init__(self, name):
+class Room(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(15))
+    floor_id = db.Column(db.Integer, db.ForeignKey('floor.id'))
+    
+    lights = db.relationship('Light', backref='room', lazy=True)
+    blinds = db.relationship('Blind', backref='room', lazy=True)
+
+    def __init__(self, name, floor_id):
         self.name = name
-        self.blinds = Blind.query.filter_by(room=self.name)
-        self.lights = Light.query.filter_by(room=self.name)
+        self.floor_id = floor_id
+        self.blinds = Blind.query.filter_by(room_id=id)
+        self.lights = Light.query.filter_by(room_id=id)
+
+    def getBlinds(self):
+        self.blinds = Blind.query.filter_by(room_id=id)
+        return self.blinds
+
+    def getLights(self):
+        self.lights = Light.query.filter_by(room_id=id)
+        return self.lights
 
     def raiseAllBlinds(self):
         for blind in self.blinds:
@@ -97,13 +115,14 @@ class Room:
 # Licht
 class Light(db.Model):
 
-    port = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    room_id = db.Column(db.Integer, db.ForeignKey('room.id'))
     threshold = db.Column(db.Integer)
-    room = db.Column(db.String(15))
+    port = db.Column(db.Integer, unique=True)
 
-    def __init__(self, room, port, threshold):
+    def __init__(self, room_id, threshold, port):
+        self.room_id = room_id
         self.port = port
-        self.room = room
         self.threshold = threshold
 
     def setThreshold(self, value:int):
@@ -119,35 +138,35 @@ class Light(db.Model):
 # Rollo
 class Blind(db.Model):
 
-    port = db.Column(db.Integer, primary_key=True)
-    room = db.Column(db.String(15))
+    id = db.Column(db.Integer, primary_key=True)
+    room_id = db.Column(db.Integer, db.ForeignKey('room.id'))
+    port = db.Column(db.Integer, unique=True)
     
     actionTimes = db.relationship('BlindsActionTimes', backref='blind', lazy=True) # Beziehung zu Action
 
-    def __init__(self, room, port):
-        self.room = room
+    def __init__(self, room_id, port):
+        self.room_id = room_id
         self.port = port
         self.closedInPercent = 0
 
     def raiseTheBlind(self):
         percent = 0
         self.closedInPercent = percent
-        db.session.commit()
 
     def lowerTheBlind(self):
         percent = 100
         self.closedInPercent = percent
-        db.session.commit()
 
 # Automatikzeiten
 class BlindsActionTimes(db.Model):
 
-    port = db.Column(db.Integer, db.ForeignKey('blind.port'), primary_key=True) # Beziehung zu Rollo
+    id = db.Column(db.Integer)
+    blind_id = db.Column(db.Integer, db.ForeignKey('blind.id'), primary_key=True)
     time_value = db.Column(db.Time, primary_key=True)
     closedInPercent = db.Column(db.Integer)
 
-    def __init__(self, port, time_value, closedInPercent):
-        self.port = port
+    def __init__(self, blind_id, time_value, closedInPercent):
+        self.blind_id = blind_id
         self.time_value = time_value
         self.closedInPercent = closedInPercent
 
