@@ -1,68 +1,147 @@
 {% extends "base.html" %}
 {% block content%}
 
-<style>
-  body {
-    display: inline;
-  }
-</style>
-
 
 <style>
-  .configContainer {
-    width: 90%;
-    background-color: rgb(8, 6, 39);
-    border-color: rgb(60, 56, 117);
-    border-width: 1px;
-  }
-
-  .flex {
-    display: flex;
-    width: 100%;
-  }
-
-  .controlButton {
-    display: block;
-    width: 100%;
-  }
-
-  .control {
-    width: 50%;
-    height: 50vh;
-  }
-
+  /* body {
+    background-size: cover;
+    background-blend-mode: multiply;
+    background-image: linear-gradient(rgba(174, 174, 201, 0.9), rgba(0, 0, 0, 0.9)), url({{ url_for('static', filename='images/all.jpg') }});
+  } */
 </style>
 
 
 <div class="bigButtonContainer">
   <div class="headerSpace"></div>
-  <!-- {% for light in lights %} -->
-  <!-- <button onclick="" id="" class="roomButton">Licht</button> -->
-  <div class="configContainer">
-    <div class="flex">
-      <div class="control">
-        <button class="controlButton">Up</button>
-        <button class="controlButton">Down</button>
-      </div>
-      <div class="control">
-        <div>
-          <input type="checkbox">Automatik
+  {% for light in lights %}
+  <div id="blindControl">
+    <div class="configContainer">
+      <div class="flex">
+
+        <div class="controlLeft">
+          <button onclick="lockButton(id)"  class="controlButton" id="driveUp{{light.port}}">
+            <div class="buttonFont">&#x003C;</div>
+          </button>
+          <button onclick="lockButton(id)" class="controlButton" id="driveDown{{light.port}}">
+            <div class="buttonFont">&#x003E;</div>
+          </button>
         </div>
-        <div>
-          <button>Zeitplan</button>
+        <script>
+          let button{{light.port}}UpisLocked
+          let button{{light.port}}DownUpisLocked
+        </script>
+
+        <div class="controlRight">
+
+          <div class="controlHeader">
+            <div>&nbsp;ROLLO {{light.port}}</div>
+            <div>0%&nbsp;</div>
+          </div>
+
+          <div class="configButtons">
+            <button class="configButton">AUTOMATIK</button>
+            <button class="configButton">Zeitplan</button>
+          </div>
+
         </div>
       </div>
     </div>
   </div>
+  {% endfor %}
+</div>
+
+<!-- <script>
+  let lockedButtonId = null;
+  let pressTimer = null;
+
+  function startPressTimer(buttonIdToLock, buttonIdToUnlock) {
+    pressTimer = setTimeout(function() {
+      // Langer Druck
+      lockButton(buttonIdToLock, buttonIdToUnlock);
+    }, 300);
+  }
+
+  function endPressTimer() {
+    clearTimeout(pressTimer);
+  }
+
+  function lockButton(buttonIdToLock, buttonIdToUnlock) {
+    if (lockedButtonId === buttonIdToLock) {
+      // Wenn der Button bereits eingerastet ist, dann aufheben
+      unlockButton(buttonIdToLock);
+    } else {
+      // Anderen Button aufheben (falls eingerastet)
+      if (lockedButtonId) {
+        unlockButton(lockedButtonId);
+      }
+
+      // Button einrasten
+      lockButtonStyle(buttonIdToLock);
+      unlockButtonStyle(buttonIdToUnlock);
+      lockedButtonId = buttonIdToLock;
+    }
+  }
+
+  function unlockButton(buttonId) {
+    unlockButtonStyle(buttonId);
+    lockedButtonId = null;
+  }
+
+  function lockButtonStyle(buttonId) {
+    let button = document.getElementById(buttonId);
+    button.classList.remove("controlButton");
+    button.classList.add("buttonLocked");
+  }
+
+  function unlockButtonStyle(buttonId) {
+    let button = document.getElementById(buttonId);
+    button.classList.remove("buttonLocked");
+    button.classList.add("controlButton");
+  }
+</script> -->
+
+<script>
+
+  function lockButton(buttonID) {
+    let pressTimer;
+    let buttonLocked = false;
+    let button = document.getElementById(buttonID);
+    button.addEventListener("mousedown", function () {
+      pressTimer = setTimeout(function () {
+        // long press
+        console.log("Langer Druck");
+        // button.classList.remove("buttonLocked");
+        // button.classList.add("controlButton");
+        buttonLocked = false;
+      }, 500);
+
+      // short press
+      if (!buttonLocked) {
+        button.classList.remove("controlButton");
+        button.classList.add("buttonLocked");
+        buttonLocked = true;
+        console.log(buttonLocked);
+      } else {
+        button.classList.remove("buttonLocked");
+        button.classList.add("controlButton");
+        buttonLocked = false;
+      }
+    });
+
+    button.addEventListener("mouseup", function () {
+      clearTimeout(pressTimer);
+    });
+  }
+</script>
 
 
-  <!-- <script>
+<!-- <script>
     envName = "";
     buttonID = document.getElementById("")
     changeClass(buttonID, envName);
   </script> -->
-  {% endfor %}
-  
+<!-- % endfor % -->
+
 </div>
 
 

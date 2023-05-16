@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <button id="myButton">Klick mich!</button>
+</body>
+<script>
+  var button = document.getElementById("myButton");
+  var pressTimer;
+
+  button.addEventListener("mousedown", function() {
+    pressTimer = setTimeout(function() {
+      // Langer Druck
+      console.log("Langer Druck");
+      // Hier kannst du weitere Aktionen für einen langen Druck ausführen
+    }, 500); // Zeit in Millisekunden für einen langen Druck (hier: 500ms)
+
+    // Kurzer Druck
+    console.log("Kurzer Druck");
+    // Hier kannst du weitere Aktionen für einen kurzen Druck ausführen
+  });
+
+  button.addEventListener("mouseup", function() {
+    clearTimeout(pressTimer);
+  });
+</script>
+</html>
+
+
