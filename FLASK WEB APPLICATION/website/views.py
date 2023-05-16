@@ -37,7 +37,6 @@ def groundFloor():
                             header=header,
                             previousPage=previousPage)
 
-
 @views.route('/Home/1.OG', methods=['GET', 'POST'])
 @login_required
 def firstFloor():
@@ -55,6 +54,24 @@ def firstFloor():
                             header=header,
                             previousPage=previousPage)
 
+@views.route('/Home/Erdgeschoss/Flur', methods=['GET', 'POST'])
+@login_required
+def hallway():
+    template = "room.html"
+    name = "Flur"
+    header = name.upper()
+    previousPage = "/Home/Erdgeschoss"
+    id = Room.query.filter_by(name=name).first().id
+    blinds = Blind.query.filter_by(room_id=id)
+    lights = Light.query.filter_by(room_id=id)
+    modules = {'lights':lights, 'blinds':blinds}
+    
+    return render_template(template,
+                            modules=modules,
+                            name=name,
+                            celsius=getTemp(),
+                            header=header,
+                            previousPage=previousPage)
 
 @views.route('/Home/Erdgeschoss/Wohnzimmer', methods=['GET', 'POST'])
 @login_required
@@ -63,8 +80,48 @@ def livingroom():
     name = "Wohnzimmer"
     header = name.upper()
     previousPage = "/Home/Erdgeschoss"
-    room_id = Room.query.filter_by(name=name).first().id
-    modules = Blind.query.filter_by(id=room_id)
+    id = Room.query.filter_by(name=name).first().id
+    blinds = Blind.query.filter_by(room_id=id)
+    lights = Light.query.filter_by(room_id=id)
+    modules = {'lights':lights, 'blinds':blinds}
+    
+    return render_template(template,
+                            modules=modules,
+                            name=name,
+                            celsius=getTemp(),
+                            header=header,
+                            previousPage=previousPage)
+
+@views.route('/Home/Erdgeschoss/Esszimmer', methods=['GET', 'POST'])
+@login_required
+def diningroom():
+    template = "room.html"
+    name = "Esszimmer"
+    header = name.upper()
+    previousPage = "/Home/Erdgeschoss"
+    id = Room.query.filter_by(name=name).first().id
+    blinds = Blind.query.filter_by(room_id=id)
+    lights = Light.query.filter_by(room_id=id)
+    modules = {'lights':lights, 'blinds':blinds}
+    
+    return render_template(template,
+                            modules=modules,
+                            name=name,
+                            celsius=getTemp(),
+                            header=header,
+                            previousPage=previousPage)
+
+@views.route('/Home/Erdgeschoss/Küche', methods=['GET', 'POST'])
+@login_required
+def kitchen():
+    template = "room.html"
+    name = "Küche"
+    header = name.upper()
+    previousPage = "/Home/Erdgeschoss"
+    id = Room.query.filter_by(name=name).first().id
+    blinds = Blind.query.filter_by(room_id=id)
+    lights = Light.query.filter_by(room_id=id)
+    modules = {'lights':lights, 'blinds':blinds}
     
     return render_template(template,
                             modules=modules,
