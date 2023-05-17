@@ -1,4 +1,4 @@
-from flask import flash, current_app, Blueprint, render_template, redirect, url_for
+from flask import request, jsonify, flash, current_app, Blueprint, render_template, redirect, url_for
 from flask_login import login_required, current_user
 from .models import *
 
@@ -11,7 +11,19 @@ def getTemp():
 def sentToHome():
     return redirect(url_for('views.home'))
 
-
+@views.route("/autoOnOff", methods=["POST"])
+def autoOnOff():
+    port = int(request.form.get("port"))
+    module = Light.query.filter_by(port=port).first()
+    try:
+        module.auto = False if module.auto == True else True
+    except:
+        module = Blind.query.filter_by(port=port).first()
+        module.auto = False if module.auto == True else True
+    finally:
+        db.session.commit()
+    
+    return jsonify(result="success")
 
 @views.route('/Home', methods=['GET', 'POST'])
 @login_required
@@ -64,7 +76,7 @@ def hallway():
     id = Room.query.filter_by(name=name).first().id
     blinds = Blind.query.filter_by(room_id=id)
     lights = Light.query.filter_by(room_id=id)
-    modules = {'lights':lights, 'blinds':blinds}
+    modules = {'blinds':blinds, 'lights':lights}
     
     return render_template(template,
                             modules=modules,
@@ -121,7 +133,7 @@ def kitchen():
     id = Room.query.filter_by(name=name).first().id
     blinds = Blind.query.filter_by(room_id=id)
     lights = Light.query.filter_by(room_id=id)
-    modules = {'lights':lights, 'blinds':blinds}
+    modules = {'blinds':blinds, 'lights':lights}
     
     return render_template(template,
                             modules=modules,

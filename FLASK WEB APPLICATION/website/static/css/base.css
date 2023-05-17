@@ -176,15 +176,17 @@ body {
   margin: 1%;
   background-color: rgb(164, 164, 164);
   z-index: 1;
-  border-radius: 3vw;
-  /* margin-right: 5vw; */
-  /* margin-left: 3vw; */
+  border-radius: 4vw;
+  border-style: double;
+  border-width: 2vw;
+  border-color: rgb(128, 128, 128);
 }
 
 
 
 .buttonLocked {
-  background-color: rgb(107, 107, 107);
+  background-color: rgb(120, 120, 120);
+  border-color: rgb(93, 93, 93);
   .buttonFont {
     color: rgb(47, 47, 47);
   }
@@ -195,13 +197,14 @@ body {
 }
 
 .controlButton:active {
-  background-color: rgb(107, 107, 107);
+  background-color: rgb(120, 120, 120);
+  border-color: rgb(93, 93, 93);
   .buttonFont {
     color: rgb(47, 47, 47);
   }
 }
 
-.buttonFont {
+.buttonArrow {
   font-family: Arial, Helvetica, sans-serif;
   color: rgb(91, 91, 91);
   font-size: 15vw;
@@ -209,18 +212,39 @@ body {
   margin-right: 1vw;
 }
 
+.buttonFont {
+  font-family: Arial, Helvetica, sans-serif;
+  color: rgb(91, 91, 91);
+  font-size: 10vw;
+  margin-right: 1vw;
+}
+
 .configButtons {
   height: 80%;
 }
 
-.configButton {
+.automaticButtonFalse, .automaticButtonTrue, .timePlanButton {
   font-size: 7vw;
   background-color: rgb(78, 138, 78);
-  color: white;
+  color: rgb(173, 173, 173);
   margin: 1% 0;
   width: 95%;
   height: 48%;
   padding: 0;
+  border-width: 1vw;
+  border-color: rgb(92, 162, 92);
+}
+
+.automaticButtonFalse:active {
+  color: white;
+  background-color: rgb(55, 95, 55);
+  text-shadow: 0 0 2vw;
+}
+
+.automaticButtonTrue {
+  background-color: rgb(78, 138, 78);
+  color: white;
+  text-shadow: 0 0 2vw;
 }
 
 .controlHeader {
@@ -230,4 +254,23 @@ body {
   font-size: 8vw;
   color: white;
   padding: 0;
+}
+
+.lightBulb {
+  width: 90%;
+  height: 48%;
+  margin: 1%;
+  background-color: rgb(164, 164, 164);
+  z-index: 1;
+  border-radius: 4vw;
+  margin-left: 5%;
+  background-color:rgba(255, 0, 225,0);
+  background-image: url("../images/lightIcon.png");
+  background-size: contain;
+  filter: invert() brightness(0.5);
+}
+
+.lightBulbOn {
+  
+  filter:invert() drop-shadow(0 0 15px rgb(255, 255, 255));
 }

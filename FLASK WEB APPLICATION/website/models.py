@@ -104,6 +104,7 @@ class Light(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     room_id = db.Column(db.Integer, db.ForeignKey('room.id'), nullable=False)
     threshold = db.Column(db.Integer)
+    auto = db.Column(db.Boolean, default=False)
     port = db.Column(db.Integer, unique=True)
 
     def setThreshold(self, value:int):
@@ -122,6 +123,7 @@ class Blind(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     room_id = db.Column(db.Integer, db.ForeignKey('room.id'), nullable=False)  
     closedInPercent = db.Column(db.Integer)
+    auto = db.Column(db.Boolean, default=False)
     port = db.Column(db.Integer, unique=True)
     
     actionTimes = db.relationship('BlindsActionTimes', backref='blind', lazy=True) # Beziehung zu Action

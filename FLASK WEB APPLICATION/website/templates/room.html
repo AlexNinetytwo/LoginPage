@@ -2,6 +2,8 @@
 {% block content%}
 
 
+
+
 <style>
   /* body {
     background-size: cover;
@@ -20,11 +22,10 @@
       <div class="flex">
 
         <div class="controlLeft">
-          <div style="font-size:22vw; color: white;">
-            *
+          <div class="lightBulb" id="{{loop.index}}">
           </div>
-          <button onclick="lockButton(id)" class="controlButton" id="driveDown{{module.port}}">
-            <div class="buttonFont">OFF</div>
+          <button onclick="lightOn({{loop.index}})" class="controlButton">
+            <div class="buttonFont">ON</div>
           </button>
         </div>
 
@@ -32,12 +33,12 @@
 
           <div class="controlHeader">
             <div>&nbsp;Licht {{loop.index}}</div>
-            <div>0%&nbsp;</div>
+            <div>aus&nbsp;</div>
           </div>
 
           <div class="configButtons">
-            <button class="configButton">AUTOMATIK</button>
-            <button class="configButton">Schwellwert</button>
+            <button id="automatic{{module.port}}" onclick="automatic({{module.port}}), switchButtonClass(id)" class="automaticButton{{module.auto}}">AUTOMATIK</button>
+            <button class="automaticButtonFalse">Schwellwert</button>
           </div>
 
         </div>
@@ -53,10 +54,10 @@
 
         <div class="controlLeft">
           <button onclick="lockButton(id)"  class="controlButton" id="driveUp{{module.port}}">
-            <div class="buttonFont">&#x003C;</div>
+            <div class="buttonArrow">&#x003C;</div>
           </button>
           <button onclick="lockButton(id)" class="controlButton" id="driveDown{{module.port}}">
-            <div class="buttonFont">&#x003E;</div>
+            <div class="buttonArrow">&#x003E;</div>
           </button>
         </div>
 
@@ -68,8 +69,8 @@
           </div>
 
           <div class="configButtons">
-            <button class="configButton">AUTOMATIK</button>
-            <button class="configButton">Zeitplan</button>
+            <button id="automatic{{module.port}}" onclick="automatic({{module.port}}), switchButtonClass(id)" class="automaticButton{{module.auto}}">AUTOMATIK</button>
+            <button class="automaticButtonFalse">Zeitplan</button>
           </div>
 
         </div>
@@ -131,6 +132,36 @@
 </script> -->
 
 <script>
+
+  function automatic(port) {
+    $.ajax({
+        url: "/autoOnOff",
+        type: 'POST',
+        data: {"port": port},
+        success: function (response) {
+            console.log(response);
+        },
+        error: function(error) {
+          console.error(error);
+        }
+    })
+  }
+
+  function switchButtonClass(id) {
+    button = document.getElementById(id);
+    if (button.classList.contains("automaticButtonTrue")) {
+      button.classList.remove("automaticButtonTrue");
+      button.classList.add("automaticButtonFalse");
+    } else {
+      button.classList.remove("automaticButtonFalse");
+      button.classList.add("automaticButtonTrue");
+    }
+  }
+
+  function lightOn(id) {
+    let lightBulb = document.getElementById(id);
+    lightBulb.classList.add("lightBulbOn");
+  }
 
   function lockButton(buttonID) {
     let pressTimer;
