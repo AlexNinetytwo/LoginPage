@@ -1,7 +1,25 @@
 {% extends "base.html" %}
 {% block content%}
 
+<style>
+  .timeplan {
+    background-color: rgb(0, 0, 0, 0.5);
+    position: fixed;
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    z-index: 2;
+    justify-items: center;
+    align-items: center;
+    justify-content: center;
+  }
 
+  .timewindow {
+    background-color: white;
+    width: 90%;
+    height: 90%;
+  }
+</style>
 
 
 <style>
@@ -12,74 +30,39 @@
   } */
 </style>
 
+<div class="timeplan" id="timeplan">
+  <div class="timewindow">
+    <table></table>
+  </div>
+</div>
+
 
 <div class="bigButtonContainer">
   <div class="headerSpace"></div>
 
-  {% for module in modules['lights'] %}
-  <div id="blindControl">
-    <div class="configContainer">
-      <div class="flex">
+  {% if modules['lights'][1] %}
 
-        <div class="controlLeft">
-          <div class="lightBulb" id="{{loop.index}}">
-          </div>
-          <button onclick="lightOn({{loop.index}})" class="controlButton">
-            <div class="buttonFont">ON</div>
-          </button>
-        </div>
+  {% include 'allLights.html' %}
 
-        <div class="controlRight">
+  {% endif %}
 
-          <div class="controlHeader">
-            <div>&nbsp;Licht {{loop.index}}</div>
-            <div>aus&nbsp;</div>
-          </div>
+  {% if modules['blinds'][1] %}
 
-          <div class="configButtons">
-            <button id="automatic{{module.port}}" onclick="automatic({{module.port}}), switchButtonClass(id)" class="automaticButton{{module.auto}}">AUTOMATIK</button>
-            <button class="automaticButtonFalse">Schwellwert</button>
-          </div>
+  {% include 'allBlinds.html' %}
 
-        </div>
-      </div>
-    </div>
-  </div>
-  {% endfor %}
+  {% endif %}
 
-  {% for module in modules['blinds'] %}
-  <div id="blindControl">
-    <div class="configContainer">
-      <div class="flex">
+  {% include 'listLights.html' %}
 
-        <div class="controlLeft">
-          <button onclick="lockButton(id)"  class="controlButton" id="driveUp{{module.port}}">
-            <div class="buttonArrow">&#x003C;</div>
-          </button>
-          <button onclick="lockButton(id)" class="controlButton" id="driveDown{{module.port}}">
-            <div class="buttonArrow">&#x003E;</div>
-          </button>
-        </div>
-
-        <div class="controlRight">
-
-          <div class="controlHeader">
-            <div>&nbsp;Rollo {{loop.index}}</div>
-            <div>0%&nbsp;</div>
-          </div>
-
-          <div class="configButtons">
-            <button id="automatic{{module.port}}" onclick="automatic({{module.port}}), switchButtonClass(id)" class="automaticButton{{module.auto}}">AUTOMATIK</button>
-            <button class="automaticButtonFalse">Zeitplan</button>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </div>
-  {% endfor %}
+  {% include 'listBlinds.html' %}
 
 </div>
+
+
+
+
+
+
 
 <!-- <script>
   let lockedButtonId = null;
@@ -132,6 +115,12 @@
 </script> -->
 
 <script>
+
+  function timeplan() {
+    let plan = document.getElementById("timeplan");
+    plan.style.display="flex";
+    html.style.overflow="hidden";
+  }
 
   function automatic(port) {
     $.ajax({
@@ -194,14 +183,6 @@
     });
   }
 </script>
-
-
-<!-- <script>
-    envName = "";
-    buttonID = document.getElementById("")
-    changeClass(buttonID, envName);
-  </script> -->
-<!-- % endfor % -->
 
 </div>
 

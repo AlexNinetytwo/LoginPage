@@ -1,0 +1,30 @@
+{% for module in modules['lights'] %}
+  <div id="blindControl">
+    <div class="configContainer">
+      <div class="flex">
+
+        <div class="controlLeft">
+          <div class="lightBulb" id="{{loop.index}}">
+          </div>
+          <button onclick="lightOn({{loop.index}})" class="controlButton">
+            <div class="buttonFont">ON</div>
+          </button>
+        </div>
+
+        <div class="controlRight">
+
+          <div class="controlHeader">
+            <div>&nbsp;Licht {{loop.index}}</div>
+            <div>aus&nbsp;</div>
+          </div>
+
+          <div class="configButtons">
+            <button id="automatic{{module.port}}" onclick="automatic({{module.port}}), switchButtonClass(id)" class="automaticButton{{module.auto}}">AUTOMATIK</button>
+            <button class="automaticButtonFalse">Schwellwert</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}

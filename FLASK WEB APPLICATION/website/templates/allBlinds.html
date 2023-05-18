@@ -1,0 +1,30 @@
+<div id="blindControl">
+    <div class="configContainer">
+        <div class="flex">
+
+            <div class="controlLeft">
+                <button onclick="lockButton(id)"  class="controlButton" id="driveUpAll">
+                    <div class="buttonArrow">&#x003C;</div>
+                </button>
+                <button onclick="lockButton(id)" class="controlButton" id="driveDownAll">
+                    <div class="buttonArrow">&#x003E;</div>
+                </button>
+            </div>
+
+            <div class="controlRight">
+
+                <div class="controlHeader">
+                    <div>&nbsp;Alle Rollos</div>
+                    <div>0%&nbsp;</div>
+                </div>
+
+                <div class="configButtons">
+                    <button id="automaticAll" onclick="automatic(-1), switchButtonClass(id)" class="automaticButtonTrue">AUTOMATIK</button>
+                    <button class="automaticButtonFalse">Zeitplan</button>
+                </div>
+
+            </div>
+            
+        </div>
+    </div>
+</div>
