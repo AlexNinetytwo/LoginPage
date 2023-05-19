@@ -88,6 +88,34 @@ def mainConfig():
         db.session.commit()
         port+=1
 
+    newAction = BlindsActionTimes(blind_id=1,time_value=openBlinds,closedInPercent=0)
+    db.session.add(newAction)
+    db.session.commit()
+
+    newAction = BlindsActionTimes(blind_id=1,time_value=closeBlinds,closedInPercent=100)
+    db.session.add(newAction)
+    db.session.commit()
+
+    newAction = BlindsActionTimes(blind_id=2,time_value=openBlinds,closedInPercent=0)
+    db.session.add(newAction)
+    db.session.commit()
+
+    newAction = BlindsActionTimes(blind_id=2,time_value=closeBlinds,closedInPercent=100)
+    db.session.add(newAction)
+    db.session.commit()
+
+    newAction = BlindsActionTimes(blind_id=3,time_value=openBlinds,closedInPercent=0)
+    db.session.add(newAction)
+    db.session.commit()
+
+    newAction = BlindsActionTimes(blind_id=3,time_value=closeBlinds,closedInPercent=100)
+    db.session.add(newAction)
+    db.session.commit()
+
+def testBehavior():
+    newAction = BlindsActionTimes(blind_id=2,time_value=time(18,0),closedInPercent=50)
+    db.session.add(newAction)
+    db.session.commit()
     
 
 

@@ -139,10 +139,19 @@ class Blind(db.Model):
 # Automatikzeiten
 class BlindsActionTimes(db.Model):
 
-    id = db.Column(db.Integer)
-    blind_id = db.Column(db.Integer, db.ForeignKey('blind.id'), primary_key=True)
-    time_value = db.Column(db.Time, primary_key=True)
-    closedInPercent = db.Column(db.Integer)
+    id = db.Column(db.Integer, primary_key=True)
+    blind_id = db.Column(db.Integer, db.ForeignKey('blind.id'),nullable=False)
+    time_value = db.Column(db.Time, nullable=False)
+    closedInPercent = db.Column(db.Integer, nullable=False)
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'time_value': self.time_value.strftime('%H:%M'),
+            'closedInPercent': self.closedInPercent,
+        }
+
+db.UniqueConstraint(BlindsActionTimes.blind_id, BlindsActionTimes.time_value, name='uq_blind_time')
 
 
         

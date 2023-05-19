@@ -25,6 +25,11 @@ def autoOnOff():
     
     return jsonify(result="success")
 
+@views.route("/getTimeEntries/<int:id>", methods=["GET"])
+def getTimeEntries(id):
+    timeEntries = BlindsActionTimes.query.filter_by(blind_id=id)
+    return jsonify(data=[item.serialize() for item in timeEntries])
+
 @views.route('/Home', methods=['GET', 'POST'])
 @login_required
 def home():
