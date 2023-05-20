@@ -60,6 +60,21 @@
   .acceptButton {
     background-color: green;
   }
+
+  .timeChooseButton {
+    height: 10vw;
+    width: 10vw;
+    font-size: 6vw;
+  }
+
+  .newTimeCont {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .timeCont {
+    width: 15vw;
+  }
 </style>
 
 
@@ -69,7 +84,7 @@
       <div>Zeitplan</div>
       <button onclick="closePlan()" style="font-size:6vw;">X</button>
     </div>
-    <div class="tableFrame">
+    <div id="tableFrame" class="tableFrame">
       <table id="timeTable">
         <tr>
           <th>Uhrzeit</th>
@@ -165,28 +180,73 @@
 
 <script>
 
-  function addAction(blind_id) {
-    let blind = document.getElementById(blind_id);
-    let tableRows = document.getElementById("timeTable");
-    let addButton = document.getElementById("addButton");
-    addButton.style.display = "none";
-    let time = "00:06";
-    let state = "Öffnen";
+  let tableFrame = document.getElementById("tableFrame");
+  let tableRows = document.getElementById("timeTable");
+  let addButton = document.getElementById("addButton");
+  let blind_id;
+  let newTime = "06:00";
+  let newAction = "Öffnen";
+
+  function saveBlindId(id) {
+    blind_id = id;
+  }
+
+  function addAction() {
+    
+    addButton.innerHTML = `Hinzufügen`;
+    addButton.onclick = null;
+    addButton.removeEventListener("click", addAction);
+    addButton.addEventListener("click", accept);
     tableRows.innerHTML += `
     <tr>
-      <td>${time}</td>
-      <td>${state}</td>
-      <td><button id="new" onclick="accept(id)" class="addButton">&#x2713;</button></td>
+      <td id="timeColumn"><div class="newTimeCont"><div class="timeCont">${newTime}</div><div><button onclick="justifyTime(0)" class="timeChooseButton">&#60;</button><button onclick="justifyTime(1)" class="timeChooseButton">&#62;</button></div></div></td>
+      <td><div class="newTimeCont">${newAction}<div><button class="timeChooseButton">&#60;</button><button class="timeChooseButton">&#62;</button></div></div></td>
+      <td><button class="deleteButton">X</button></td>
     </tr>
+    `;
+    tableFrame.scrollTop = tableFrame.scrollHeight;
+  }
+
+  function justifyTime(direction) {
+    setTime(direction);
+    let timeColumn = document.getElementById("timeColumn");
+    timeColumn.innerHTML = `
+      <div class="newTimeCont"><div class="timeCont">${newTime}</div><div><button onclick="justifyTime(0)" class="timeChooseButton">&#60;</button><button onclick="justifyTime(1)" class="timeChooseButton">&#62;</button></div></div>
     `;
   }
 
-  function accept(id) {
-    let button = document.getElementById(id);
-    let addButton = document.getElementById("addButton");
-    button.classList.remove("acceptButton");
-    button.classList.add("deleteButton");
-    addButton.style.display = "block";
+  function setTime(direction) {
+    let timePart = newTime.split(":");
+    let hours = parseInt(timePart[0]);
+    let minutes = parseInt(timePart[1]);
+    let allMinutes = hours * 60 + minutes;
+
+    if (direction) {
+      allMinutes += 30;
+    } else {
+      allMinutes -= 30;
+    }
+    if (allMinutes >= 24 * 60) {
+    allMinutes -= 24 * 60;
+    } else if (allMinutes < 0) {
+      allMinutes += 24 * 60;
+    }
+
+    let expandHours = Math.floor(allMinutes / 60);
+    let expandMinutes = allMinutes % 60;
+    let expandHoursString = expandHours.toString().padStart(2, "0");
+    let expandMinutesString = expandMinutes.toString().padStart(2, "0");
+    // Rückgabe der erweiterten Zeit im Format "hh:mm"
+    newTime = expandHoursString + ":" + expandMinutesString;
+  }
+
+
+
+
+  function accept() {
+    addButton.removeEventListener("click", accept);
+    addButton.innerHTML = `Neu`;
+    addButton.addEventListener("click", addAction);
   }
 
   function timeplan(id) {
@@ -241,7 +301,7 @@
   function closePlan() {
     let plan = document.getElementById("timeplan");
     plan.style.display="none";
-    
+    addButton.style.display="block";
   }
 
   function automatic(port) {
