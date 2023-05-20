@@ -124,10 +124,6 @@
 
 
 
-
-
-
-
 <!-- <script>
   let lockedButtonId = null;
   let pressTimer = null;
@@ -185,7 +181,7 @@
   let addButton = document.getElementById("addButton");
   let blind_id;
   let newTime = "06:00";
-  let newAction = "Öffnen";
+  let newAction = "0";
 
   function saveBlindId(id) {
     blind_id = id;
@@ -240,13 +236,32 @@
     newTime = expandHoursString + ":" + expandMinutesString;
   }
 
-
-
-
   function accept() {
+    resetAddButton();
+    saveNewAction();
+    
+  }
+
+  function resetAddButton() {
     addButton.removeEventListener("click", accept);
     addButton.innerHTML = `Neu`;
     addButton.addEventListener("click", addAction);
+  }
+
+  function saveNewAction() {
+    $.ajax({
+      url: "/saveNewAction/" + blind_id,
+      type: 'POST',
+      data: {'time':newTime, 'action':newAction},
+      success: function (response) {
+        console.log(response);
+        timeplan(blind_id)
+      },
+      error: function (error) {
+        console.log(error);
+        timeplan(blind_id)
+      }
+    });
   }
 
   function timeplan(id) {
@@ -301,7 +316,7 @@
   function closePlan() {
     let plan = document.getElementById("timeplan");
     plan.style.display="none";
-    addButton.style.display="block";
+    resetAddButton();
   }
 
   function automatic(port) {

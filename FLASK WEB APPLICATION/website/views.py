@@ -1,5 +1,6 @@
 from flask import request, jsonify, flash, current_app, Blueprint, render_template, redirect, url_for
 from flask_login import login_required, current_user
+from datetime import time as dt_time
 from .models import *
 
 views = Blueprint('views', __name__)
@@ -29,6 +30,21 @@ def autoOnOff():
 def getTimeEntries(id):
     timeEntries = BlindsActionTimes.query.filter_by(blind_id=id)
     return jsonify(data=[item.serialize() for item in timeEntries])
+
+@views.route("/saveNewAction/<int:id>", methods=["POST"])
+def saveNewAction(id):
+    time = request.form.get("time")
+    action = int(request.form.get("action"))
+
+    timeParts = time.split(":")
+    hours = int(timeParts[0])
+    minutes = int(timeParts[1])
+    newTime = dt_time(hours, minutes)
+    newAction = BlindsActionTimes(blind_id=id, time_value=newTime, closedInPercent=action)
+    db.session.add(newAction)
+    db.session.commit()
+
+    return "success"
 
 @views.route('/Home', methods=['GET', 'POST'])
 @login_required
