@@ -1,5 +1,6 @@
 from flask import request, jsonify, flash, current_app, Blueprint, render_template, redirect, url_for
 from flask_login import login_required, current_user
+from sqlalchemy.exc import IntegrityError
 from datetime import time as dt_time
 from .models import *
 
@@ -40,11 +41,28 @@ def saveNewAction(id):
     hours = int(timeParts[0])
     minutes = int(timeParts[1])
     newTime = dt_time(hours, minutes)
+
+    for blindAction in BlindsActionTimes.query.all():
+        if blindAction.time_value == newTime and blindAction.blind_id == id:
+            blindAction.time_value = newTime
+            blindAction.closedInPercent = action
+            db.session.commit()
+            return "overwritten"
+        
     newAction = BlindsActionTimes(blind_id=id, time_value=newTime, closedInPercent=action)
+
     db.session.add(newAction)
     db.session.commit()
 
     return "success"
+
+@views.route("/deleteAction/<int:id>", methods=["POST"])
+def deleteAction(id):
+    action = BlindsActionTimes.query.get(id)
+    db.session.delete(action)
+    db.session.commit()
+
+    return "deleted"
 
 @views.route('/Home', methods=['GET', 'POST'])
 @login_required

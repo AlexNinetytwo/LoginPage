@@ -196,8 +196,8 @@
     tableRows.innerHTML += `
     <tr>
       <td id="timeColumn"><div class="newTimeCont"><div class="timeCont">${newTime}</div><div><button onclick="justifyTime(0)" class="timeChooseButton">&#60;</button><button onclick="justifyTime(1)" class="timeChooseButton">&#62;</button></div></div></td>
-      <td><div class="newTimeCont">${newAction}<div><button class="timeChooseButton">&#60;</button><button class="timeChooseButton">&#62;</button></div></div></td>
-      <td><button class="deleteButton">X</button></td>
+      <td id="actionColumn"><div class="newTimeCont">${newAction}<div><button onclick="justifyAction(0)" class="timeChooseButton">&#60;</button><button onclick="justifyAction(1)" class="timeChooseButton">&#62;</button></div></div></td>
+      <td><button onclick="interrupt()" class="deleteButton">X</button></td>
     </tr>
     `;
     tableFrame.scrollTop = tableFrame.scrollHeight;
@@ -208,6 +208,14 @@
     let timeColumn = document.getElementById("timeColumn");
     timeColumn.innerHTML = `
       <div class="newTimeCont"><div class="timeCont">${newTime}</div><div><button onclick="justifyTime(0)" class="timeChooseButton">&#60;</button><button onclick="justifyTime(1)" class="timeChooseButton">&#62;</button></div></div>
+    `;
+  }
+
+  function justifyAction(direction) {
+    setAction(direction);
+    let actionColumn = document.getElementById("actionColumn");
+    actionColumn.innerHTML = `
+      <div class="newTimeCont">${newAction}<div><button onclick="justifyAction(0)" class="timeChooseButton">&#60;</button><button onclick="justifyAction(1)" class="timeChooseButton">&#62;</button></div></div>
     `;
   }
 
@@ -236,10 +244,20 @@
     newTime = expandHoursString + ":" + expandMinutesString;
   }
 
+  function setAction(direction) {
+    if (direction && parseInt(newAction) < 100) {
+      newAction = String(parseInt(newAction)+10);
+    } else if (!direction && parseInt(newAction) > 0) {
+      newAction = String(parseInt(newAction)-10);
+    }
+  }
+
   function accept() {
-    resetAddButton();
     saveNewAction();
-    
+  }
+
+  function interrupt() {
+    timeplan(blind_id);
   }
 
   function resetAddButton() {
@@ -264,9 +282,25 @@
     });
   }
 
+  function deleteAction(action_id) {
+    $.ajax({
+      url: "/deleteAction/" + action_id,
+      type: 'POST',
+      success: function (response) {
+        console.log(response);
+        timeplan(blind_id)
+      },
+      error: function (error) {
+        console.log(error);
+        timeplan(blind_id)
+      }
+    });
+  }
+
   function timeplan(id) {
     let plan = document.getElementById("timeplan");
     let tableRows = document.getElementById("timeTable");
+    resetAddButton();
     tableRows.innerHTML = `
       <tr>
         <th>Uhrzeit</th>
@@ -280,11 +314,12 @@
         entries.forEach(entry => {
           let time = entry['time_value'];
           let state = entry['closedInPercent'];
+          let action_id = entry['id'];
           tableRows.innerHTML += `
             <tr>
               <td>${time}</td>
               <td>${state}</td>
-              <td><button class="deleteButton">X</button></td>
+              <td><button onclick="deleteAction(id)" id="${action_id}" class="deleteButton">X</button></td>
             </tr>
           `;
         });
@@ -316,7 +351,6 @@
   function closePlan() {
     let plan = document.getElementById("timeplan");
     plan.style.display="none";
-    resetAddButton();
   }
 
   function automatic(port) {
