@@ -1,4 +1,5 @@
 {% for module in modules['blinds'] %}
+
   <div id="blindControl">
     <div class="configContainer">
       <div class="flex">
@@ -21,7 +22,7 @@
 
           <div class="configButtons">
             <button id="automatic{{module.port}}" onclick="automatic({{module.port}}), switchButtonClass(id)" class="automaticButton{{module.auto}}">AUTOMATIK</button>
-            <button id="{{module.id}}" onclick="saveBlindId(id), timeplan(id)" class="automaticButtonFalse">Zeitplan</button>
+            <button id="{{module.id}}" onclick="redrawTimeplan(id)" class="automaticButtonFalse">Zeitplan</button>
           </div>
 
         </div>
