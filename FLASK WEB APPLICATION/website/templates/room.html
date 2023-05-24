@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block content%}
 
+<script src="{{ url_for('static', filename='/js/room.js') }}"></script>
+
 <style>
   .timeplan {
     background-color: rgba(0, 0, 0, 0.7);
@@ -174,175 +176,36 @@
   }
 </script> -->
 
-<script>
+<script src="/socket.io/socket.io.js">
 
-  let blind_id;
-  let plan = document.getElementById("timeplan");
-  let tableRows = document.getElementById("timeTable");
-  let tableFrame = document.getElementById("tableFrame");
-  let addButton = document.getElementById("addButton");
-  let dirveButtons = [];
-  
-  let newTime = "06:00";
-  let newAction = "0";
+let blind_id;
+let plan = document.getElementById("timeplan");
+let tableRows = document.getElementById("timeTable");
+let tableFrame = document.getElementById("tableFrame");
+let addButton = document.getElementById("addButton");
+let dirveButtons = [];
 
-  function saveDriveButtonStates() {
-    let id = "0";
+let newTime = "06:00";
+let newAction = "0";
+
+  // Verbindung zum WebSocket-Server
+  const socket = io.connect("http://localhost:5000");
+  socket.on("ButtonStatesChanged", function(data) {})
+
+  function driveButton(id) {
+    let portActionSplit = id.split("/");
+    let port = portButtonSplit[1];
+    let action = portButtonSplit[0];
+    saveDriveButtonStates(port, action);
   }
 
-  function redrawTimeplan(id) {
-    saveBlind_id(id);
-    resetAddButton();
-    rebuildTableHeader();
-    getTimeEntries(id)
-      .then(displayEntries)
-      .catch(error => {
-        console.log(error);
-      });
-  }
-
-  function saveBlind_id(id) {
-    blind_id = id;
-  }
-
-  function rebuildTableHeader() {
-    tableRows.innerHTML = `
-      <tr>
-        <th>Uhrzeit</th>
-        <th>Aktion</th>
-        <th class="lastColumn">Entf</th>
-      </tr>
-    `;
-  }
-
-
-  function getTimeEntries(blind_id) {
-    return new Promise((resolve, reject) => {
-      $.ajax({
-        url: "/getTimeEntries/" + blind_id,
-        type: 'GET',
-        success: function (response) {
-          let actionTimes = response.data;
-          resolve(actionTimes);
-        },
-        error: function (error) {
-          reject(error);
-        }
-      });
-    });
-  }
-
-  function displayEntries(entries) {
-    let time;
-    let state;
-    let action_id;
-    entries.forEach(entry => {
-      time = entry['time_value'];
-      state = entry['closedInPercent'];
-      action_id = entry['id'];
-      tableRows.innerHTML += `
-        <tr>
-          <td>${time}</td>
-          <td>${state}</td>
-          <td><button onclick="deleteAction(${action_id})" id="${action_id}" class="deleteButton">X</button></td>
-        </tr>
-      `;
-    });
-    
-    // Show plan
-    plan.style.display = "flex";
-  }
-
-  function addAction() {
-    drawInputRow();
-    changeAddButton();
-  }
-
-  function drawInputRow() {
-    tableRows.innerHTML += `
-    <tr>
-      <td id="timeColumn"><div class="newTimeCont"><div class="timeCont">${newTime}</div><div><button onclick="justifyTime(0)" class="timeChooseButton">&#60;</button><button onclick="justifyTime(1)" class="timeChooseButton">&#62;</button></div></div></td>
-      <td id="actionColumn"><div class="newTimeCont">${newAction}<div><button onclick="justifyAction(0)" class="timeChooseButton">&#60;</button><button onclick="justifyAction(1)" class="timeChooseButton">&#62;</button></div></div></td>
-      <td><button onclick="interrupt()" class="deleteButton">X</button></td>
-    </tr>
-    `;
-    tableFrame.scrollTop = tableFrame.scrollHeight;
-  }
-
-  function changeAddButton() {
-    addButton.innerHTML = `Hinzufügen`;
-    addButton.onclick = null;
-    addButton.removeEventListener("click", addAction);
-    addButton.addEventListener("click", saveNewAction);
-  }
-
-  function justifyTime(direction) {
-    setTime(direction);
-    let timeColumn = document.getElementById("timeColumn");
-    timeColumn.innerHTML = `
-      <div class="newTimeCont"><div class="timeCont">${newTime}</div><div><button onclick="justifyTime(0)" class="timeChooseButton">&#60;</button><button onclick="justifyTime(1)" class="timeChooseButton">&#62;</button></div></div>
-    `;
-  }
-
-  function justifyAction(direction) {
-    setAction(direction);
-    let actionColumn = document.getElementById("actionColumn");
-    actionColumn.innerHTML = `
-      <div class="newTimeCont">${newAction}<div><button onclick="justifyAction(0)" class="timeChooseButton">&#60;</button><button onclick="justifyAction(1)" class="timeChooseButton">&#62;</button></div></div>
-    `;
-  }
-
-  function setTime(direction) {
-    let timePart = newTime.split(":");
-    let hours = parseInt(timePart[0]);
-    let minutes = parseInt(timePart[1]);
-    let allMinutes = hours * 60 + minutes;
-
-    if (direction) {
-      allMinutes += 30;
-    } else {
-      allMinutes -= 30;
-    }
-    if (allMinutes >= 24 * 60) {
-    allMinutes -= 24 * 60;
-    } else if (allMinutes < 0) {
-      allMinutes += 24 * 60;
-    }
-
-    let expandHours = Math.floor(allMinutes / 60);
-    let expandMinutes = allMinutes % 60;
-    let expandHoursString = expandHours.toString().padStart(2, "0");
-    let expandMinutesString = expandMinutes.toString().padStart(2, "0");
-    // Rückgabe der erweiterten Zeit im Format "hh:mm"
-    newTime = expandHoursString + ":" + expandMinutesString;
-  }
-
-  function setAction(direction) {
-    if (direction && parseInt(newAction) < 100) {
-      newAction = String(parseInt(newAction)+10);
-    } else if (!direction && parseInt(newAction) > 0) {
-      newAction = String(parseInt(newAction)-10);
-    }
-  }
-
-  function interrupt() {
-    redrawTimeplan(blind_id);
-  }
-
-  function resetAddButton() {
-    addButton.removeEventListener("click", saveNewAction);
-    addButton.innerHTML = `Neu`;
-    addButton.addEventListener("click", addAction);
-  }
-
-  function saveNewAction() {
+  function saveDriveButtonStates(port, state) {
     $.ajax({
-      url: "/saveNewAction/" + blind_id,
+      url: "/updateButtonStates/" + port,
       type: 'POST',
-      data: {'time':newTime, 'action':newAction},
+      data: {'state': state},
       success: function (response) {
         console.log(response);
-        redrawTimeplan(blind_id);
       },
       error: function (error) {
         console.log(error);
@@ -350,36 +213,8 @@
     });
   }
 
-  function deleteAction(action_id) {
-    $.ajax({
-      url: "/deleteAction/" + action_id,
-      type: 'POST',
-      success: function (response) {
-        console.log(response);
-        redrawTimeplan(blind_id)
-      },
-      error: function (error) {
-        console.log(error);
-      }
-    });
-  }
-
-  function closePlan() {
-    plan.style.display="none";
-  }
-
-  function automatic(port) {
-    $.ajax({
-        url: "/autoOnOff",
-        type: 'POST',
-        data: {"port": port},
-        success: function (response) {
-            console.log(response);
-        },
-        error: function(error) {
-          console.error(error);
-        }
-    })
+  function redrawDriveButtons() {
+    console.log("Redrawing drive buttons now.")
   }
 
   function switchButtonClass(id) {
@@ -398,11 +233,10 @@
     lightBulb.classList.add("lightBulbOn");
   }
 
-  function driveBlinds(upButton, downButton) {
 
-  }
 
   function lockButton(buttonID) {
+
     let pressTimer;
     let buttonLocked = false;
     let button = document.getElementById(buttonID);

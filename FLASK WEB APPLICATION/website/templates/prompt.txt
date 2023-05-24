@@ -1,0 +1,7 @@
+Fehermeldung:
+
+GET http://127.0.0.1:5000/socket.io/socket.io.js net::ERR_ABORTED 400 (BAD REQUEST)
+
+Verweis auf:
+
+<script src="/socket.io/socket.io.js">

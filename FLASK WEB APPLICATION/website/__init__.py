@@ -14,7 +14,7 @@ def create_app():
     
     app = Flask(__name__)
     sslify = SSLify(app)
-    app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
+    app.config['SECRET_KEY'] = "secret_key"
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=30)
     app.config['DRIVE_BUTTON_STATES'] = []
