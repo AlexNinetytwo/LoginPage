@@ -1,6 +1,22 @@
 
 
+function setEventListener(button) {
+  
+  button.addEventListener("mousedown", function () {
 
+    pressTimer = setTimeout(function () {
+      // long press
+      longPress(button);
+    }, 500);
+
+    // short press
+    shortPress(button);
+  });
+
+  button.addEventListener("mouseup", function () {
+    clearTimeout(pressTimer);
+  });
+}
 
 
 function rebuildTableHeader(tag) {
@@ -166,9 +182,9 @@ function closePlan() {
   plan.style.display="none";
 }
 
-function automatic(port) {
+function automatic(port, room_id) {
   $.ajax({
-      url: "/autoOnOff",
+      url: "/autoOnOff/" + room_id,
       type: 'POST',
       data: {"port": port},
       success: function (response) {

@@ -27,17 +27,28 @@ def sentToHome():
     return redirect(url_for('views.home'))
 
 
-@views.route("/autoOnOff", methods=["POST"])
-def autoOnOff():
+@views.route("/autoOnOff/<int:room_id>", methods=["POST"])
+def autoOnOff(room_id):
+    room_id = int(room_id)
     port = int(request.form.get("port"))
-    module = Light.query.filter_by(port=port).first()
-    try:
-        module.auto = False if module.auto == True else True
-    except:
-        module = Blind.query.filter_by(port=port).first()
-        module.auto = False if module.auto == True else True
-    finally:
+    if port == -1:
+        room = Room.query.get(room_id)
+        room.autoBlinds = False if room.autoBlinds else True
         db.session.commit()
+    elif port == -2:
+        room = Room.query.get(room_id)
+        room.autoLights = False if room.autoLights else True
+        db.session.commit()
+        
+    else:
+        module = Light.query.filter_by(port=port).first()
+        try:
+            module.auto = False if module.auto else True
+        except:
+            module = Blind.query.filter_by(port=port).first()
+            module.auto = False if module.auto else True
+        finally:
+            db.session.commit()
     
     return jsonify(result="success")
 
@@ -126,12 +137,13 @@ def hallway():
     name = "Flur"
     header = name.upper()
     previousPage = "/Home/Erdgeschoss"
-    id = Room.query.filter_by(name=name).first().id
-    blinds = Blind.query.filter_by(room_id=id)
-    lights = Light.query.filter_by(room_id=id)
+    room = Room.query.filter_by(name=name).first()
+    blinds = Blind.query.filter_by(room_id=room.id)
+    lights = Light.query.filter_by(room_id=room.id)
     modules = {'blinds':blinds, 'lights':lights}
     
     return render_template(template,
+                            room=room,
                             modules=modules,
                             name=name,
                             celsius=getTemp(),
@@ -145,13 +157,14 @@ def livingroom():
     name = "Wohnzimmer"
     header = name.upper()
     previousPage = "/Home/Erdgeschoss"
-    id = Room.query.filter_by(name=name).first().id
-    blinds = Blind.query.filter_by(room_id=id)
-    lights = Light.query.filter_by(room_id=id)
+    room = Room.query.filter_by(name=name).first()
+    blinds = Blind.query.filter_by(room_id=room.id)
+    lights = Light.query.filter_by(room_id=room.id)
     modules = {'lights':lights, 'blinds':blinds}
     
     return render_template(template,
                             modules=modules,
+                            room=room,
                             name=name,
                             celsius=getTemp(),
                             header=header,
@@ -164,12 +177,13 @@ def diningroom():
     name = "Esszimmer"
     header = name.upper()
     previousPage = "/Home/Erdgeschoss"
-    id = Room.query.filter_by(name=name).first().id
-    blinds = Blind.query.filter_by(room_id=id)
-    lights = Light.query.filter_by(room_id=id)
+    room = Room.query.filter_by(name=name).first()
+    blinds = Blind.query.filter_by(room_id=room.id)
+    lights = Light.query.filter_by(room_id=room.id)
     modules = {'lights':lights, 'blinds':blinds}
     
     return render_template(template,
+                            room=room,
                             modules=modules,
                             name=name,
                             celsius=getTemp(),
@@ -183,12 +197,13 @@ def kitchen():
     name = "Küche"
     header = name.upper()
     previousPage = "/Home/Erdgeschoss"
-    id = Room.query.filter_by(name=name).first().id
-    blinds = Blind.query.filter_by(room_id=id)
-    lights = Light.query.filter_by(room_id=id)
+    room = Room.query.filter_by(name=name).first()
+    blinds = Blind.query.filter_by(room_id=room.id)
+    lights = Light.query.filter_by(room_id=room.id)
     modules = {'blinds':blinds, 'lights':lights}
     
     return render_template(template,
+                            room=room,
                             modules=modules,
                             name=name,
                             celsius=getTemp(),

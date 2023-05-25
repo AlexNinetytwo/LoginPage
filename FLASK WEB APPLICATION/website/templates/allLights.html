@@ -17,7 +17,7 @@
                 </div>
 
                 <div class="configButtons">
-                    <button id="automaticAll" onclick="automatic(-1), switchButtonClass(id)" class="automaticButtonTrue">AUTOMATIK</button>
+                    <button id="automaticAll" onclick="automatic(-2, {{room.id}}), switchButtonClass(id)" class="automaticButton{{room.autoLights}}">AUTOMATIK</button>
                     <button class="automaticButtonFalse">Schwellwert</button>
                 </div>
 

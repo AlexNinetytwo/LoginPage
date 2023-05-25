@@ -1,22 +1,3 @@
-<script>
-    function setEventListener(button) {
-  
-      button.addEventListener("mousedown", function () {
-  
-        pressTimer = setTimeout(function () {
-          // long press
-          longPress(button);
-        }, 500);
-  
-        // short press
-        shortPress(button);
-      });
-  
-      button.addEventListener("mouseup", function () {
-        clearTimeout(pressTimer);
-      });
-    }
-</script>
 <div id="blindControl">
     <div class="configContainer">
         <div class="flex">
@@ -44,8 +25,8 @@
                 </div>
 
                 <div class="configButtons">
-                    <button id="automaticAll" onclick="automatic(-1), switchButtonClass(id)" class="automaticButtonTrue">AUTOMATIK</button>
-                    <button class="automaticButtonFalse">Zeitplan</button>
+                    <button id="automaticAll" onclick="automatic(-1, {{room.id}}), switchButtonClass(id)" class="automaticButton{{room.autoBlinds}}">AUTOMATIK</button>
+                    <button onclick="securityCheck()" class="automaticButtonFalse">Zeitplan</button>
                 </div>
 
             </div>

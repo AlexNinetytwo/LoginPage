@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 {% block content%}
 
-<script src="{{ url_for('static', filename='/js/room.js') }}"></script>
-
 
 <style>
   .timeplan {
@@ -234,50 +232,14 @@
         }
       }
     } else {
-      allUp.classList.remove("buttonLocked");
-      allDown.classList.remove("buttonLocked");
+        try {
+          allUp.classList.remove("buttonLocked");
+          allDown.classList.remove("buttonLocked");
+        }
+        catch {}
     }
   }
 
-
-
-  function lockButton(buttonID) {
-
-    let portActionSplit = buttonID.split("/");
-    let port = portActionSplit[1];
-    let action = portActionSplit[0];
-    let brotherID;
-
-    if (action == "driveUp") {
-      brotherID = "driveDown/" + String(port);
-    } else {
-      brotherID = "driveUp/" + String(port);
-    }
-
-    let pressTimer;
-    let buttonLocked = false;
-    let button = document.getElementById(buttonID);
-    let brother = document.getElementById(brotherID);
-
-    if (button.classList.contains("buttonLocked")) {
-      buttonLocked = true;
-    }
-
-    unlockBrotherButton(brother);
-
-    // button.addEventListener("mousedown", function () {
-      
-
-    //   function unlockBrotherButton(brother) {
-    //     brother.classList.remove("buttonLocked");
-    //     brother.classList.add("controlButton");
-    //   }
-
-    //   button.addEventListener("mouseup", function () {
-    //     clearTimeout(pressTimer);
-    //   });
-    // }
-  }
 
 </script>
 

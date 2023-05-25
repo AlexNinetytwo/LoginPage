@@ -69,6 +69,8 @@ class Room(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(15), nullable=False)
+    autoBlinds = db.Column(db.Boolean, default=True)
+    autoLights = db.Column(db.Boolean, default=True)
     floor_id = db.Column(db.Integer, db.ForeignKey('floor.id'), nullable=False)
     
     lights = db.relationship('Light', backref='room', lazy=True)
