@@ -1,15 +1,40 @@
+<script>
+    function setEventListener(button) {
+  
+      button.addEventListener("mousedown", function () {
+  
+        pressTimer = setTimeout(function () {
+          // long press
+          longPress(button);
+        }, 500);
+  
+        // short press
+        shortPress(button);
+      });
+  
+      button.addEventListener("mouseup", function () {
+        clearTimeout(pressTimer);
+      });
+    }
+</script>
 <div id="blindControl">
     <div class="configContainer">
         <div class="flex">
 
             <div class="controlLeft">
-                <button onclick="lockButton(id)"  class="controlButton" id="driveUpAll">
+                <button class="controlButton" id="driveUp/00">
                     <div class="buttonArrow">&#x003C;</div>
                 </button>
-                <button onclick="lockButton(id)" class="controlButton" id="driveDownAll">
+                <button class="controlButton" id="driveDown/00">
                     <div class="buttonArrow">&#x003E;</div>
                 </button>
             </div>
+            <script>
+                let allUp = document.getElementById("driveUp/00");
+                let allDown = document.getElementById("driveDown/00");
+                setEventListener(allUp);
+                setEventListener(allDown);
+            </script>
 
             <div class="controlRight">
 

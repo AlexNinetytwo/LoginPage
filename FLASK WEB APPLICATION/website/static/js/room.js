@@ -3,23 +3,8 @@
 
 
 
-function redrawTimeplan(id) {
-  saveBlind_id(id);
-  resetAddButton();
-  rebuildTableHeader();
-  getTimeEntries(id)
-    .then(displayEntries)
-    .catch(error => {
-      console.log(error);
-    });
-}
-
-function saveBlind_id(id) {
-  blind_id = id;
-}
-
-function rebuildTableHeader() {
-  tableRows.innerHTML = `
+function rebuildTableHeader(tag) {
+  tag.innerHTML = `
     <tr>
       <th>Uhrzeit</th>
       <th>Aktion</th>

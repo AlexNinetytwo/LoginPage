@@ -1,28 +1,26 @@
 from flask import request, jsonify, flash, current_app, Blueprint, render_template, redirect, url_for
 from flask_login import login_required, current_user
-from flask_socketio import SocketIO
 from sqlalchemy.exc import IntegrityError
 from datetime import time as dt_time
 from .models import *
 from flask_socketio import emit
+
 
 views = Blueprint('views', __name__)
 
 def getTemp():
     return "21°C"
 
-socketio = SocketIO()
-
-@socketio.on("ButtonStatesChanged")
-def sendButtonStates(message):
-    states = current_app.config["DRIVE_BUTTON_STATES"]
-    socketio.emit("ButtonStatesChanged", states, broadcast=True)
 
 @views.route("/updateButtonStates/<int:port>", methods=["POST"])
 def updateButtonStates(port):
     newState = request.form.get("newState")
     current_app.config["DRIVE_BUTTON_STATES"][port] = newState
     return "success"
+
+@views.route("/getButtonStates", methods=['GET'])
+def getButtonStates():
+    return jsonify(data=current_app.config["DRIVE_BUTTON_STATES"])
 
 @views.route('/', methods=['GET', 'POST'])
 def sentToHome():

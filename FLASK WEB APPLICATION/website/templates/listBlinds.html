@@ -1,16 +1,21 @@
 {% for module in modules['blinds'] %}
-
   <div id="blindControl">
     <div class="configContainer">
       <div class="flex">
 
         <div class="controlLeft">
-          <button onclick="lockButton(id)"  class="controlButton" id="driveUp/{{module.port}}">
+          <button class="controlButton" id="driveUp/{{module.port}}">
             <div class="buttonArrow">&#x003C;</div>
           </button>
-          <button onclick="lockButton(id)" class="controlButton" id="driveDown/{{module.port}}">
+          <button class="controlButton" id="driveDown/{{module.port}}">
             <div class="buttonArrow">&#x003E;</div>
           </button>
+          <script>
+            driveUp = document.getElementById("driveUp/{{module.port}}");
+            driveDown = document.getElementById("driveDown/{{module.port}}");
+            setEventListener(driveUp);
+            setEventListener(driveDown);
+          </script>
         </div>
 
         <div class="controlRight">
