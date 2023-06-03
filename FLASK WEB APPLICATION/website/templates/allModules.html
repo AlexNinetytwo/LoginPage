@@ -107,7 +107,33 @@
 
   {% if modules['lights'][1] %}
 
-  {% include 'allLights.html' %}
+  <div id="blindControl">
+    <div class="configContainer">
+        <div class="flex">
+
+            <div class="controlLeft">
+                <div class="lightBulb" id="all"></div>
+                <button onclick="lightOn(-1)" class="controlButton">
+                    <div class="buttonFont">ON</div>
+                </button>
+            </div>
+
+            <div class="controlRight">
+
+                <div class="controlHeader">
+                    <div>&nbsp;Alle Lichter</div>
+                    <div>aus&nbsp;</div>
+                </div>
+
+                <div class="configButtons">
+                    <button id="automaticAll" onclick="automatic(-2, ), switchButtonClass(id)" class="automaticButton{{room.autoLights}}">AUTOMATIK</button>
+                    <button class="automaticButtonFalse">Schwellwert</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
 
   {% endif %}
 

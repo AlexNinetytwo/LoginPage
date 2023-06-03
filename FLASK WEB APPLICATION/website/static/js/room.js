@@ -1,7 +1,16 @@
-
+let isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
 
 function setEventListener(button) {
-  
+
+  if (isTouchDevice) {
+    setTouchListener(button);
+  } else {
+    setClickListener(button);
+  }
+
+}
+
+function setClickListener(button) {
   button.addEventListener("mousedown", function () {
 
     pressTimer = setTimeout(function () {
@@ -15,6 +24,25 @@ function setEventListener(button) {
 
   button.addEventListener("mouseup", function () {
     clearTimeout(pressTimer);
+  });
+}
+
+function setTouchListener(button) {
+  button.addEventListener("touchstart", function () {
+
+    pressTimer = setTimeout(function () {
+      // long press
+      longPress(button);
+    }, 500);
+
+    // short press
+    shortPress(button);
+  });
+
+  button.addEventListener("touchend", function () {
+    clearTimeout(pressTimer);
+    // releaseButton(button);
+    // console.log("released");
   });
 }
 

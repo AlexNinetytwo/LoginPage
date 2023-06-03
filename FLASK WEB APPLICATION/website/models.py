@@ -100,6 +100,12 @@ class Room(db.Model):
         for light in self.lights:
             light.turnOff()
 
+    def switchAutoLights(self):
+        self.autoLights = False if self.autoLights else True
+
+    def switchAutoBlinds(self):
+        self.autoBlinds = False if self.autoBlinds else True
+
 # Licht
 class Light(db.Model):
 
@@ -119,6 +125,9 @@ class Light(db.Model):
     def turnOff(self):
         pass
 
+    def switchAutomatic(self):
+        self.auto == False if self.auto else True
+
 # Rollo
 class Blind(db.Model):
 
@@ -137,6 +146,9 @@ class Blind(db.Model):
     def lowerTheBlind(self):
         percent = 100
         self.closedInPercent = percent
+
+    def switchAutomatic(self):
+        self.auto == False if self.auto else True
 
 # Automatikzeiten
 class BlindsActionTimes(db.Model):

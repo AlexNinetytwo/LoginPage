@@ -1,3 +1,9 @@
+<script>
+  document.addEventListener('contextmenu', function(event) {
+  event.preventDefault();
+  });
+</script>
+
 {% for module in modules['blinds'] %}
   <div id="blindControl">
     <div class="configContainer">
@@ -5,10 +11,10 @@
 
         <div class="controlLeft">
           <button class="controlButton" id="driveUp/{{module.port}}">
-            <div class="buttonArrow">&#x003C;</div>
+            <img class="arrowImage" src="{{ url_for('static', filename='/images/left-arrow.png') }}">
           </button>
           <button class="controlButton" id="driveDown/{{module.port}}">
-            <div class="buttonArrow">&#x003E;</div>
+            <img class="arrowImage" style="transform: rotate(-90deg);" src="{{ url_for('static', filename='/images/left-arrow.png') }}">
           </button>
           <script>
             driveUp = document.getElementById("driveUp/{{module.port}}");
