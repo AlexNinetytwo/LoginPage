@@ -4,7 +4,7 @@
   });
 </script>
 
-{% for module in modules['blinds'] %}
+{% for module in room.getBlinds() %}
   <div id="blindControl">
     <div class="configContainer">
       <div class="flex">
@@ -27,12 +27,12 @@
         <div class="controlRight">
 
           <div class="controlHeader">
-            <div>&nbsp;Rollo {{loop.index}}</div>
+            <div>&nbsp;Jalousie {{loop.index}}</div>
             <div>0%&nbsp;</div>
           </div>
 
           <div class="configButtons">
-            <button id="automatic{{module.port}}" onclick="automatic({{module.port}}, 0), switchButtonClass(id)" class="automaticButton{{module.auto}}">AUTOMATIK</button>
+            <button id="automatic{{module.port}}" onclick="automatic('blind', {{module.id}}), switchButtonClass(id)" class="automaticButton{{module.auto}}">AUTOMATIK</button>
             <button id="{{module.id}}" onclick="redrawTimeplan(id)" class="automaticButtonFalse">Zeitplan</button>
           </div>
 

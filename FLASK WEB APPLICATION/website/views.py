@@ -26,43 +26,16 @@ def sentToHome():
     return redirect(url_for('views.home'))
 
 
-@views.route("/autoOnOff/<int:room_id>", methods=["POST"])
-def autoOnOff(room_id):
-    room_id = int(room_id)
-    port = int(request.form.get("port"))
+@views.route("/autoOnOff/<int:id>", methods=["POST"])
+def autoOnOff(id):
+    id = int(id)
+    target = int(request.form.get("target"))
 
-    if room_id == -1:
-        if port == -1:
-            automaticAllLights()
-        else:
-            automaticAllBlinds()
-
-    else:
-
-        if port == -1:
-            room = Room.query.get(room_id)
-            room.autoBlinds = False if room.autoBlinds else True
-            db.session.commit()
-        elif port == -2:
-            room = Room.query.get(room_id)
-            room.autoLights = False if room.autoLights else True
-            db.session.commit()
-            
-        else:
-            module = Light.query.filter_by(port=port).first()
-            try:
-                module.auto = False if module.auto else True
-            except:
-                module = Blind.query.filter_by(port=port).first()
-                module.auto = False if module.auto else True
-            finally:
-                db.session.commit()
+    if target == ""
     
     return jsonify(result="success")
 
-def automaticAllLights():
-    room.autoBlinds = False if room.autoBlinds else True
-    db.session.commit()
+
 
 @views.route("/getTimeEntries/<int:id>", methods=["GET"])
 def getTimeEntries(id):
@@ -111,18 +84,12 @@ def home():
 @views.route('/Home/Alle', methods=['GET', 'POST'])
 @login_required
 def all():
-    template = "allModules.html"
+    template = "room.html"
     name = "Alle"
-    rooms = Room.query.all()
     header = name.upper()
     previousPage = "/Home"
-    blinds = Blind.query.all()
-    lights = Light.query.all()
-    modules = {'blinds':blinds, 'lights':lights}
 
     return render_template(template,
-                            name=name,
-                            modules=modules,
                             celsius=getTemp(),
                             header=header,
                             previousPage=previousPage)
@@ -132,14 +99,12 @@ def all():
 def groundFloor():
     template = "floor.html"
     name = "Erdgeschoss"
-    floor_id = Floor.query.filter_by(name="Erdgeschoss").first().id
-    rooms = Room.query.filter_by(floor_id=floor_id)
+    floor = Floor.query.filter_by(name="Erdgeschoss").first()
     header = name.upper()
     previousPage = "/Home"
     
     return render_template(template,
-                            name=name,
-                            rooms=rooms,
+                            floor=floor,
                             celsius=getTemp(),
                             header=header,
                             previousPage=previousPage)
@@ -149,14 +114,12 @@ def groundFloor():
 def firstFloor():
     template = "floor.html"
     name = "1.OG"
-    floor_id = Floor.query.filter_by(name="1.OG").first().id
-    rooms = Room.query.filter_by(floor_id=floor_id)
+    floor = Floor.query.filter_by(name="1.OG").first()
     header = name
     previousPage = "/Home"
     
     return render_template(template,
-                            name=name,
-                            rooms=rooms,
+                            floor=floor,
                             celsius=getTemp(),
                             header=header,
                             previousPage=previousPage)
@@ -169,14 +132,9 @@ def hallway():
     header = name.upper()
     previousPage = "/Home/Erdgeschoss"
     room = Room.query.filter_by(name=name).first()
-    blinds = Blind.query.filter_by(room_id=room.id)
-    lights = Light.query.filter_by(room_id=room.id)
-    modules = {'blinds':blinds, 'lights':lights}
     
     return render_template(template,
                             room=room,
-                            modules=modules,
-                            name=name,
                             celsius=getTemp(),
                             header=header,
                             previousPage=previousPage)
@@ -189,14 +147,9 @@ def livingroom():
     header = name.upper()
     previousPage = "/Home/Erdgeschoss"
     room = Room.query.filter_by(name=name).first()
-    blinds = Blind.query.filter_by(room_id=room.id)
-    lights = Light.query.filter_by(room_id=room.id)
-    modules = {'lights':lights, 'blinds':blinds}
     
     return render_template(template,
-                            modules=modules,
                             room=room,
-                            name=name,
                             celsius=getTemp(),
                             header=header,
                             previousPage=previousPage)
@@ -209,14 +162,9 @@ def diningroom():
     header = name.upper()
     previousPage = "/Home/Erdgeschoss"
     room = Room.query.filter_by(name=name).first()
-    blinds = Blind.query.filter_by(room_id=room.id)
-    lights = Light.query.filter_by(room_id=room.id)
-    modules = {'lights':lights, 'blinds':blinds}
     
     return render_template(template,
-                            room=room,
-                            modules=modules,
-                            name=name,
+                            room=room,    
                             celsius=getTemp(),
                             header=header,
                             previousPage=previousPage)
@@ -229,14 +177,9 @@ def kitchen():
     header = name.upper()
     previousPage = "/Home/Erdgeschoss"
     room = Room.query.filter_by(name=name).first()
-    blinds = Blind.query.filter_by(room_id=room.id)
-    lights = Light.query.filter_by(room_id=room.id)
-    modules = {'blinds':blinds, 'lights':lights}
     
     return render_template(template,
                             room=room,
-                            modules=modules,
-                            name=name,
                             celsius=getTemp(),
                             header=header,
                             previousPage=previousPage)
@@ -249,14 +192,9 @@ def office1():
     header = name.upper()
     previousPage = "/Home/1.OG"
     room = Room.query.filter_by(name=name).first()
-    blinds = Blind.query.filter_by(room_id=room.id)
-    lights = Light.query.filter_by(room_id=room.id)
-    modules = {'blinds':blinds, 'lights':lights}
     
     return render_template(template,
                             room=room,
-                            modules=modules,
-                            name=name,
                             celsius=getTemp(),
                             header=header,
                             previousPage=previousPage)
@@ -269,14 +207,9 @@ def office2():
     header = name.upper()
     previousPage = "/Home/1.OG"
     room = Room.query.filter_by(name=name).first()
-    blinds = Blind.query.filter_by(room_id=room.id)
-    lights = Light.query.filter_by(room_id=room.id)
-    modules = {'blinds':blinds, 'lights':lights}
     
     return render_template(template,
                             room=room,
-                            modules=modules,
-                            name=name,
                             celsius=getTemp(),
                             header=header,
                             previousPage=previousPage)
@@ -289,14 +222,9 @@ def menroom():
     header = name.upper()
     previousPage = "/Home/1.OG"
     room = Room.query.filter_by(name=name).first()
-    blinds = Blind.query.filter_by(room_id=room.id)
-    lights = Light.query.filter_by(room_id=room.id)
-    modules = {'blinds':blinds, 'lights':lights}
     
     return render_template(template,
                             room=room,
-                            modules=modules,
-                            name=name,
                             celsius=getTemp(),
                             header=header,
                             previousPage=previousPage)

@@ -210,11 +210,11 @@ function closePlan() {
   plan.style.display="none";
 }
 
-function automatic(port, room_id) {
+function automatic(target, id) {
   $.ajax({
-      url: "/autoOnOff/" + room_id,
+      url: "/autoOnOff/" + id,
       type: 'POST',
-      data: {"port": port},
+      data: {"target": target},
       success: function (response) {
           console.log(response);
       },

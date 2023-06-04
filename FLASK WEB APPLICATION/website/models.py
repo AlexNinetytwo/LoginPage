@@ -12,6 +12,8 @@ class House(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(15), unique=True, nullable=False)
+    autoBlinds = db.Column(db.Boolean, default=True)
+    autoLights = db.Column(db.Boolean, default=True)
 
     floors = db.relationship('Floor', backref='house', lazy=True)
 
@@ -35,11 +37,21 @@ class House(db.Model):
         for floor in self.floors:
             floor.lightsOff()
 
+    def switchAutoLights(self):
+        self.autoLights = False if self.autoLights else True
+        db.session.commit()
+
+    def switchAutoBlinds(self):
+        self.autoBlinds = False if self.autoBlinds else True
+        db.session.commit()
+
 # Etage
 class Floor(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(15), nullable=False)
+    autoBlinds = db.Column(db.Boolean, default=True)
+    autoLights = db.Column(db.Boolean, default=True)
     house_id = db.Column(db.Integer, db.ForeignKey('house.id'), nullable=False)
 
     rooms = db.relationship('Room', backref='floor', lazy=True)
@@ -63,6 +75,14 @@ class Floor(db.Model):
     def lightsOff(self):
         for room in self.rooms:
             room.lightsOff()
+
+    def switchAutoLights(self):
+        self.autoLights = False if self.autoLights else True
+        db.session.commit()
+
+    def switchAutoBlinds(self):
+        self.autoBlinds = False if self.autoBlinds else True
+        db.session.commit()
 
 # Raum
 class Room(db.Model):
@@ -102,9 +122,12 @@ class Room(db.Model):
 
     def switchAutoLights(self):
         self.autoLights = False if self.autoLights else True
+        db.session.commit()
 
     def switchAutoBlinds(self):
         self.autoBlinds = False if self.autoBlinds else True
+        db.session.commit()
+
 
 # Licht
 class Light(db.Model):
@@ -117,7 +140,7 @@ class Light(db.Model):
 
     def setThreshold(self, value:int):
         self.threshold = value
-        db.session.commt()
+        db.session.commit()
 
     def turnOn(self):
         pass
@@ -127,6 +150,8 @@ class Light(db.Model):
 
     def switchAutomatic(self):
         self.auto == False if self.auto else True
+        db.session.commit()
+
 
 # Rollo
 class Blind(db.Model):
@@ -149,6 +174,7 @@ class Blind(db.Model):
 
     def switchAutomatic(self):
         self.auto == False if self.auto else True
+        db.session.commit()
 
 # Automatikzeiten
 class BlindsActionTimes(db.Model):

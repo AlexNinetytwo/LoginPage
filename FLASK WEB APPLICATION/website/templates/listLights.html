@@ -1,4 +1,4 @@
-{% for module in modules['lights'] %}
+{% for module in room.getLights() %}
   <div id="blindControl">
     <div class="configContainer">
       <div class="flex">
@@ -19,7 +19,7 @@
           </div>
 
           <div class="configButtons">
-            <button id="automatic{{module.port}}" onclick="automatic({{module.port}}, 0), switchButtonClass(id)" class="automaticButton{{module.auto}}">AUTOMATIK</button>
+            <button id="automatic{{module.port}}" onclick="automatic('light', {{module.id}}), switchButtonClass(id)" class="automaticButton{{module.auto}}">AUTOMATIK</button>
             <button class="automaticButtonFalse">Schwellwert</button>
           </div>
 
