@@ -17,7 +17,7 @@
                 </div>
 
                 <div class="configButtons">
-                    <button id="automaticAll" onclick="automatic({{env}}, {{id}}), switchButtonClass(id)" class="automaticButton{{room.autoLights}}">AUTOMATIK</button>
+                    <button id="automaticAllLights" onclick="envAutomatic('lights','{{room.name}}',{{room.id}}), switchButtonClass(id)" class="automaticButton{{room.autoLights}}">AUTOMATIK</button>
                     <button class="automaticButtonFalse">Schwellwert</button>
                 </div>
 

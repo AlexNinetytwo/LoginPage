@@ -4,7 +4,6 @@ from sqlalchemy.exc import IntegrityError
 from datetime import time as dt_time
 from .models import *
 
-
 views = Blueprint('views', __name__)
 
 def getTemp():
@@ -26,14 +25,30 @@ def sentToHome():
     return redirect(url_for('views.home'))
 
 
-@views.route("/autoOnOff/<int:id>", methods=["POST"])
-def autoOnOff(id):
-    id = int(id)
-    target = int(request.form.get("target"))
-
-    if target == ""
+@views.route("/switchAutomatic/<int:port>", methods=["POST"])
+def switchAutomatic(port):
+    port = int(port)
+    module = House.getModuleByPort(port)
+    module.switchAutomatic()
     
     return jsonify(result="success")
+
+@views.route("/switchEnvAutomatic/<int:env_id>", methods=["POST"])
+def switchEnvAutomatic(env_id):
+    env = request.form.get("enviroment")
+    moduleType = request.form.get("moduleType")
+
+    if env == "HomeSystem":
+        House.query.get(env_id).switchAutomatic(moduleType) 
+
+    elif env == "Erdgeschoss" or env == "1.OG":
+        Floor.query.get(env_id).switchAutomatic(moduleType)
+      
+    else:
+        Room.query.get(env_id).switchAutomatic(moduleType)
+
+    return jsonify(result="success")
+
 
 
 
@@ -88,9 +103,11 @@ def all():
     name = "Alle"
     header = name.upper()
     previousPage = "/Home"
+    room = House.query.get(1)
 
     return render_template(template,
                             celsius=getTemp(),
+                            room=room,
                             header=header,
                             previousPage=previousPage)
 
@@ -102,8 +119,10 @@ def groundFloor():
     floor = Floor.query.filter_by(name="Erdgeschoss").first()
     header = name.upper()
     previousPage = "/Home"
+    allLinkFiller = name + "/"
     
     return render_template(template,
+                            allLinkFiller=allLinkFiller,
                             floor=floor,
                             celsius=getTemp(),
                             header=header,
@@ -117,9 +136,39 @@ def firstFloor():
     floor = Floor.query.filter_by(name="1.OG").first()
     header = name
     previousPage = "/Home"
+    allLinkFiller = name + "/"
     
     return render_template(template,
                             floor=floor,
+                            allLinkFiller=allLinkFiller,
+                            celsius=getTemp(),
+                            header=header,
+                            previousPage=previousPage)
+
+@views.route('/Home/Erdgeschoss/Alle', methods=['GET', 'POST'])
+@login_required
+def groundFloorAll():
+    template = "room.html"
+    header = "ALLE ERDGESCHOSS"
+    previousPage = "/Home/Erdgeschoss"
+    room = Floor.query.filter_by(name="Erdgeschoss").first()
+    
+    return render_template(template,
+                            room=room,
+                            celsius=getTemp(),
+                            header=header,
+                            previousPage=previousPage)
+
+@views.route('/Home/1.OG/Alle', methods=['GET', 'POST'])
+@login_required
+def firstFloorAll():
+    template = "room.html"
+    header = "ALLE 1.OG"
+    previousPage = "/Home/1.OG"
+    room = Floor.query.filter_by(name="1.OG").first()
+    
+    return render_template(template,
+                            room=room,
                             celsius=getTemp(),
                             header=header,
                             previousPage=previousPage)

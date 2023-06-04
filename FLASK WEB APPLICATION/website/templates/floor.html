@@ -6,7 +6,7 @@
   <div class="headerSpace"></div>
  
   
-  <button onclick="redirectToPage('/Home/Alle')" id="Alle" class="roomButton">Alle</button>
+  <button onclick="redirectToPage('/Home/{{allLinkFiller}}Alle')" id="Alle" class="roomButton">Alle</button>
   
 
 
@@ -15,8 +15,8 @@
     changeClass(buttonID, "{{name}}");
   </script>
 
-  {% for room in rooms %}
-  <button onclick="redirectToPage('/Home/{{name}}/{{room.name}}')" id="{{room.name}}" class="roomButton">{{room.name}}</button>
+  {% for room in floor.getRooms() %}
+  <button onclick="redirectToPage('/Home/{{floor.name}}/{{room.name}}')" id="{{room.name}}" class="roomButton">{{room.name}}</button>
   
 
   <script>

@@ -210,11 +210,24 @@ function closePlan() {
   plan.style.display="none";
 }
 
-function automatic(target, id) {
+function automatic(port) {
   $.ajax({
-      url: "/autoOnOff/" + id,
+      url: "/switchAutomatic/" + port,
       type: 'POST',
-      data: {"target": target},
+      success: function (response) {
+          console.log(response);
+      },
+      error: function(error) {
+        console.error(error);
+      }
+  })
+}
+
+function envAutomatic(moduleType, enviroment, env_id) {
+  $.ajax({
+      url: "/switchEnvAutomatic/" + env_id,
+      type: 'POST',
+      data: {'moduleType':moduleType, 'enviroment':enviroment},
       success: function (response) {
           console.log(response);
       },

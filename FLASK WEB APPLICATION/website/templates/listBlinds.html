@@ -32,7 +32,7 @@
           </div>
 
           <div class="configButtons">
-            <button id="automatic{{module.port}}" onclick="automatic('blind', {{module.id}}), switchButtonClass(id)" class="automaticButton{{module.auto}}">AUTOMATIK</button>
+            <button id="automatic{{module.port}}" onclick="automatic({{module.port}}), switchButtonClass(id)" class="automaticButton{{module.auto}}">AUTOMATIK</button>
             <button id="{{module.id}}" onclick="redrawTimeplan(id)" class="automaticButtonFalse">Zeitplan</button>
           </div>
 
