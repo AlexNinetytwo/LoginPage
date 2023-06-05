@@ -3,7 +3,6 @@
 }
 
 
-
 html {
   scroll-snap-type: y mandatory;
 }
@@ -111,7 +110,7 @@ body {
 }
 
 .hallway {
-  background-image: linear-gradient(rgba(78, 77, 150, 0.5), rgba(0, 0, 0, 0.8)), url(../images/ground.jpg);
+  background-image: linear-gradient(rgba(78, 77, 150, 0.5), rgba(0, 0, 0, 0.8)), url(../images/hallway.jpg);
 }
 
 .livingroom {
@@ -130,7 +129,7 @@ body {
   background-image: linear-gradient(rgba(78, 77, 150, 0.5), rgba(0, 0, 0, 0.8)), url(../images/office.jpg);
 }
 
-.mensroom {
+.business {
   background-image: linear-gradient(rgba(78, 77, 150, 0.5), rgba(0, 0, 0, 0.8)), url(../images/business.jpeg);
 }
 
@@ -220,7 +219,7 @@ body {
 .buttonFont {
   font-family: Arial, Helvetica, sans-serif;
   color: rgb(91, 91, 91);
-  font-size: 5vw;
+  font-size: 8vw;
   margin-right: 1vw;
 }
 

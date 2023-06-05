@@ -105,10 +105,17 @@
 <div class="bigButtonContainer">
   <div class="headerSpace"></div>
 
+  {% if room.getLights()[1] %}
 
   {% include 'allLights.html' %}
 
+  {% endif %}
+
+  {% if room.getBlinds()[1] %}
+
   {% include 'allBlinds.html' %}
+
+  {% endif %}
 
   {% include 'listLights.html' %}
 
@@ -119,11 +126,6 @@
 
 
 <script>
-
-
-
-
-
 
   let blind_id;
   let plan = document.getElementById("timeplan");
@@ -189,7 +191,15 @@
 
   function lightOn(id) {
     let lightBulb = document.getElementById(id);
-    lightBulb.classList.add("lightBulbOn");
+    let button = document.getElementById("lightButton/"+id);
+    if (lightBulb.classList.contains("lightBulbOn")) {
+      lightBulb.classList.remove("lightBulbOn");
+      button.innerHTML = `ON`;
+    } else {
+      lightBulb.classList.add("lightBulbOn");
+      button.innerHTML = `OFF`;
+    }
+    
   }
 
   function longPress(button) {
