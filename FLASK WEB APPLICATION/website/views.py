@@ -1,5 +1,5 @@
 from flask import request, jsonify, flash, current_app, Blueprint, render_template, redirect, url_for
-from flask_login import login_required, current_user
+from flask_login import login_required
 from sqlalchemy.exc import IntegrityError
 from datetime import time as dt_time
 from .models import *
