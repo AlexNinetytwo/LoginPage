@@ -56,7 +56,7 @@
     
     <div onclick="resetTimer()" class="screenSaver" id="screenSaver">
       <div class="screenSaverBox" id="screenSaverBox">
-        <h1 class="screenSaverFont">14:31</h1>
+        <h1 id="time" class="screenSaverFont">14:31</h1>
         <h1 class="screenSaverFont">{{celsius}}</h1>
       </div>
     </div>
@@ -69,6 +69,10 @@
       let timer = setInterval(updateTimer, 1000);
       let screenSaver = document.getElementById("screenSaver");
       let screenSaverBox = document.getElementById("screenSaverBox");
+
+      function getCurrentTime() {
+        let currentTime = new 
+      }
 
       function updateTimer() {
         seconds++;
