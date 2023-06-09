@@ -7,11 +7,11 @@
   
   <button onclick="redirectToPage('Home/Alle')" id="Alle" class="roomButton">Alle</button>
   
-  {% for env in envs %}
-  <button onclick="redirectToPage('/Home/{{env.name}}')" id="{{env.name}}" class="roomButton">{{env.name}}</button>
+  {% for floor in house.floors %}
+  <button onclick="redirectToPage('/Home/{{floor.name}}')" id="{{floor.name}}" class="roomButton">{{floor.name}}</button>
   
   <script>
-    envName = "{{env.name}}";
+    envName = "{{floor.name}}";
     buttonID = document.getElementById(envName)
     changeClass(buttonID, envName);
   </script>

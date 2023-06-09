@@ -61,24 +61,14 @@ def getTimeEntries(id):
 def saveNewAction(id):
     time = request.form.get("time")
     action = int(request.form.get("action"))
+    blind = Blind.query.get(id)
 
     timeParts = time.split(":")
     hours = int(timeParts[0])
     minutes = int(timeParts[1])
     newTime = dt_time(hours, minutes)
 
-    for blindAction in BlindsActionTimes.query.all():
-        if blindAction.time_value == newTime and blindAction.blind_id == id:
-            blindAction.time_value = newTime
-            blindAction.closedInPercent = action
-            db.session.commit()
-            return "overwritten"
-        
-    newAction = BlindsActionTimes(blind_id=id, time_value=newTime, closedInPercent=action)
-
-    db.session.add(newAction)
-    db.session.commit()
-
+    blind.addActionTime(newTime, action)
     return "success"
 
 @views.route("/deleteAction/<int:id>", methods=["POST"])
@@ -92,9 +82,8 @@ def deleteAction(id):
 @views.route('/Home', methods=['GET', 'POST'])
 @login_required
 def home():
-    house = House.query.filter_by(id=1)
-    envs = Floor.query.all()
-    return render_template('home.html',envs=envs, house=house, celsius=getTemp(), header='HOME')
+    house = House.query.get(1)
+    return render_template('home.html', house=house, celsius=getTemp(), header='HOME')
 
 @views.route('/Home/Alle', methods=['GET', 'POST'])
 @login_required
@@ -104,6 +93,7 @@ def all():
     header = name.upper()
     previousPage = "/Home"
     room = House.query.get(1)
+
 
     return render_template(template,
                             celsius=getTemp(),

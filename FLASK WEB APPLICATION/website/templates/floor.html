@@ -15,7 +15,7 @@
     changeClass(buttonID, "{{floor.name}}");
   </script>
 
-  {% for room in floor.getRooms() %}
+  {% for room in floor.rooms %}
   <button onclick="redirectToPage('/Home/{{floor.name}}/{{room.name}}')" id="{{room.name}}" class="roomButton">{{room.name}}</button>
   
 

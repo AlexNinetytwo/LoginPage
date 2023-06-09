@@ -1,0 +1,31 @@
+Das ist mein Code in models.py:
+
+class Floor(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(15), nullable=False)
+    autoBlinds = db.Column(db.Boolean, default=True)
+    autoLights = db.Column(db.Boolean, default=True)
+    house_id = db.Column(db.Integer, db.ForeignKey('house.id'), nullable=False)
+
+    rooms = db.relationship('Room', backref='floor', lazy=True)
+    
+    def getLights(self):
+        lights = []
+        for room in self.rooms:
+            for light in room.lights:
+                lights.append(light)  
+        return lights
+    
+    def getBlinds(self):
+        blinds = []
+        for room in self.rooms:
+            for blind in room.blinds:
+                blinds.append(blind)
+        return blinds
+
+Das ist die Fehlermeldung:
+
+File "c:\programming\schoolProject\LoginPage\FLASK WEB APPLICATION\website\models.py", line 83, in getLights
+for room in self.rooms():
+TypeError: 'InstrumentedList' object is not callable

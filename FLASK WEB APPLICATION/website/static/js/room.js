@@ -27,8 +27,9 @@ function setClickListener(button) {
   });
 }
 
-function setTouchListener(button) {
-  button.addEventListener("touchstart", function () {
+function setTouchListener(id) {
+  button = document.getElementById(id);
+  button.addEventListener("touchstart",  function () {
 
     pressTimer = setTimeout(function () {
       // long press
@@ -41,9 +42,13 @@ function setTouchListener(button) {
 
   button.addEventListener("touchend", function () {
     clearTimeout(pressTimer);
-    // releaseButton(button);
-    // console.log("released");
   });
+}
+
+function clearEventListener(id) {
+  button = document.getElementById(id);
+  button.removeEventListener("touchstart", function () { });
+  button.removeEventListener("touchend", function () { });
 }
 
 

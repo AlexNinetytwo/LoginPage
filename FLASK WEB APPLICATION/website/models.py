@@ -17,15 +17,23 @@ class House(db.Model):
 
     floors = db.relationship('Floor', backref='house', lazy=True)
 
-    def getFloors(self):
-        return Floor.query.filter_by(house_id=self.id)
-    
     def getLights(self):
-        return Light.query.all()
+        lights = []
+        for floor in self.floors:
+            for light in floor.getLights():
+                lights.append(light)
+        return lights
     
     def getBlinds(self):
-        return Blind.query.all()
-    
+        blinds = []
+        for floor in self.floors:
+            for blind in floor.getBlinds():
+                blinds.append(blind)
+        return blinds
+      
+    def getFloors(self):
+        return Floor.query.filter_by(house_id=self.id)
+      
     def getModuleByPort(port):
         module = Light.query.filter_by(port=port).first()
         if not module:
@@ -69,21 +77,18 @@ class Floor(db.Model):
     house_id = db.Column(db.Integer, db.ForeignKey('house.id'), nullable=False)
 
     rooms = db.relationship('Room', backref='floor', lazy=True)
-
-    def getRooms(self):
-        return Room.query.filter_by(floor_id=self.id)
     
     def getLights(self):
         lights = []
-        for room in self.getRooms():
-            for light in room.getLights():
+        for room in self.rooms:
+            for light in room.lights:
                 lights.append(light)  
         return lights
     
     def getBlinds(self):
         blinds = []
-        for room in self.getRooms():
-            for blind in room.getBlinds():
+        for room in self.rooms:
+            for blind in room.blinds:
                 blinds.append(blind)
         return blinds
 
@@ -141,10 +146,10 @@ class Room(db.Model):
     blinds = db.relationship('Blind', backref='room', lazy=True)
 
     def getBlinds(self):
-        return Blind.query.filter_by(room_id=self.id)
+        return self.blinds
 
     def getLights(self):
-        return Light.query.filter_by(room_id=self.id)
+        return self.lights
 
     def raiseAllBlinds(self):
         for blind in self.blinds:
@@ -226,6 +231,18 @@ class Blind(db.Model):
     def switchAutomatic(self):
         self.auto = False if self.auto == True else True
         db.session.commit()
+
+    def addActionTime(self, time_value, closedInPercent):
+        for action in self.actionTimes:
+            if action.time_value == time_value:
+                action.closedInPercent = closedInPercent
+                db.session.commit()
+                return "overwritten"
+           
+        actionTime = BlindsActionTimes(blind_id=self.id, time_value=time_value, closedInPercent=closedInPercent)
+        db.session.add(actionTime)
+        db.session.commit()
+        return "saved"
 
 # Automatikzeiten
 class BlindsActionTimes(db.Model):
