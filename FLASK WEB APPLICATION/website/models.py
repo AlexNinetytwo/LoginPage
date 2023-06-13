@@ -63,7 +63,7 @@ class House(db.Model):
         elif moduleType == 'lights':
             state = self.autoLights = False if self.autoLights else True
 
-        for floor in self.getFloors():
+        for floor in self.floors:
             floor.setAutomatic(moduleType, state)
 
 
@@ -116,7 +116,7 @@ class Floor(db.Model):
         elif moduleType == 'lights':
             state = self.autoLights = False if self.autoLights else True
 
-        for room in self.getRooms():
+        for room in self.rooms:
             room.setAutomatic(moduleType, state)
 
         
@@ -128,7 +128,7 @@ class Floor(db.Model):
         else:
             raise Exception('ModuleType not found')
         
-        for room in self.getRooms():
+        for room in self.rooms:
             room.setAutomatic(moduleType, state)
         
             
@@ -190,9 +190,16 @@ class Light(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     room_id = db.Column(db.Integer, db.ForeignKey('room.id'), nullable=False)
-    threshold = db.Column(db.Integer)
+    number = db.Column(db.Integer)
+    threshold = db.Column(db.Integer, default=0)
     auto = db.Column(db.Boolean, default=False)
     port = db.Column(db.Integer, unique=True)
+
+    def __init__(self, room_id, port):
+        self.room_id = room_id
+        self.port = port
+        self.number = self.query.filter_by(room_id=self.room_id).count() +1
+
 
     def setThreshold(self, value:int):
         self.threshold = value
@@ -213,12 +220,18 @@ class Light(db.Model):
 class Blind(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
-    room_id = db.Column(db.Integer, db.ForeignKey('room.id'), nullable=False)  
-    closedInPercent = db.Column(db.Integer)
+    room_id = db.Column(db.Integer, db.ForeignKey('room.id'), nullable=False)
+    number = db.Column(db.Integer)
+    closedInPercent = db.Column(db.Integer, default=0)
     auto = db.Column(db.Boolean, default=False)
     port = db.Column(db.Integer, unique=True)
     
     actionTimes = db.relationship('BlindsActionTimes', backref='blind', lazy=True) # Beziehung zu Action
+
+    def __init__(self, room_id, port):
+        self.room_id = room_id
+        self.port = port
+        self.number = self.query.filter_by(room_id=self.room_id).count() +1
 
     def raiseTheBlind(self):
         percent = 0

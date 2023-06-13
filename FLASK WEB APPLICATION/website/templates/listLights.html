@@ -27,38 +27,40 @@
 
 
 {% for module in room.getLights() %}
-  <div id="blindControl">
-    <div class="configContainer">
-      <div class="flex">
+<div class="configContainer">
+  <div class="flex">
 
-        <div class="controlLeft">
-          <div class="lightBulb" id="{{loop.index}}">
-          </div>
-          <button onclick="lightOn({{loop.index}})" class="controlButton">
-            <div id="lightButton/{{loop.index}}" class="buttonFont">ON</div>
-          </button>
-        </div>
+    <div class="controlLeft">
+      <div class="lightBulb" id="{{loop.index}}">
+      </div>
+      <button onclick="lightOn({{loop.index}})" class="controlButton">
+        <div id="lightButton/{{loop.index}}" class="buttonFont">ON</div>
+      </button>
+    </div>
 
-        <div class="controlRight">
+    <div class="controlRight">
 
-          <div class="controlHeader">
-            <div>&nbsp;Licht {{loop.index}}</div>
-            <div>aus&nbsp;</div>
-          </div>
-          
-
-          <div class="configButtons">
-            <button id="automatic{{module.port}}" onclick="automatic({{module.port}}), switchButtonClass(id)" class="automaticButton{{module.auto}}">AUTOMATIK</button>
-            <div class="slider-container">
-              <div class="slider-track"></div>
-              <div class="slider-thumb"></div>
-            </div>
-          </div>
-
+      <div>
+        <div class="moduleHeader">{{module.room.name}}</div>
+        <div class="controlHeader">
+          <div>&nbsp;Licht {{loop.index}}</div>
+          <div>aus&nbsp;</div>
         </div>
       </div>
+      
+      
+
+      <div class="configButtons">
+        <button id="automatic{{module.port}}" onclick="automatic({{module.port}}), switchButtonClass(id)" class="automaticButton{{module.auto}}">AUTOMATIK</button>
+        <div class="slider-container">
+          <div class="slider-track"></div>
+          <div class="slider-thumb"></div>
+        </div>
+      </div>
+
     </div>
   </div>
+</div>
   <script>
     var sliderContainer = document.querySelector(".slider-container");
     var sliderThumb = document.querySelector(".slider-thumb");

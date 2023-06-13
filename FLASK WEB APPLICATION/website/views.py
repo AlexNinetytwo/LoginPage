@@ -38,14 +38,20 @@ def switchEnvAutomatic(env_id):
     env = request.form.get("enviroment")
     moduleType = request.form.get("moduleType")
 
-    if env == "HomeSystem":
-        House.query.get(env_id).switchAutomatic(moduleType) 
+    try:
 
-    elif env == "Erdgeschoss" or env == "1.OG":
-        Floor.query.get(env_id).switchAutomatic(moduleType)
-      
-    else:
-        Room.query.get(env_id).switchAutomatic(moduleType)
+
+        if env == "HomeSystem":
+            House.query.get(env_id).switchAutomatic(moduleType) 
+
+        elif env == "Erdgeschoss" or env == "1.OG":
+            Floor.query.get(env_id).switchAutomatic(moduleType)
+        
+        else:
+            Room.query.get(env_id).switchAutomatic(moduleType)
+
+    except Exception as e:
+        print(e)
 
     return jsonify(result="success")
 

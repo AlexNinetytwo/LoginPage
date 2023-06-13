@@ -5,38 +5,39 @@
 </script>
 
 {% for module in room.getBlinds() %}
-  <div id="blindControl">
-    <div class="configContainer">
-      <div class="flex">
+  <div class="configContainer">
+    <div class="flex">
 
-        <div class="controlLeft">
-          <button class="controlButton" id="driveUp/{{module.port}}">
-            <img class="arrowImage" src="{{ url_for('static', filename='/images/left-arrow.png') }}">
-          </button>
-          <button class="controlButton" id="driveDown/{{module.port}}">
-            <img class="arrowImage" style="transform: rotate(-90deg);" src="{{ url_for('static', filename='/images/left-arrow.png') }}">
-          </button>
-          <script>
-            // driveUp = document.getElementById("driveUp/{{module.port}}");
-            // driveDown = document.getElementById("driveDown/{{module.port}}");
-            // setEventListener(driveUp);
-            // setEventListener(driveDown);
-          </script>
-        </div>
+      <div class="controlLeft">
+        <button class="controlButton" id="driveUp/{{module.port}}">
+          <img class="arrowImage" src="{{ url_for('static', filename='/images/left-arrow.png') }}">
+        </button>
+        <button class="controlButton" id="driveDown/{{module.port}}">
+          <img class="arrowImage" style="transform: rotate(-90deg);" src="{{ url_for('static', filename='/images/left-arrow.png') }}">
+        </button>
+        <script>
+          driveUp = document.getElementById("driveUp/{{module.port}}");
+          driveDown = document.getElementById("driveDown/{{module.port}}");
+          setEventListener(driveUp);
+          setEventListener(driveDown);
+        </script>
+      </div>
 
-        <div class="controlRight">
+      <div class="controlRight">
 
+        <div>
+          <div class="moduleHeader">{{module.room.name}}</div>
           <div class="controlHeader">
-            <div>&nbsp;Jalousie {{loop.index}}</div>
+            <div>&nbsp;Jalousie {{module.number}}</div>
             <div>0%&nbsp;</div>
           </div>
-
-          <div class="configButtons">
-            <button id="automatic{{module.port}}" onclick="automatic({{module.port}}), switchButtonClass(id)" class="automaticButton{{module.auto}}">AUTOMATIK</button>
-            <button id="{{module.id}}" onclick="redrawTimeplan(id)" class="automaticButtonFalse">Zeitplan</button>
-          </div>
-
         </div>
+
+        <div class="configButtons">
+          <button id="automatic{{module.port}}" onclick="automatic({{module.port}}), switchButtonClass(id)" class="automaticButton{{module.auto}}">AUTOMATIK</button>
+          <button id="{{module.id}}" onclick="redrawTimeplan(id)" class="automaticButtonFalse">Zeitplan</button>
+        </div>
+
       </div>
     </div>
   </div>

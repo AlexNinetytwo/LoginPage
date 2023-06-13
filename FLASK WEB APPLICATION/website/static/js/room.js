@@ -27,8 +27,7 @@ function setClickListener(button) {
   });
 }
 
-function setTouchListener(id) {
-  button = document.getElementById(id);
+function setTouchListener(button) {
   button.addEventListener("touchstart",  function () {
 
     pressTimer = setTimeout(function () {
@@ -229,6 +228,7 @@ function automatic(port) {
 }
 
 function envAutomatic(moduleType, enviroment, env_id) {
+  console.log(env_id);
   $.ajax({
       url: "/switchEnvAutomatic/" + env_id,
       type: 'POST',

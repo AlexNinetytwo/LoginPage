@@ -4,7 +4,7 @@
 
 
 html {
-  scroll-snap-type: y mandatory;
+  overflow: hidden;
 }
 
 .screenSaver {
@@ -48,15 +48,19 @@ body {
   margin: 0;
 }
 
+.container {
+  height: 100vh;
+  width: 100%;
+}
+
 .header {
   color: white;
   font-size: 3vw;
   /* font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; */
   text-align: center;
   background-color: rgb(8, 6, 39);
-  width: 100%;
-  margin: 0;
-  position: fixed;
+  height: 15vw;
+  /* position: fixed; */
   justify-content: space-between;
   display: flex;
   z-index: 2;
@@ -67,20 +71,21 @@ body {
 }
 
 .bigButtonContainer {
-
-  display: flex;
   width: 100%;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
+  height: calc(100% - 15vw);
+  text-align: center;
+  justify-content: space-around;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
 }
 
 .roomButton {
-  scroll-snap-align: end;
-  width: 100%;
-  height: 28vw;
+  scroll-snap-align: start;
+  scroll-margin-top: 1vw;
+  width: 98%;
+  height: 29vw;
   border-radius: 1.5vw;
-  margin: 0.7vw 1vw;
+  margin-top: 1vw;
   padding: 5vh 0vw;
   font-size: 10vw;
   background-blend-mode: normal, luminosity;
@@ -140,26 +145,30 @@ body {
 }
 
 .configContainer {
-  scroll-snap-align: end;
-  width: 95vw;
-  height: 55vw;
+  scroll-snap-align: center;
+  width: 97%;
   background-color: rgba(0, 0, 0, 0.5);
   border-color: rgb(14, 14, 29);
   border-width: 1px;
-  margin-bottom: 2vh;
   border-style: solid;
-  padding-top: 2vh;
+  padding-top: 1vw;
+  padding-bottom: 1vw;
+  margin-top: 2vw;
+  margin-left: 1.2%;
+  
 }
 
 .flex {
   display: flex;
+  align-items: center;
   width: 100%;
   height: 100%;
 }
 
 .controlLeft, .controlRight {
+  /* display: inline-block; */
   width: 30%;
-  height: 100%;
+  height: fit-content;
   text-align: center;
   justify-items: center;
   vertical-align: middle;
@@ -167,6 +176,7 @@ body {
 
 .controlRight {
   width: 70%;
+  height: fit-content;
 }
 
 .controlButton, .buttonLocked {
@@ -174,9 +184,9 @@ body {
   -webkit-touch-callout: none;
   -ms-touch-action: none;
   touch-action: none;
-  width: 90%;
-  height: 48%;
-  margin: 1%;
+  width: 26vw;
+  height: 26vw;
+  margin: 1vw;
   background-color: rgb(164, 164, 164);
   z-index: 1;
   border-radius: 4vw;
@@ -224,7 +234,7 @@ body {
 }
 
 .configButtons {
-  height: 80%;
+  height: 40vw;
 }
 
 .automaticButtonFalse, .automaticButtonTrue, .timePlanButton {
@@ -233,7 +243,7 @@ body {
   color: rgb(173, 173, 173);
   margin: 1% 0;
   width: 95%;
-  height: 48%;
+  height: 47%;
   padding: 0;
   border-width: 1vw;
   border-color: rgb(92, 162, 92);
@@ -258,11 +268,12 @@ body {
   font-size: 8vw;
   color: white;
   padding: 0;
+  font-style: italic;
 }
 
 .lightBulb {
-  width: 90%;
-  height: 48%;
+  width: 26vw;
+  height: 26vw;
   margin: 1%;
   background-color: rgb(164, 164, 164);
   z-index: 1;
@@ -277,4 +288,90 @@ body {
 .lightBulbOn {
   
   filter:invert() drop-shadow(0 0 15px rgb(255, 255, 255));
+}
+
+.moduleHeader {
+  width: 100%;
+  color: white;
+  text-align: left;
+  /* margin-top: -2.5vw; */
+  margin-bottom: -1vw;
+  margin-left: 2.5vw;
+  font-size: 4vw;
+  font-style: italic;
+}
+
+.timeplan {
+  background-color: rgba(0, 0, 0, 0.3);
+  position: fixed;
+  display: none;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+  justify-items: center;
+  align-items: center;
+  justify-content: center;
+  font-size: 6vw;
+  backdrop-filter: blur(1vw);
+}
+
+.timewindow {
+  background-color: white;
+  width: 90%;
+  height: 70vw;
+}
+
+.tableFrame {
+  max-height: 75%;
+  width: 100%;
+  overflow-y: scroll;
+}
+
+table {
+  width: 100%;
+}
+
+table, th, td {
+border: 1px solid black;
+border-collapse: collapse;
+}
+
+.titleBar {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tableButton {
+  width: 100%;
+  font-size: 6vw;
+}
+
+.lastColumn {
+  width: 6vw;
+}
+
+.deleteButton, .acceptButton {
+  width: 100%;
+  height: 10vw;
+  background-color: red;
+  color: white;
+}
+
+.acceptButton {
+  background-color: green;
+}
+
+.timeChooseButton {
+  height: 10vw;
+  width: 10vw;
+  font-size: 6vw;
+}
+
+.newTimeCont {
+  display: flex;
+  justify-content: space-between;
+}
+
+.timeCont {
+  width: 15vw;
 }
