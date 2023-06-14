@@ -1,4 +1,149 @@
 let isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+let blind_id;
+let plan = document.getElementById("timeplan");
+let tableRows = document.getElementById("timeTable");
+let tableFrame = document.getElementById("tableFrame");
+let addButton = document.getElementById("addButton");
+let modulesActions = [];
+let allDriveButtons = document.querySelectorAll("controlButton");
+
+let newTime = "06:00";
+let newAction = "0";
+
+function saveBlind_id(id) {
+  blind_id = id;
+}
+
+function redrawTimeplan(id) {
+  saveBlind_id(id);
+  resetAddButton();
+  rebuildTableHeader(tableRows);
+  getTimeEntries(id)
+    .then(displayEntries)
+    .catch(error => {
+      console.log(error);
+    });
+}
+
+
+function driveButton(id) {
+  let portActionSplit = id.split("/");
+  let port = portButtonSplit[1];
+  let action = portButtonSplit[0];
+  saveDriveButtonStates(port, action);
+}
+
+function saveDriveButtonStates(port, state) {
+  $.ajax({
+    url: "/updateButtonStates/" + port,
+    type: 'POST',
+    data: {'state': state},
+    success: function (response) {
+      console.log(response);
+    },
+    error: function (error) {
+      console.log(error);
+    }
+  });
+}
+
+function redrawDriveButtons() {
+  console.log("Redrawing drive buttons now.")
+}
+
+function switchButtonClass(id) {
+  button = document.getElementById(id);
+  if (button.classList.contains("automaticButtonTrue")) {
+    button.classList.remove("automaticButtonTrue");
+    button.classList.add("automaticButtonFalse");
+  } else {
+    button.classList.remove("automaticButtonFalse");
+    button.classList.add("automaticButtonTrue");
+  }
+}
+
+function lightOn(id) {
+  let lightBulb = document.getElementById(id);
+  let button = document.getElementById("lightButton/"+id);
+  if (lightBulb.classList.contains("lightBulbOn")) {
+    lightBulb.classList.remove("lightBulbOn");
+    button.innerHTML = `ON`;
+  } else {
+    lightBulb.classList.add("lightBulbOn");
+    button.innerHTML = `OFF`;
+  }
+  
+}
+
+function longPress(button) {
+  let opposite = getOpposite(button);
+  button.classList.remove("buttonLocked");
+}
+
+function releaseButton(button) {
+  button.classList.add("controlButton");  
+}
+
+function shortPress(button) {
+  let opposite = getOpposite(button);
+  unlockEachDriveButtonIfThe_ALLinterface_IsUsed(button);
+  opposite.classList.remove("buttonLocked");
+  if (button.classList.contains("buttonLocked")) {
+    button.classList.remove("buttonLocked");
+    button.value = "0";
+  } else {
+    button.classList.add("buttonLocked");
+    button.value = "1";
+  }
+  
+}
+
+function getOpposite(button) {
+  let action = button.id.split("/")[0];
+  let port = button.id.split("/")[1];
+  let opposite = document.getElementById("driveDown/"+port);
+  if (action == "driveDown") {
+    opposite = document.getElementById("driveUp/"+port);
+  }
+  return opposite;
+}
+
+function unlockEachDriveButtonIfThe_ALLinterface_IsUsed(button) {
+  let port = button.id.split("/")[1];
+  if (port == "00") {
+    let buttons = document.querySelectorAll(".buttonLocked");
+    for (let i = 0; i < buttons.length; i++) {
+      if (buttons[i] != button) {
+        buttons[i].classList.remove("buttonLocked");
+        buttons[i].value = "0";
+      }
+    }
+  } else {
+      try {
+        allUp.classList.remove("buttonLocked");
+        allDown.classList.remove("buttonLocked");
+      }
+      catch {}
+      finally {
+        allUp.value = "0";
+        allDown.value = "1";
+      }
+  }
+}
+
+function updateCurrentActions(buttons) {
+  $.ajax({
+    url: "/updateCurrentActions/",
+    type: 'POST',
+    data: {'buttons': buttons},
+    success: function (response) {
+      console.log(response);
+    },
+    error: function (error) {
+      console.log(error);
+    }
+  });
+}
 
 function setEventListener(button) {
 
@@ -13,17 +158,26 @@ function setEventListener(button) {
 function setClickListener(button) {
   button.addEventListener("mousedown", function () {
 
+    let long = false;
+
     pressTimer = setTimeout(function () {
       // long press
       longPress(button);
+      long = true;
     }, 500);
 
     // short press
     shortPress(button);
+    updateCurrentActions(allDriveButtons);
   });
 
   button.addEventListener("mouseup", function () {
     clearTimeout(pressTimer);
+    if (long) {
+      button.value = "0";
+      updateCurrentActions(allDriveButtons);
+    }
+    
   });
 }
 
@@ -37,6 +191,7 @@ function setTouchListener(button) {
 
     // short press
     shortPress(button);
+    updateCurrentActions(allDriveButtons);
   });
 
   button.addEventListener("touchend", function () {

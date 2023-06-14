@@ -9,10 +9,10 @@
     <div class="flex">
 
       <div class="controlLeft">
-        <button class="controlButton" id="driveUp/{{module.port}}">
+        <button class="controlButton" id="driveUp/{{module.port}}" value="0">
           <img class="arrowImage" src="{{ url_for('static', filename='/images/left-arrow.png') }}">
         </button>
-        <button class="controlButton" id="driveDown/{{module.port}}">
+        <button class="controlButton" id="driveDown/{{module.port}}" value="0">
           <img class="arrowImage" style="transform: rotate(-90deg);" src="{{ url_for('static', filename='/images/left-arrow.png') }}">
         </button>
         <script>

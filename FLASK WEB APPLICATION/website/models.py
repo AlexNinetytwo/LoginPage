@@ -1,5 +1,6 @@
 from . import db
 from flask_login import UserMixin
+import moduleAPI
 
 
 # Benutzer
@@ -77,6 +78,7 @@ class Floor(db.Model):
     house_id = db.Column(db.Integer, db.ForeignKey('house.id'), nullable=False)
 
     rooms = db.relationship('Room', backref='floor', lazy=True)
+    lights = rooms.lights
     
     def getLights(self):
         lights = []
@@ -200,16 +202,12 @@ class Light(db.Model):
         self.port = port
         self.number = self.query.filter_by(room_id=self.room_id).count() +1
 
-
     def setThreshold(self, value:int):
         self.threshold = value
         db.session.commit()
 
-    def turnOn(self):
-        pass
-
-    def turnOff(self):
-        pass
+    def turnOnOff(self):
+        moduleAPI.lightOnOff(self.port)
 
     def switchAutomatic(self):
         self.auto = False if self.auto else True
@@ -235,10 +233,12 @@ class Blind(db.Model):
 
     def raiseTheBlind(self):
         percent = 0
+        moduleAPI.driveBlind(self.port, percent)
         self.closedInPercent = percent
 
     def lowerTheBlind(self):
         percent = 100
+        moduleAPI.driveBlind(self.port, percent)
         self.closedInPercent = percent
 
     def switchAutomatic(self):
