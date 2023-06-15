@@ -2,145 +2,25 @@
 {% block content%}
 
 
-<style>
-  /* body {
-    background-size: cover;
-    background-blend-mode: multiply;
-    background-image: linear-gradient(rgba(174, 174, 201, 0.9), rgba(0, 0, 0, 0.9)), url({{ url_for('static', filename='images/all.jpg') }});
-  } */
-</style>
 
 
 <div class="bigButtonContainer">
-  <div class="headerSpace"></div>
-  {% for light in lights %}
-  <div id="blindControl">
-    <div class="configContainer">
-      <div class="flex">
 
-        <div class="controlLeft">
-          <button onclick="lockButton(id)"  class="controlButton" id="driveUp{{light.port}}">
-            <div class="buttonFont">&#x003C;</div>
-          </button>
-          <button onclick="lockButton(id)" class="controlButton" id="driveDown{{light.port}}">
-            <div class="buttonFont">&#x003E;</div>
-          </button>
-        </div>
-        <script>
-          let button{{light.port}}UpisLocked
-          let button{{light.port}}DownUpisLocked
-        </script>
+  {% if room.getLights()[1] %}
 
-        <div class="controlRight">
+  {% include 'allLights.html' %}
 
-          <div class="controlHeader">
-            <div>&nbsp;ROLLO {{light.port}}</div>
-            <div>0%&nbsp;</div>
-          </div>
+  {% endif %}
 
-          <div class="configButtons">
-            <button class="configButton">AUTOMATIK</button>
-            <button class="configButton">Zeitplan</button>
-          </div>
+  {% if room.getBlinds()[1] %}
 
-        </div>
-      </div>
-    </div>
-  </div>
-  {% endfor %}
-</div>
+  {% include 'allBlinds.html' %}
 
-<!-- <script>
-  let lockedButtonId = null;
-  let pressTimer = null;
+  {% endif %}
 
-  function startPressTimer(buttonIdToLock, buttonIdToUnlock) {
-    pressTimer = setTimeout(function() {
-      // Langer Druck
-      lockButton(buttonIdToLock, buttonIdToUnlock);
-    }, 300);
-  }
+  {% include 'listLights.html' %}
 
-  function endPressTimer() {
-    clearTimeout(pressTimer);
-  }
-
-  function lockButton(buttonIdToLock, buttonIdToUnlock) {
-    if (lockedButtonId === buttonIdToLock) {
-      // Wenn der Button bereits eingerastet ist, dann aufheben
-      unlockButton(buttonIdToLock);
-    } else {
-      // Anderen Button aufheben (falls eingerastet)
-      if (lockedButtonId) {
-        unlockButton(lockedButtonId);
-      }
-
-      // Button einrasten
-      lockButtonStyle(buttonIdToLock);
-      unlockButtonStyle(buttonIdToUnlock);
-      lockedButtonId = buttonIdToLock;
-    }
-  }
-
-  function unlockButton(buttonId) {
-    unlockButtonStyle(buttonId);
-    lockedButtonId = null;
-  }
-
-  function lockButtonStyle(buttonId) {
-    let button = document.getElementById(buttonId);
-    button.classList.remove("controlButton");
-    button.classList.add("buttonLocked");
-  }
-
-  function unlockButtonStyle(buttonId) {
-    let button = document.getElementById(buttonId);
-    button.classList.remove("buttonLocked");
-    button.classList.add("controlButton");
-  }
-</script> -->
-
-<script>
-
-  function lockButton(buttonID) {
-    let pressTimer;
-    let buttonLocked = false;
-    let button = document.getElementById(buttonID);
-    button.addEventListener("mousedown", function () {
-      pressTimer = setTimeout(function () {
-        // long press
-        console.log("Langer Druck");
-        // button.classList.remove("buttonLocked");
-        // button.classList.add("controlButton");
-        buttonLocked = false;
-      }, 500);
-
-      // short press
-      if (!buttonLocked) {
-        button.classList.remove("controlButton");
-        button.classList.add("buttonLocked");
-        buttonLocked = true;
-        console.log(buttonLocked);
-      } else {
-        button.classList.remove("buttonLocked");
-        button.classList.add("controlButton");
-        buttonLocked = false;
-      }
-    });
-
-    button.addEventListener("mouseup", function () {
-      clearTimeout(pressTimer);
-    });
-  }
-</script>
-
-
-<!-- <script>
-    envName = "";
-    buttonID = document.getElementById("")
-    changeClass(buttonID, envName);
-  </script> -->
-<!-- % endfor % -->
+  {% include 'listBlinds.html' %}
 
 </div>
 

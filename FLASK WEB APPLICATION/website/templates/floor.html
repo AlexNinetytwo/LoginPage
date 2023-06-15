@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content%}
+
+
+<div class="bigButtonContainer">
+ 
+  
+  <button onclick="redirectToPage('/Home/{{allLinkFiller}}Alle')" id="Alle" class="roomButton">Alle</button>
+  
+
+
+  <script>
+    buttonID = document.getElementById("Alle");
+    changeClass(buttonID, "{{floor.name}}");
+  </script>
+
+  {% for room in floor.rooms %}
+  <button onclick="redirectToPage('/Home/{{floor.name}}/{{room.name}}')" id="{{room.name}}" class="roomButton">{{room.name}}</button>
+  
+
+  <script>
+    envName = "{{room.name}}";
+    buttonID = document.getElementById("{{room.name}}")
+    changeClass(buttonID, envName);
+  </script>
+  {% endfor %}
+  
+  
+</div>
+
+
+{% endblock %}

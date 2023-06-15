@@ -9,17 +9,23 @@ function redirectToPage(pageUrl) {
 
 function changeClass(object, caseVar) {
     switch (caseVar) {
-      case "Erdgeschoss":
+      case "Flur":
+        object.classList.add("hallway");
+        break;
+      case "groundFloor":
         object.classList.add("groundFloor");
         break;
       case "1.OG":
         object.classList.add("firstFloor");
         break;
+      case "Erdgeschoss":
+        object.classList.add("groundFloor");
+        break;
       case "Wohnzimmer":
-        object.classList.add("livingRoom");
+        object.classList.add("livingroom");
         break;
       case "Esszimmer":
-        object.classList.add("diningRoom");
+        object.classList.add("diningroom");
         break;
       case "Küche":
         object.classList.add("kitchen");

@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
 
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/base.css') }}">
-  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='/css/base.css') }}">
+  <script src="{{ url_for('static', filename='/js/main.js') }}"></script>
+  <script src="{{ url_for('static', filename='/js/jQuery.js') }}"></script>
+  <script src="{{ url_for('static', filename='/js/room.js') }}"></script>
 
 
   <head>
@@ -13,48 +15,51 @@
   </head>
   <body id="body">
     
-    <div onclick="redirectToPage('{{previousPage}}')" class="header">
-      <h1>&nbsp;&#8678</h1>
-      <h1>
-        {% for i in range(4) %}
-        &nbsp;
-        {% endfor %}
-        {{header}}
-      </h1>
-      <div style="width:17vw; text-align: right;">
-        <h1>{{celsius}}&nbsp;</h1>
+
+    <div class="container">
+
+      <div class="timeplan" id="timeplan">
+        <div class="timewindow">
+          <div class="titleBar">
+            <div>Zeitplan</div>
+            <button onclick="closePlan()" style="font-size:6vw;">X</button>
+          </div>
+          <div id="tableFrame" class="tableFrame">
+            <table id="timeTable">
+              <tr>
+                <th>Uhrzeit</th>
+                <th>Aktion</th>
+                <th class="lastColumn">Entf</th>
+              </tr>
+            </table>
+          </div>
+          
+          <button onclick="addAction(0)" id="addButton" class="tableButton">
+            Neu
+          </button>
+        </div>
       </div>
-    </div>
-      
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    {% for category, message in messages %}
-    {% if category == 'error' %}
-    <div class="alert alert-danger alter-dismissable fade show" role="alert">
-      {{ message }}
-      <button type="button" class="close" data-dismiss="alert">
-        <span aria-hidden="true">&times;</span>
-      </button>
+      <div onclick="redirectToPage('{{previousPage}}')" class="header">
+        <h1>&nbsp;&#8678</h1>
+        <h1>
+          {% for i in range(4) %}
+          &nbsp;
+          {% endfor %}
+          {{header}}
+        </h1>
+        <div style="width:17vw; text-align: right;">
+          <h1>{{celsius}}&nbsp;</h1>
+        </div>
+      </div>
+      {% block content %}
+      {% endblock %}
     </div>
-    {% else %}
-    <div class="alert alert-success alter-dismissable fade show" role="alert">
-      {{ message }}
-      <button type="button" class="close" data-dismiss="alert">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    {% endif %}
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
-
-    <div class="container">{% block content %} {% endblock %}</div>
     
     
     <div onclick="resetTimer()" class="screenSaver" id="screenSaver">
       <div class="screenSaverBox" id="screenSaverBox">
-        <h1 class="screenSaverFont">14:31</h1>
+        <h1 id="time" class="screenSaverFont">14:31</h1>
         <h1 class="screenSaverFont">{{celsius}}</h1>
       </div>
     </div>
@@ -67,6 +72,10 @@
       let timer = setInterval(updateTimer, 1000);
       let screenSaver = document.getElementById("screenSaver");
       let screenSaverBox = document.getElementById("screenSaverBox");
+
+      function getCurrentTime() {
+        let currentTime = new 
+      }
 
       function updateTimer() {
         seconds++;

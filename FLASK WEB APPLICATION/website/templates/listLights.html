@@ -1,0 +1,148 @@
+<style>
+  .slider-container {
+    width: 95%;
+    height: 50%; /* Höhe des Schiebereglers anpassen */
+    background-color: #ddd; /* Hintergrundfarbe des Schiebereglers */
+    position: relative;
+  }
+
+  .slider-track {
+    height: 100%;
+    background-color: #aaa; /* Hintergrundfarbe der Spur */
+  }
+
+  .slider-thumb {
+    width: 20%; /* Breite des Daumens anpassen */
+    height: 100%; /* Höhe des Daumens anpassen */
+    background-color: #f00; /* Farbe des Daumens */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+  }
+
+</style>
+  
+
+
+{% for module in room.getLights() %}
+<div class="configContainer">
+  <div class="flex">
+
+    <div class="controlLeft">
+      <div class="lightBulb" id="{{loop.index}}">
+      </div>
+      <button onclick="switchLightState({{loop.index}}, {{module.port}})" class="controlButton">
+        <div id="lightButton/{{loop.index}}" class="buttonFont">ON</div>
+      </button>
+    </div>
+
+    <div class="controlRight">
+
+      <div>
+        <div class="moduleHeader">{{module.room.name}}</div>
+        <div class="controlHeader">
+          <div>&nbsp;Licht {{loop.index}}</div>
+          <div>aus&nbsp;</div>
+        </div>
+      </div>
+      
+      
+
+      <div class="configButtons">
+        <button id="automatic{{module.port}}" onclick="automatic({{module.port}}), switchButtonClass(id)" class="automaticButton{{module.auto}}">AUTOMATIK</button>
+        <div class="slider-container">
+          <div class="slider-track"></div>
+          <div class="slider-thumb"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+  <script>
+    var sliderContainer = document.querySelector(".slider-container");
+    var sliderThumb = document.querySelector(".slider-thumb");
+    var sliderTrack = document.querySelector(".slider-track");
+    let scrolling = false;
+
+    function addAllListeners() {
+      sliderThumb.addEventListener("mousedown", startDragging);
+      sliderContainer.addEventListener("mouseup", stopDragging);
+      sliderContainer.addEventListener("mouseleave", stopDragging);
+      sliderContainer.addEventListener("mousemove", dragSlider);
+    
+      sliderThumb.addEventListener("touchstart", startDragging);
+      sliderContainer.addEventListener("touchend", stopDragging);
+      sliderContainer.addEventListener("touchcancel", stopDragging);
+      sliderContainer.addEventListener("touchmove", dragSlider);
+    }
+
+    addAllListeners();
+
+    function removeAllListeners() {
+      sliderThumb.remvoveEventListener("mousedown", startDragging);
+      sliderContainer.remvoveEventListener("mouseup", stopDragging);
+      sliderContainer.remvoveEventListener("mouseleave", stopDragging);
+      sliderContainer.remvoveEventListener("mousemove", dragSlider);
+    
+      sliderThumb.remvoveEventListener("touchstart", startDragging);
+      sliderContainer.remvoveEventListener("touchend", stopDragging);
+      sliderContainer.addEventListener("touchcancel", stopDragging);
+      sliderContainer.remvoveEventListener("touchmove", dragSlider);
+    }
+  
+    var isDragging = false;
+  
+    function startDragging(e) {
+      isDragging = true;
+    }
+  
+    function stopDragging(e) {
+      isDragging = false;
+    }
+  
+    function dragSlider(e) {
+      e.preventDefault();
+  
+      var clientX;
+      if (e.type === "touchmove") {
+        clientX = e.touches[0].clientX;
+      } else {
+        clientX = e.clientX;
+      }
+  
+      if (isDragging) {
+        var positionX = clientX - sliderContainer.getBoundingClientRect().left;
+        var positionPercent = (positionX / sliderContainer.offsetWidth) * 100;
+        
+        if (positionPercent < 0) {
+          positionPercent = 0;
+        } else if (positionPercent > 100) {
+          positionPercent = 100;
+        }
+  
+        sliderThumb.style.left = positionPercent + "%";
+        sliderTrack.style.width = positionPercent + "%";
+      }
+    }
+
+    
+  </script>
+  <script>
+    function isScrollingInYAxis() {
+      // Überprüfe, ob das Gerät einen Touch-Support hat
+      if ('ontouchstart' in window || navigator.maxTouchPoints) {
+        // Überprüfe, ob die Seite in der Y-Achse gescrollt wird
+        // return window.pageYOffset !== 0;
+        console.log(window.pageYOffset !== 0);
+        return window.scrollY > 0;
+      }
+
+      return false; // Wenn kein Touch-Support vorhanden ist, wird false zurückgegeben
+    }
+    // let checkScroll = setInterval(isScrollingInYAxis, 1000);
+
+  </script>
+  {% endfor %}

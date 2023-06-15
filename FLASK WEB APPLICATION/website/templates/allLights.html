@@ -1,0 +1,32 @@
+
+<div class="configContainer">
+    <div class="flex">
+
+        <div class="controlLeft">
+            <div class="lightBulb" id="all"></div>
+            <button onclick="switchLightState(-1, -1)" class="controlButton">
+                <div id="lightButton/-1" class="buttonFont">
+                    ON
+                </div>
+            </button>
+        </div>
+
+        <div class="controlRight">
+
+            <div>
+                <div class="moduleHeader">{{room.name}}</div>
+                <div class="controlHeader">
+                    <div>&nbsp;Alle Lichter</div>
+                    <div>aus&nbsp;</div>
+                </div>
+            </div>
+            
+
+            <div class="configButtons">
+                <button id="automaticAllLights" onclick="envAutomatic('lights','{{room.name}}',{{room.id}}), switchButtonClass(id)" class="automaticButton{{room.autoLights}}">AUTOMATIK</button>
+                <button class="automaticButtonFalse">Schwellwert</button>
+            </div>
+
+        </div>
+    </div>
+</div>

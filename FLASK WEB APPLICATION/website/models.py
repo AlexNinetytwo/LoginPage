@@ -1,5 +1,6 @@
 from . import db
 from flask_login import UserMixin
+from . import moduleAPI, lightAPI
 
 
 # Benutzer
@@ -8,23 +9,37 @@ class User(db.Model, UserMixin):
     pin = db.Column(db.String(6))
 
 # Haus
-class House:
-    def __init__(self, roomNames:list):
-        self.floors = [Floor(roomNames)]
+class House(db.Model):
 
-    def addRooms(self, roomNames:list, floorName:str, floorIndex:int=None):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(15), unique=True, nullable=False)
+    autoBlinds = db.Column(db.Boolean, default=True)
+    autoLights = db.Column(db.Boolean, default=True)
 
-        if type(floorIndex) == None:
-            if len(self.floors) == 1:
-                self.floors[-1].addRooms(roomNames)
-            else:
-                self.floors.append(Floor(roomNames, floorName))
+    floors = db.relationship('Floor', backref='house', lazy=True)
 
-        else:
-            if floorIndex in list(range(len(self.floors))):
-                self.floors[floorIndex].addRooms(roomNames)
-            else:
-                self.floors.insert(floorIndex, Floor(roomNames, floorName))
+    def getLights(self):
+        lights = []
+        for floor in self.floors:
+            for light in floor.getLights():
+                lights.append(light)
+        return lights
+    
+    def getBlinds(self):
+        blinds = []
+        for floor in self.floors:
+            for blind in floor.getBlinds():
+                blinds.append(blind)
+        return blinds
+      
+    def getFloors(self):
+        return Floor.query.filter_by(house_id=self.id)
+      
+    def getModuleByPort(port):
+        module = Light.query.filter_by(port=port).first()
+        if not module:
+            module = Blind.query.filter_by(port=port).first()
+        return module
 
     def raiseAllBlinds(self):
         for floor in self.floors:
@@ -42,18 +57,41 @@ class House:
         for floor in self.floors:
             floor.lightsOff()
 
+    def switchAutomatic(self, moduleType):
+        if moduleType == 'blinds':
+            state = self.autoBlinds = False if self.autoBlinds else True
+                
+        elif moduleType == 'lights':
+            state = self.autoLights = False if self.autoLights else True
+
+        for floor in self.floors:
+            floor.setAutomatic(moduleType, state)
+
+
 # Etage
-class Floor:
-    def __init__(self, roomNames:list, floorName="Erdgeschoss"):
+class Floor(db.Model):
 
-        self.name = floorName
-        self.rooms = []
-        for roomName in roomNames:
-            self.rooms.append(Room(roomName))
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(15), nullable=False)
+    autoBlinds = db.Column(db.Boolean, default=True)
+    autoLights = db.Column(db.Boolean, default=True)
+    house_id = db.Column(db.Integer, db.ForeignKey('house.id'), nullable=False)
 
-    def addRooms(self, roomNames):
-        for roomName in roomNames:
-            self.rooms.append(Room(roomName))
+    rooms = db.relationship('Room', backref='floor', lazy=True)
+    
+    def getLights(self):
+        lights = []
+        for room in self.rooms:
+            for light in room.lights:
+                lights.append(light)  
+        return lights
+    
+    def getBlinds(self):
+        blinds = []
+        for room in self.rooms:
+            for blind in room.blinds:
+                blinds.append(blind)
+        return blinds
 
     def raiseAllBlinds(self):
         for room in self.rooms:
@@ -71,12 +109,48 @@ class Floor:
         for room in self.rooms:
             room.lightsOff()
 
+    def switchAutomatic(self, moduleType):
+
+        if moduleType == 'blinds':
+            state = self.autoBlinds = False if self.autoBlinds else True
+
+        elif moduleType == 'lights':
+            state = self.autoLights = False if self.autoLights else True
+
+        for room in self.rooms:
+            room.setAutomatic(moduleType, state)
+
+        
+    def setAutomatic(self, moduleType, state):
+        if moduleType == 'blinds':
+            self.autoBlinds = state
+        elif moduleType == 'lights':
+            self.autoLights = state
+        else:
+            raise Exception('ModuleType not found')
+        
+        for room in self.rooms:
+            room.setAutomatic(moduleType, state)
+        
+            
+
 # Raum
-class Room:
-    def __init__(self, name):
-        self.name = name
-        self.blinds = Blind.query.filter_by(room=self.name)
-        self.lights = Light.query.filter_by(room=self.name)
+class Room(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(15), nullable=False)
+    autoBlinds = db.Column(db.Boolean, default=True)
+    autoLights = db.Column(db.Boolean, default=True)
+    floor_id = db.Column(db.Integer, db.ForeignKey('floor.id'), nullable=False)
+    
+    lights = db.relationship('Light', backref='room', lazy=True)
+    blinds = db.relationship('Blind', backref='room', lazy=True)
+
+    def getBlinds(self):
+        return self.blinds
+
+    def getLights(self):
+        return self.lights
 
     def raiseAllBlinds(self):
         for blind in self.blinds:
@@ -94,62 +168,116 @@ class Room:
         for light in self.lights:
             light.turnOff()
 
+    def switchAutomatic(self, moduleType):
+        if moduleType == 'blinds':
+            self.autoBlinds = False if self.autoBlinds else True
+        elif moduleType == 'lights':
+            self.autoLights = False if self.autoLights else True
+            
+        db.session.commit()
+        
+    def setAutomatic(self, moduleType, state):
+        if moduleType == 'blinds':
+            self.autoBlinds = state
+
+        elif moduleType == 'lights':
+            self.autoLights = state
+
+        db.session.commit()
+
+
 # Licht
 class Light(db.Model):
 
-    port = db.Column(db.Integer, primary_key=True)
-    threshold = db.Column(db.Integer)
-    room = db.Column(db.String(15))
+    id = db.Column(db.Integer, primary_key=True)
+    room_id = db.Column(db.Integer, db.ForeignKey('room.id'), nullable=False)
+    number = db.Column(db.Integer)
+    threshold = db.Column(db.Integer, default=0)
+    auto = db.Column(db.Boolean, default=False)
+    port = db.Column(db.Integer, unique=True)
 
-    def __init__(self, room, port, threshold):
+    def __init__(self, room_id, port):
+        self.room_id = room_id
         self.port = port
-        self.room = room
-        self.threshold = threshold
+        self.number = self.query.filter_by(room_id=self.room_id).count() +1
 
     def setThreshold(self, value:int):
         self.threshold = value
-        db.session.commt()
+        db.session.commit()
 
     def turnOn(self):
-        pass
+        lightAPI.setLight(self.id, "on")
 
     def turnOff(self):
-        pass
+        lightAPI.setLight(self.id, "off")
+
+    def switchAutomatic(self):
+        self.auto = False if self.auto else True
+        db.session.commit()
+
 
 # Rollo
 class Blind(db.Model):
 
-    port = db.Column(db.Integer, primary_key=True)
-    room = db.Column(db.String(15))
+    id = db.Column(db.Integer, primary_key=True)
+    room_id = db.Column(db.Integer, db.ForeignKey('room.id'), nullable=False)
+    number = db.Column(db.Integer)
+    closedInPercent = db.Column(db.Integer, default=0)
+    auto = db.Column(db.Boolean, default=False)
+    port = db.Column(db.Integer, unique=True)
     
     actionTimes = db.relationship('BlindsActionTimes', backref='blind', lazy=True) # Beziehung zu Action
 
-    def __init__(self, room, port):
-        self.room = room
+    def __init__(self, room_id, port):
+        self.room_id = room_id
         self.port = port
-        self.closedInPercent = 0
+        self.number = self.query.filter_by(room_id=self.room_id).count() +1
+
+    def drive(self, percent):
+        moduleAPI.driveBlind(self.port, percent)
 
     def raiseTheBlind(self):
-        percent = 0
+        moduleAPI.driveBlind(self.port, 0)
+        
+    def lowerTheBlind(self):
+        moduleAPI.driveBlind(self.port, 100)
+
+    def updateCloseState(self, percent):
         self.closedInPercent = percent
         db.session.commit()
 
-    def lowerTheBlind(self):
-        percent = 100
-        self.closedInPercent = percent
+    def switchAutomatic(self):
+        self.auto = False if self.auto else True
         db.session.commit()
+
+    def addActionTime(self, time_value, closedInPercent):
+        for action in self.actionTimes:
+            if action.time_value == time_value:
+                action.closedInPercent = closedInPercent
+                db.session.commit()
+                return "overwritten"
+           
+        actionTime = BlindsActionTimes(blind_id=self.id, time_value=time_value, closedInPercent=closedInPercent)
+        db.session.add(actionTime)
+        db.session.commit()
+        return "saved"
 
 # Automatikzeiten
 class BlindsActionTimes(db.Model):
 
-    port = db.Column(db.Integer, db.ForeignKey('blind.port'), primary_key=True) # Beziehung zu Rollo
-    time_value = db.Column(db.Time, primary_key=True)
-    closedInPercent = db.Column(db.Integer)
+    id = db.Column(db.Integer, primary_key=True)
+    blind_id = db.Column(db.Integer, db.ForeignKey('blind.id'),nullable=False)
+    time_value = db.Column(db.Time, nullable=False)
+    closedInPercent = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, port, time_value, closedInPercent):
-        self.port = port
-        self.time_value = time_value
-        self.closedInPercent = closedInPercent
+    def serialize(self):
+        return {
+            'id': self.id,
+            'time_value': self.time_value.strftime('%H:%M'),
+            'closedInPercent': self.closedInPercent,
+        }
+
+db.UniqueConstraint(BlindsActionTimes.blind_id, BlindsActionTimes.time_value, name='uq_blind_time')
 
 
         
