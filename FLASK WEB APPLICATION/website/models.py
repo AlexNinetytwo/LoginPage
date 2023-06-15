@@ -1,6 +1,6 @@
 from . import db
 from flask_login import UserMixin
-import moduleAPI
+from . import moduleAPI, lightAPI
 
 
 # Benutzer
@@ -78,7 +78,6 @@ class Floor(db.Model):
     house_id = db.Column(db.Integer, db.ForeignKey('house.id'), nullable=False)
 
     rooms = db.relationship('Room', backref='floor', lazy=True)
-    lights = rooms.lights
     
     def getLights(self):
         lights = []
@@ -206,8 +205,11 @@ class Light(db.Model):
         self.threshold = value
         db.session.commit()
 
-    def turnOnOff(self):
-        moduleAPI.lightOnOff(self.port)
+    def turnOn(self):
+        lightAPI.setLight(self.id, "on")
+
+    def turnOff(self):
+        lightAPI.setLight(self.id, "off")
 
     def switchAutomatic(self):
         self.auto = False if self.auto else True
@@ -231,18 +233,21 @@ class Blind(db.Model):
         self.port = port
         self.number = self.query.filter_by(room_id=self.room_id).count() +1
 
-    def raiseTheBlind(self):
-        percent = 0
+    def drive(self, percent):
         moduleAPI.driveBlind(self.port, percent)
-        self.closedInPercent = percent
 
+    def raiseTheBlind(self):
+        moduleAPI.driveBlind(self.port, 0)
+        
     def lowerTheBlind(self):
-        percent = 100
-        moduleAPI.driveBlind(self.port, percent)
+        moduleAPI.driveBlind(self.port, 100)
+
+    def updateCloseState(self, percent):
         self.closedInPercent = percent
+        db.session.commit()
 
     def switchAutomatic(self):
-        self.auto = False if self.auto == True else True
+        self.auto = False if self.auto else True
         db.session.commit()
 
     def addActionTime(self, time_value, closedInPercent):

@@ -4,6 +4,8 @@ from os import path
 from flask_login import LoginManager
 from flask_sslify import SSLify
 from datetime import timedelta
+from .schedule import schedule_database_query, run_scheduler
+from threading import Thread
 
 
 db = SQLAlchemy()
@@ -18,7 +20,6 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=30)
     app.config['DRIVE_BUTTON_STATES'] = []
-    
     
 
     db.init_app(app)
@@ -45,6 +46,11 @@ def create_app():
     @login_manager.user_loader
     def load_user(id):
         return User.query.get(int(id))
+    
+    schedule_database_query()
+
+    scheduler_thread = Thread(target=run_scheduler)
+    scheduler_thread.start()
           
 
     return app

@@ -1,4 +1,4 @@
-def aktuelleTemperatur():
+def currentTemperature():
       
     # 1-wire Slave Datei lesen
     file = open('/sys/bus/w1/devices/28-000005d2e508/w1_slave')

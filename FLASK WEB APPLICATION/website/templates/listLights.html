@@ -33,7 +33,7 @@
     <div class="controlLeft">
       <div class="lightBulb" id="{{loop.index}}">
       </div>
-      <button onclick="lightOn({{loop.index}})" class="controlButton">
+      <button onclick="switchLightState({{loop.index}}, {{module.port}})" class="controlButton">
         <div id="lightButton/{{loop.index}}" class="buttonFont">ON</div>
       </button>
     </div>

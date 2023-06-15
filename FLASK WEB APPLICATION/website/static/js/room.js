@@ -62,17 +62,45 @@ function switchButtonClass(id) {
   }
 }
 
-function lightOn(id) {
+function switchLightState(id, port) {
   let lightBulb = document.getElementById(id);
   let button = document.getElementById("lightButton/"+id);
   if (lightBulb.classList.contains("lightBulbOn")) {
     lightBulb.classList.remove("lightBulbOn");
     button.innerHTML = `ON`;
+    lightOn(port);
   } else {
     lightBulb.classList.add("lightBulbOn");
     button.innerHTML = `OFF`;
+    lightOff(port);
   }
   
+}
+
+function lightOn(port) {
+  $.ajax({
+    url: "/turnLightOn/" + port,
+    type: 'POST',
+    success: function (response) {
+      console.log(response);
+    },
+    error: function (error) {
+      console.log(error);
+    }
+  });
+}
+
+function lightOff(port) {
+  $.ajax({
+    url: "/turnLightOff/" + port,
+    type: 'POST',
+    success: function (response) {
+      console.log(response);
+    },
+    error: function (error) {
+      console.log(error);
+    }
+  });
 }
 
 function longPress(button) {

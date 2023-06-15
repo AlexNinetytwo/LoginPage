@@ -8,22 +8,9 @@ def driveBlind(port, pos):
         while pos < currentPos:
             # Jalousie bis pos heben
             pass
-    return "done"
+    return currentPos
 
 def getBlindPos(port):
     # Abfragen, um wie viel Prozent die Jalousie geschlossen ist
     pass
     return #currentPos
-
-
-def lightOnOff(port):
-    if lightIsOn(port):
-        # Schalte Licht aus
-        pass
-    else:
-        # Schalte Licht an
-        pass
-
-def lightIsOn(port):
-    # Abfrage ob licht an ist
-    pass

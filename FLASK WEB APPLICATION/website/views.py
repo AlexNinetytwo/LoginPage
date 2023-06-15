@@ -1,14 +1,32 @@
 from flask import request, jsonify, flash, current_app, Blueprint, render_template, redirect, url_for
 from flask_login import login_required
-from sqlalchemy.exc import IntegrityError
 from datetime import time as dt_time
 from .models import *
+from . import temperatureAPI
 
 views = Blueprint('views', __name__)
 
-def getTemp():
-    return "21°C"
+@views.route("/turnLightOff/<int:port>", methods=["POST"])
+def turnLightOff(port):
+    if port != -1:
+        light = Light.query.filter_by(port=port).first()
+        light.turnOff()
+    else:
+        for light in Light.query.all():
+            light.turnOff()
 
+@views.route("/turnLightOn/<int:id>", methods=["POST"])
+def turnLightOn(port):
+    if port != -1:
+        light = Light.query.filter_by(port=port).first()
+        light.query.get(id).turnOn()
+    else:
+        for light in Light.query.all():
+            light.turnOn()
+
+@views.route("/currentTemperature", methods=['GET'])
+def getCurrentTemperature():
+    return temperatureAPI.currentTemperature()
 
 @views.route("/updateButtonStates/<int:port>", methods=["POST"])
 def updateButtonStates(port):
@@ -89,7 +107,7 @@ def deleteAction(id):
 @login_required
 def home():
     house = House.query.get(1)
-    return render_template('home.html', house=house, celsius=getTemp(), header='HOME')
+    return render_template('home.html', house=house, celsius=getCurrentTemperature(), header='HOME')
 
 @views.route('/Home/Alle', methods=['GET', 'POST'])
 @login_required
@@ -102,7 +120,7 @@ def all():
 
 
     return render_template(template,
-                            celsius=getTemp(),
+                            celsius=getCurrentTemperature(),
                             room=room,
                             header=header,
                             previousPage=previousPage)
@@ -120,7 +138,7 @@ def groundFloor():
     return render_template(template,
                             allLinkFiller=allLinkFiller,
                             floor=floor,
-                            celsius=getTemp(),
+                            celsius=getCurrentTemperature(),
                             header=header,
                             previousPage=previousPage)
 
@@ -137,7 +155,7 @@ def firstFloor():
     return render_template(template,
                             floor=floor,
                             allLinkFiller=allLinkFiller,
-                            celsius=getTemp(),
+                            celsius=getCurrentTemperature(),
                             header=header,
                             previousPage=previousPage)
 
@@ -151,7 +169,7 @@ def groundFloorAll():
     
     return render_template(template,
                             room=room,
-                            celsius=getTemp(),
+                            celsius=getCurrentTemperature(),
                             header=header,
                             previousPage=previousPage)
 
@@ -165,7 +183,7 @@ def firstFloorAll():
     
     return render_template(template,
                             room=room,
-                            celsius=getTemp(),
+                            celsius=getCurrentTemperature(),
                             header=header,
                             previousPage=previousPage)
 
@@ -180,7 +198,7 @@ def hallway():
     
     return render_template(template,
                             room=room,
-                            celsius=getTemp(),
+                            celsius=getCurrentTemperature(),
                             header=header,
                             previousPage=previousPage)
 
@@ -195,7 +213,7 @@ def livingroom():
     
     return render_template(template,
                             room=room,
-                            celsius=getTemp(),
+                            celsius=getCurrentTemperature(),
                             header=header,
                             previousPage=previousPage)
 
@@ -210,7 +228,7 @@ def diningroom():
     
     return render_template(template,
                             room=room,    
-                            celsius=getTemp(),
+                            celsius=getCurrentTemperature(),
                             header=header,
                             previousPage=previousPage)
 
@@ -225,7 +243,7 @@ def kitchen():
     
     return render_template(template,
                             room=room,
-                            celsius=getTemp(),
+                            celsius=getCurrentTemperature(),
                             header=header,
                             previousPage=previousPage)
 
@@ -240,7 +258,7 @@ def office1():
     
     return render_template(template,
                             room=room,
-                            celsius=getTemp(),
+                            celsius=getCurrentTemperature(),
                             header=header,
                             previousPage=previousPage)
 
@@ -255,7 +273,7 @@ def office2():
     
     return render_template(template,
                             room=room,
-                            celsius=getTemp(),
+                            celsius=getCurrentTemperature(),
                             header=header,
                             previousPage=previousPage)
 
@@ -270,7 +288,7 @@ def menroom():
     
     return render_template(template,
                             room=room,
-                            celsius=getTemp(),
+                            celsius=getCurrentTemperature(),
                             header=header,
                             previousPage=previousPage)
 

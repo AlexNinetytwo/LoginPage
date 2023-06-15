@@ -1,7 +1,6 @@
 from website import create_app, config
 
 
-
 app = create_app()
 
 
