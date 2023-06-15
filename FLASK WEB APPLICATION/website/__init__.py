@@ -49,8 +49,7 @@ def create_app():
     
     schedule_database_query()
 
-    scheduler_thread = Thread(target=run_scheduler)
-    scheduler_thread.start()
+    start_scheduler_thread()
           
 
     return app
@@ -60,4 +59,14 @@ def create_database(app):
     if not path.exists('website/' + DB_NAME):
         db.create_all(app=app)
         print('Created Database!')
+
+
+
+scheduler_thread = None
+
+def start_scheduler_thread():
+    global scheduler_thread
+    if scheduler_thread is None or not scheduler_thread.is_alive():
+        scheduler_thread = Thread(target=run_scheduler)
+        scheduler_thread.start()
 

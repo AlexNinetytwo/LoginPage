@@ -6,6 +6,16 @@ from . import temperatureAPI
 
 views = Blueprint('views', __name__)
 
+@views.route("/updateCurrentActions", methods=["POST"])
+def updateCurrentActions(buttons):
+    if port != -1:
+        light = Light.query.filter_by(port=port).first()
+        light.turnOff()
+    else:
+        for light in Light.query.all():
+            light.turnOff()
+    return "success"
+
 @views.route("/turnLightOff/<int:port>", methods=["POST"])
 def turnLightOff(port):
     if port != -1:
@@ -14,6 +24,7 @@ def turnLightOff(port):
     else:
         for light in Light.query.all():
             light.turnOff()
+    return "success"
 
 @views.route("/turnLightOn/<int:id>", methods=["POST"])
 def turnLightOn(port):
@@ -23,10 +34,12 @@ def turnLightOn(port):
     else:
         for light in Light.query.all():
             light.turnOn()
+    return "success"
 
 @views.route("/currentTemperature", methods=['GET'])
 def getCurrentTemperature():
-    return temperatureAPI.currentTemperature()
+    # return temperatureAPI.currentTemperature()
+    return "21°C"
 
 @views.route("/updateButtonStates/<int:port>", methods=["POST"])
 def updateButtonStates(port):
