@@ -4,7 +4,7 @@
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='/css/base.css') }}">
   <script src="{{ url_for('static', filename='/js/main.js') }}"></script>
   <script src="{{ url_for('static', filename='/js/jQuery.js') }}"></script>
-  <script src="{{ url_for('static', filename='/js/room.js') }}"></script>
+  
 
 
   <head>
@@ -34,11 +34,14 @@
             </table>
           </div>
           
-          <button onclick="addAction(0)" id="addButton" class="tableButton">
+          <button onclick="addAction()" id="addButton" class="tableButton">
             Neu
           </button>
         </div>
       </div>
+
+      <script src="{{ url_for('static', filename='/js/room.js') }}"></script>
+
 
       <div onclick="redirectToPage('{{previousPage}}')" class="header">
         <h1>&nbsp;&#8678</h1>
@@ -68,14 +71,15 @@
 
     <script>
 
+
       let seconds = 0;
       let timer = setInterval(updateTimer, 1000);
       let screenSaver = document.getElementById("screenSaver");
       let screenSaverBox = document.getElementById("screenSaverBox");
 
-      function getCurrentTime() {
-        let currentTime = new 
-      }
+      // function getCurrentTime() {
+      //   let currentTime = new 
+      // }
 
       function updateTimer() {
         seconds++;

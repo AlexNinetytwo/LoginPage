@@ -4,6 +4,7 @@ let plan = document.getElementById("timeplan");
 let tableRows = document.getElementById("timeTable");
 let tableFrame = document.getElementById("tableFrame");
 let addButton = document.getElementById("addButton");
+
 let modulesActions = [];
 let allDriveButtons = document.querySelectorAll("controlButton");
 
@@ -359,7 +360,7 @@ function interrupt() {
 }
 
 function resetAddButton() {
-  addButton.removeEventListener("click", saveNewAction);
+  // addButton.removeEventListener("click", saveNewAction);
   addButton.innerHTML = `Neu`;
   addButton.addEventListener("click", addAction);
 }
