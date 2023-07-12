@@ -1,9 +1,5 @@
 let isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
 let blind_id;
-let plan = document.getElementById("timeplan");
-let tableRows = document.getElementById("timeTable");
-let tableFrame = document.getElementById("tableFrame");
-let addButton = document.getElementById("addButton");
 let modulesActions = [];
 let allDriveButtons = document.querySelectorAll("controlButton");
 
@@ -106,22 +102,25 @@ function lightOff(port) {
 function longPress(button) {
   let opposite = getOpposite(button);
   button.classList.remove("buttonLocked");
+  button.value = 1;
 }
 
 function releaseButton(button) {
-  button.classList.add("controlButton");  
+  button.classList.add("controlButton");
+  button.value = 0;
 }
 
 function shortPress(button) {
   let opposite = getOpposite(button);
   unlockEachDriveButtonIfThe_ALLinterface_IsUsed(button);
   opposite.classList.remove("buttonLocked");
+  opposite.value = 0;
   if (button.classList.contains("buttonLocked")) {
     button.classList.remove("buttonLocked");
-    button.value = "0";
+    button.value = 0;
   } else {
     button.classList.add("buttonLocked");
-    button.value = "1";
+    button.value = 1;
   }
   
 }
@@ -153,8 +152,8 @@ function unlockEachDriveButtonIfThe_ALLinterface_IsUsed(button) {
       }
       catch {}
       finally {
-        allUp.value = "0";
-        allDown.value = "1";
+        allUp.value = 0;
+        allDown.value = 1;
       }
   }
 }
@@ -183,29 +182,23 @@ function setEventListener(button) {
 
 }
 
+
+
 function setClickListener(button) {
   button.addEventListener("mousedown", function () {
-
-    let long = false;
 
     pressTimer = setTimeout(function () {
       // long press
       longPress(button);
-      long = true;
     }, 500);
 
     // short press
     shortPress(button);
-    updateCurrentActions(allDriveButtons);
+
   });
 
   button.addEventListener("mouseup", function () {
     clearTimeout(pressTimer);
-    if (long) {
-      button.value = "0";
-      updateCurrentActions(allDriveButtons);
-    }
-    
   });
 }
 
@@ -219,7 +212,6 @@ function setTouchListener(button) {
 
     // short press
     shortPress(button);
-    updateCurrentActions(allDriveButtons);
   });
 
   button.addEventListener("touchend", function () {

@@ -56,6 +56,7 @@
       {% endblock %}
     </div>
     
+    <script src="{{ url_for('static', filename='/js/timeplan.js') }}"></script>
     
     <div onclick="resetTimer()" class="screenSaver" id="screenSaver">
       <div class="screenSaverBox" id="screenSaverBox">
@@ -74,7 +75,7 @@
       let screenSaverBox = document.getElementById("screenSaverBox");
 
       function getCurrentTime() {
-        let currentTime = new 
+        let currentTime = new Date().getTIme();
       }
 
       function updateTimer() {
