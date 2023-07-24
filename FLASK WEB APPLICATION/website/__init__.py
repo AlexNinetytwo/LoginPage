@@ -4,8 +4,7 @@ from os import path
 from flask_login import LoginManager
 from flask_sslify import SSLify
 from datetime import timedelta
-from .schedule import schedule_database_query, run_scheduler
-from threading import Thread
+
 
 
 db = SQLAlchemy()
@@ -47,10 +46,10 @@ def create_app():
     def load_user(id):
         return User.query.get(int(id))
     
-    schedule_database_query()
+ 
+    
 
-    start_scheduler_thread()
-          
+  
 
     return app
 
@@ -59,14 +58,4 @@ def create_database(app):
     if not path.exists('website/' + DB_NAME):
         db.create_all(app=app)
         print('Created Database!')
-
-
-
-scheduler_thread = None
-
-def start_scheduler_thread():
-    global scheduler_thread
-    if scheduler_thread is None or not scheduler_thread.is_alive():
-        scheduler_thread = Thread(target=run_scheduler)
-        scheduler_thread.start()
 
