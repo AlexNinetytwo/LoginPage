@@ -8,6 +8,7 @@ views = Blueprint('views', __name__)
 
 @views.route("/updateCurrentActions", methods=["POST"])
 def updateCurrentActions(buttons):
+    port = 1
     if port != -1:
         light = Light.query.filter_by(port=port).first()
         light.turnOff()
