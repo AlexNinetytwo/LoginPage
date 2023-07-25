@@ -15,25 +15,26 @@ class House(db.Model):
     name = db.Column(db.String(15), unique=True, nullable=False)
     autoBlinds = db.Column(db.Boolean, default=True)
     autoLights = db.Column(db.Boolean, default=True)
+    #autoDiverse = db.Column(db.Boolean, default=True) Later
 
-    floors = db.relationship('Floor', backref='house', lazy=True)
+    #groups = db.relationship('Group', backref='house', lazy=True)
 
     def getLights(self):
         lights = []
-        for floor in self.floors:
-            for light in floor.getLights():
+        for group in self.groups:
+            for light in group.getLights():
                 lights.append(light)
         return lights
     
     def getBlinds(self):
         blinds = []
-        for floor in self.floors:
-            for blind in floor.getBlinds():
+        for group in self.groups:
+            for blind in group.getBlinds():
                 blinds.append(blind)
         return blinds
       
-    def getFloors(self):
-        return Floor.query.filter_by(house_id=self.id)
+    def getGroups(self):
+        return groups.query.filter_by(house_id=self.id)
       
     def getModuleByPort(port):
         module = Light.query.filter_by(port=port).first()
@@ -41,21 +42,21 @@ class House(db.Model):
             module = Blind.query.filter_by(port=port).first()
         return module
 
-    def raiseAllBlinds(self):
-        for floor in self.floors:
-            floor.raiseAllBlinds()
+    # def raiseAllBlinds(self):
+    #     for floor in self.floors:
+    #         floor.raiseAllBlinds()
 
-    def lowerAllBlinds(self):
-        for floor in self.floors:
-            floor.lowerAllBlinds()
+    # def lowerAllBlinds(self):
+    #     for floor in self.floors:
+    #         floor.lowerAllBlinds()
 
-    def lightsOn(self):
-        for floor in self.floors:
-            floor.lightsOn()
+    # def lightsOn(self):
+    #     for floor in self.floors:
+    #         floor.lightsOn()
 
-    def lightsOff(self):
-        for floor in self.floors:
-            floor.lightsOff()
+    # def lightsOff(self):
+    #     for floor in self.floors:
+    #         floor.lightsOff()
 
     def switchAutomatic(self, moduleType):
         if moduleType == 'blinds':
@@ -69,68 +70,67 @@ class House(db.Model):
 
 
 # Etage
-class Floor(db.Model):
+class KeinName(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(15), nullable=False)
-    autoBlinds = db.Column(db.Boolean, default=True)
-    autoLights = db.Column(db.Boolean, default=True)
-    house_id = db.Column(db.Integer, db.ForeignKey('house.id'), nullable=False)
+    # autoBlinds = db.Column(db.Boolean, default=True)
+    # autoLights = db.Column(db.Boolean, default=True)
+ 
 
-    rooms = db.relationship('Room', backref='floor', lazy=True)
     
-    def getLights(self):
-        lights = []
-        for room in self.rooms:
-            for light in room.lights:
-                lights.append(light)  
-        return lights
+    # def getLights(self):
+    #     lights = []
+    #     for room in self.rooms:
+    #         for light in room.lights:
+    #             lights.append(light)  
+    #     return lights
     
-    def getBlinds(self):
-        blinds = []
-        for room in self.rooms:
-            for blind in room.blinds:
-                blinds.append(blind)
-        return blinds
+    # def getBlinds(self):
+    #     blinds = []
+    #     for room in self.rooms:
+    #         for blind in room.blinds:
+    #             blinds.append(blind)
+    #     return blinds
 
-    def raiseAllBlinds(self):
-        for room in self.rooms:
-            room.raiseAllBlinds()
+    # def raiseAllBlinds(self):
+    #     for room in self.rooms:
+    #         room.raiseAllBlinds()
 
-    def lowerAllBlinds(self):
-        for room in self.rooms:
-            room.raiseAllBlinds()
+    # def lowerAllBlinds(self):
+    #     for room in self.rooms:
+    #         room.raiseAllBlinds()
 
-    def lightsOn(self):
-        for room in self.rooms:
-            room.lightsOn()
+    # def lightsOn(self):
+    #     for room in self.rooms:
+    #         room.lightsOn()
 
-    def lightsOff(self):
-        for room in self.rooms:
-            room.lightsOff()
+    # def lightsOff(self):
+    #     for room in self.rooms:
+    #         room.lightsOff()
 
-    def switchAutomatic(self, moduleType):
+    # def switchAutomatic(self, moduleType):
 
-        if moduleType == 'blinds':
-            state = self.autoBlinds = False if self.autoBlinds else True
+    #     if moduleType == 'blinds':
+    #         state = self.autoBlinds = False if self.autoBlinds else True
 
-        elif moduleType == 'lights':
-            state = self.autoLights = False if self.autoLights else True
+    #     elif moduleType == 'lights':
+    #         state = self.autoLights = False if self.autoLights else True
 
-        for room in self.rooms:
-            room.setAutomatic(moduleType, state)
+    #     for room in self.rooms:
+    #         room.setAutomatic(moduleType, state)
 
         
-    def setAutomatic(self, moduleType, state):
-        if moduleType == 'blinds':
-            self.autoBlinds = state
-        elif moduleType == 'lights':
-            self.autoLights = state
-        else:
-            raise Exception('ModuleType not found')
+    # def setAutomatic(self, moduleType, state):
+    #     if moduleType == 'blinds':
+    #         self.autoBlinds = state
+    #     elif moduleType == 'lights':
+    #         self.autoLights = state
+    #     else:
+    #         raise Exception('ModuleType not found')
         
-        for room in self.rooms:
-            room.setAutomatic(moduleType, state)
+    #     for room in self.rooms:
+    #         room.setAutomatic(moduleType, state)
         
             
 

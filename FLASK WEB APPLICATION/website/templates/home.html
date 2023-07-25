@@ -1,14 +1,18 @@
 {% extends "base.html" %}
 {% block content%}
 
+<style>
+</style>
+
 
 <div class="bigButtonContainer">
-  <!-- <div class="headerSpace"></div> -->
   
-  <button onclick="redirectToPage('Home/Alle')" id="Alle" class="roomButton">Alle</button>
+  <button onclick="redirectToPage('{{this.all}}')" id="Alle" class="roomButton">Alle</button>
   
-  {% for floor in house.floors %}
-  <button onclick="redirectToPage('/Home/{{floor.name}}')" id="{{floor.name}}" class="roomButton">{{floor.name}}</button>
+  {% for group in this.groups %}
+  <button onclick="redirectToPage('{{group.url}}')" id="{{group.name}}" class="roomButton">{{group.name}}</button>
+
+  
   
   <script>
     envName = "{{floor.name}}";
@@ -17,6 +21,7 @@
   </script>
   {% endfor %}
   
+  <button class="roomButton">+</button>
   
 </div>
 
